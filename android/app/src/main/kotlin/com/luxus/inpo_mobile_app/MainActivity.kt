@@ -1,4 +1,4 @@
-package com.luxus.databank_mobile_app
+package com.luxus.inpo_mobile_app
 
 import io.flutter.embedding.android.FlutterActivity
 

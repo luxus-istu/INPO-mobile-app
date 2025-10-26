@@ -14,7 +14,7 @@ plugins {
 }
 
 android {
-    namespace = "com.luxus.databank_mobile_app"
+    namespace = "com.luxus.inpo_mobile_app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -32,7 +32,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.luxus.databank_mobile_app"
+        applicationId = "com.luxus.inpo_mobile_app"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

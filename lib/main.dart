@@ -1,5 +1,6 @@
-import 'package:databank_mobile_app/config/theme/theme.dart';
-import 'package:databank_mobile_app/core/di/injection.dart';
+import 'package:inpo_mobile_app/config/router/router.dart';
+import 'package:inpo_mobile_app/config/theme/theme.dart';
+import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:flutter/material.dart';
 
 Future<void> main() async {
@@ -13,10 +14,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        theme: AppTheme.light,
-        darkTheme: AppTheme.dark,
-        title: 'Databank Mobile App',
-        home: const AuthWrapper());
+    return MaterialApp.router(
+      theme: AppTheme.light,
+      darkTheme: AppTheme.dark,
+      title: 'INPO Mobile App',
+      routerConfig: router,
+    );
   }
 }
