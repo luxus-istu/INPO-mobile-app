@@ -7,7 +7,7 @@ import 'package:inpo_mobile_app/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inpo_mobile_app/presentation/widgets/splash_screen.dart';
+import 'package:inpo_mobile_app/presentation/pages/splash_screen.dart';
 
 class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
