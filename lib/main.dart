@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       theme: AppTheme.light,
-      darkTheme: AppTheme.dark,
+      themeMode: ThemeMode.light,
       title: 'INPO Mobile App',
       routerConfig: router,
     );

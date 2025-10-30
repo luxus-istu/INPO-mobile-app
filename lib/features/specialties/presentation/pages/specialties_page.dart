@@ -1,5 +1,4 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
-import 'package:inpo_mobile_app/features/home/presentation/widgets/splash_screen.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_bloc.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_event.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_state.dart';
@@ -8,6 +7,7 @@ import 'package:inpo_mobile_app/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inpo_mobile_app/presentation/widgets/splash_screen.dart';
 
 class SpecialtiesPage extends StatefulWidget {
   const SpecialtiesPage({super.key});
@@ -30,6 +30,7 @@ class _SpecialtiesPageState extends State<SpecialtiesPage> {
       builder: (context, state) {
         if (state is SpecialtyLoaded) {
           return Scaffold(
+            backgroundColor: Colors.white,
             appBar: AppBar(
               toolbarHeight: 158,
               title: const SizedBox.shrink(),

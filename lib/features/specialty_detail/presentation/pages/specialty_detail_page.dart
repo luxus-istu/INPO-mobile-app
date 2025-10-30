@@ -4,8 +4,9 @@ import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/features/specialty_detail/presentation/bloc/specialty_detail_bloc.dart';
 import 'package:inpo_mobile_app/features/specialty_detail/presentation/bloc/specialty_detail_state.dart';
+import 'package:inpo_mobile_app/features/specialty_detail/presentation/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
-import 'package:url_launcher/url_launcher_string.dart';
+import 'package:url_launcher2/url_launcher_string.dart';
 
 class SpecialtyDetailPage extends StatefulWidget {
   const SpecialtyDetailPage({super.key});
@@ -23,6 +24,9 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
     return BlocBuilder<SpecialtyDetailBloc, SpecialtyDetailState>(
         bloc: getIt<SpecialtyDetailBloc>(),
         builder: (context, state) {
+          if (state is SpecialtyDetailError) {
+            return ErrorMessageWidget(route: "/specialties", error: state);
+          }
           if (state is SpecialtyDetailLoaded) {
             return Scaffold(
               backgroundColor: Colors.white,
@@ -46,7 +50,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                               state.detail.duration!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontFamily: "SF Pro Display",
                                 fontWeight: FontWeight.bold,
@@ -62,7 +66,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                           children: [
                             Text(
                               state.detail.code!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontFamily: "Onder",
                                 fontWeight: FontWeight.w400,
@@ -74,7 +78,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                               maxLines: 3,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontFamily: "SF Pro Display",
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -83,7 +87,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             ),
                             Text(
                               '${state.detail.seats!} мест',
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: "SF Pro Display",
@@ -128,7 +132,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             fontSize: 15,
                             fontFamily: "SF Pro Display",
                             fontWeight: FontWeight.w400,
-                            color: const Color(0xFF000080),
+                            color: Color(0xFF000080),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -138,8 +142,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                 : 3)
                             .map(
                               (item) => Text(
-                                '• $item;',
-                                style: TextStyle(
+                                '• $item',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontFamily: "SF Pro Display",
                                   fontWeight: FontWeight.bold,
@@ -161,7 +165,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                               children: [
                                 Text(
                                   _showAllCompetencies ? 'Скрыть' : 'Подробнее',
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: const Color(0xFF000080),
                                     fontFamily: "SF Pro Display",
                                     fontWeight: FontWeight.bold,
@@ -172,7 +176,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                       ? Icons.arrow_drop_down
                                       : Icons.arrow_drop_up,
                                   size: 24,
-                                  color: Color(0xFF000080),
+                                  color: const Color(0xFF000080),
                                 )
                               ],
                             ),
@@ -202,8 +206,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                 : 5)
                             .map(
                               (item) => Text(
-                                '• $item;',
-                                style: TextStyle(
+                                '• $item',
+                                style: const TextStyle(
                                   fontSize: 15,
                                   fontFamily: "SF Pro Display",
                                   fontWeight: FontWeight.bold,
@@ -225,8 +229,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                               children: [
                                 Text(
                                   _showAllDisciplines ? 'Скрыть' : 'Подробнее',
-                                  style: TextStyle(
-                                    color: const Color(0xFF000080),
+                                  style: const TextStyle(
+                                    color: Color(0xFF000080),
                                     fontFamily: "SF Pro Display",
                                     fontWeight: FontWeight.bold,
                                   ),
@@ -236,7 +240,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                       ? Icons.arrow_drop_down
                                       : Icons.arrow_drop_up,
                                   size: 24,
-                                  color: Color(0xFF000080),
+                                  color: const Color(0xFF000080),
                                 )
                               ],
                             ),
@@ -257,7 +261,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                   ...state.detail.companies!.map(
                     (company) => Text(
                       company,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: const Color(0xFF000080),
                         fontFamily: "SF Pro Display",
                         fontWeight: FontWeight.bold,

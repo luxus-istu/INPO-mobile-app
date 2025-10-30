@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inpo_mobile_app/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
+import 'package:url_launcher2/url_launcher_string.dart';
 
 class ContactsPage extends StatelessWidget {
   const ContactsPage({super.key});
@@ -26,37 +27,46 @@ class ContactsPage extends StatelessWidget {
                     color: Color(0xFF000080),
                   )),
               const SizedBox(height: 36),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 16,
                 children: [
-                  Icon(Icons.phone_outlined,
+                  const Icon(Icons.phone_outlined,
                       size: 20, color: Color(0xFF000080)),
-                  Text("8(3412) 77-49-07",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "SF Pro Display",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF000080),
-                      )),
+                  GestureDetector(
+                    onTap: () async {
+                      await launchUrlString("tel:+7(3412)77-49-07");
+                    },
+                    child: const Text("+7(3412) 77-49-07",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: "SF Pro Display",
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF000080),
+                        )),
+                  ),
                 ],
               ),
               const SizedBox(height: 26),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: 16,
                 children: [
-                  Icon(Icons.alternate_email_outlined,
+                  const Icon(Icons.alternate_email_outlined,
                       size: 20, color: Color(0xFF000080)),
-                  Text("inpo@istu.ru",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: "SF Pro Display",
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF000080),
-                      )),
+                  GestureDetector(
+                      onTap: () async {
+                        await launchUrlString("mailto:inpo@istu.ru");
+                      },
+                      child: const Text("inpo@istu.ru",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: "SF Pro Display",
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF000080),
+                          ))),
                 ],
               ),
               const SizedBox(height: 57),

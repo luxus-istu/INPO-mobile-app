@@ -4,10 +4,10 @@ import 'package:inpo_mobile_app/features/home/presentation/bloc/news_event.dart'
 import 'package:inpo_mobile_app/features/home/presentation/bloc/news_state.dart';
 import 'package:inpo_mobile_app/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/features/home/presentation/widgets/image_collage_widget.dart';
-import 'package:inpo_mobile_app/features/home/presentation/widgets/splash_screen.dart';
 import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:inpo_mobile_app/presentation/widgets/splash_screen.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
               state.news.map((newsItem) => newsItem.imageUrl ?? "").toList();
 
           return Scaffold(
+            backgroundColor: Colors.white,
             body: ListView(
               children: [
                 const HeaderWidget(labelName: "ГЛАВНАЯ\nСТРАНИЦА"),
