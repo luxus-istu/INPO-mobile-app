@@ -12,22 +12,27 @@ import 'package:inpo_mobile_app/features/specialty_detail/presentation/pages/spe
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(path: '/', builder: (_, __) => const HomePage()),
-  GoRoute(path: "/specialties", builder: (_, __) => const SpecialtiesPage()),
   GoRoute(
-    path: '/specialty_detail',
-    builder: (context, state) {
-      final url = state.extra as String?;
+      path: "/specialties",
+      builder: (_, __) => const SpecialtiesPage(),
+      routes: [
+        GoRoute(
+          path: 'details',
+          builder: (context, state) {
+            final url = state.extra as String?;
 
-      if (url == null) {
-        return const Scaffold(
-            body: Center(child: Text('Ошибка: URL не найден')));
-      }
-      return BlocProvider.value(
-        value: getIt<SpecialtyDetailBloc>()..add(FetchSpecialtyDetail(url)),
-        child: const SpecialtyDetailPage(),
-      );
-    },
-  ),
+            if (url == null) {
+              return const Scaffold(
+                  body: Center(child: Text('Ошибка: URL не найден')));
+            }
+            return BlocProvider.value(
+              value: getIt<SpecialtyDetailBloc>()
+                ..add(FetchSpecialtyDetail(url)),
+              child: const SpecialtyDetailPage(),
+            );
+          },
+        ),
+      ]),
   GoRoute(path: "/news", builder: (_, __) => const NewsPage()),
   GoRoute(path: "/contacts", builder: (_, __) => const ContactsPage()),
 ]);

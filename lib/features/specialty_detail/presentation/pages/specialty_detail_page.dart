@@ -35,7 +35,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                 children: [
                   HeaderWidget(
                     labelName: state.detail.title!,
-                    onTap: () => context.go('/specialties'),
+                    onTap: () => context.pop(),
                   ),
                   Row(
                     children: [

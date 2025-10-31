@@ -14,7 +14,7 @@ class SpecialtyGridItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        context.go('/specialty_detail', extra: specialty.link);
+        context.push('/specialties/details', extra: specialty.link);
       },
       child: Container(
         padding: const EdgeInsets.all(8),
