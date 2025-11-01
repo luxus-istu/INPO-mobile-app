@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:inpo_mobile_app/presentation/widgets/animated_fab_menu.dart';
-import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:url_launcher2/url_launcher_string.dart';
 
 class ContactsPage extends StatelessWidget {

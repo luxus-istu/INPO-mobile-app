@@ -1,6 +1,6 @@
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parser;
-import 'package:inpo_mobile_app/presentation/helpers/specialty_icon_mapper.dart';
+import 'package:inpo_mobile_app/core/presentation/helpers/specialty_icon_mapper.dart';
 import 'package:inpo_mobile_app/features/specialty_detail/domain/entities/specialty_detail.dart';
 
 class SpecialtyDetailModel {

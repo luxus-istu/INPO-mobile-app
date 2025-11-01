@@ -3,11 +3,11 @@ import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty
 import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_event.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_state.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/widgets/specialty_grid_item.dart';
-import 'package:inpo_mobile_app/presentation/widgets/animated_fab_menu.dart';
-import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inpo_mobile_app/presentation/pages/splash_screen.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
 
 class SpecialtiesPage extends StatefulWidget {
   const SpecialtiesPage({super.key});

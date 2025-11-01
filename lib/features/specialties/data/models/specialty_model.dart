@@ -1,5 +1,5 @@
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty.dart';
-import 'package:inpo_mobile_app/presentation/helpers/specialty_icon_mapper.dart';
+import 'package:inpo_mobile_app/core/presentation/helpers/specialty_icon_mapper.dart';
 
 class SpecialtyModel {
   final String? code;

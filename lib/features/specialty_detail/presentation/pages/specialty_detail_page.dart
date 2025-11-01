@@ -5,7 +5,7 @@ import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/features/specialty_detail/presentation/bloc/specialty_detail_bloc.dart';
 import 'package:inpo_mobile_app/features/specialty_detail/presentation/bloc/specialty_detail_state.dart';
 import 'package:inpo_mobile_app/features/specialty_detail/presentation/widgets/error_message_widget.dart';
-import 'package:inpo_mobile_app/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:url_launcher2/url_launcher_string.dart';
 
 class SpecialtyDetailPage extends StatefulWidget {
