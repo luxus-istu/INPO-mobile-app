@@ -6,9 +6,9 @@ import 'package:inpo_mobile_app/features/specialties/presentation/pages/specialt
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inpo_mobile_app/features/specialty_detail/presentation/bloc/specialty_detail_bloc.dart';
-import 'package:inpo_mobile_app/features/specialty_detail/presentation/bloc/specialty_detail_event.dart';
-import 'package:inpo_mobile_app/features/specialty_detail/presentation/pages/specialty_detail_page.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_detail_bloc.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_detail_event.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/pages/specialty_detail_page.dart';
 
 final GoRouter router = GoRouter(initialLocation: '/', routes: [
   GoRoute(path: '/', builder: (_, __) => const HomePage()),

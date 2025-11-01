@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:inpo_mobile_app/features/home/domain/entities/news_item.dart';
+import 'package:inpo_mobile_app/core/domain/entities/news_item.dart';
 import 'package:url_launcher2/url_launcher.dart';
 
 class NewsCard extends StatelessWidget {

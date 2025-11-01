@@ -1,4 +1,4 @@
-import 'package:inpo_mobile_app/features/home/domain/entities/news_item.dart';
+import 'package:inpo_mobile_app/core/domain/entities/news_item.dart';
 import 'package:equatable/equatable.dart';
 
 sealed class NewsState extends Equatable {

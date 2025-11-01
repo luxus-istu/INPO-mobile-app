@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:inpo_mobile_app/features/home/domain/entities/news_item.dart';
-import 'package:inpo_mobile_app/features/home/domain/usecases/get_news_usecase.dart';
+import 'package:inpo_mobile_app/core/domain/entities/news_item.dart';
+import 'package:inpo_mobile_app/core/domain/usecases/get_news_usecase.dart';
 import 'package:injectable/injectable.dart';
 
 import 'news_event.dart';
