@@ -1,5 +1,4 @@
 import 'package:inpo_mobile_app/config/router/router.dart';
-import 'package:inpo_mobile_app/config/theme/theme.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:flutter/material.dart';
 
@@ -15,8 +14,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      theme: AppTheme.light,
       themeMode: ThemeMode.light,
+      color: Colors.white,
       title: 'INPO Mobile App',
       routerConfig: router,
     );

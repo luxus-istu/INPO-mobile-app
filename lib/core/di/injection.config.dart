@@ -39,10 +39,10 @@ import 'package:inpo_mobile_app/features/specialties/domain/usecases/get_special
     as _i665;
 import 'package:inpo_mobile_app/features/specialties/domain/usecases/get_specialty_detail_usecase.dart'
     as _i190;
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_bloc.dart'
-    as _i240;
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_detail_bloc.dart'
-    as _i130;
+import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart'
+    as _i593;
+import 'package:inpo_mobile_app/features/specialties/presentation/index/bloc/specialty_bloc.dart'
+    as _i386;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -76,12 +76,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i575.NewsBloc(gh<_i966.GetNewsUseCase>()));
     gh.lazySingleton<_i140.NewsBloc>(
         () => _i140.NewsBloc(gh<_i966.GetNewsUseCase>()));
-    gh.lazySingleton<_i240.SpecialtyBloc>(() => _i240.SpecialtyBloc(
+    gh.lazySingleton<_i386.SpecialtyBloc>(() => _i386.SpecialtyBloc(
         getSpecialtiesUseCase: gh<_i665.GetSpecialtiesUseCase>()));
     gh.lazySingleton<_i190.GetSpecialtyDetailUseCase>(() =>
         _i190.GetSpecialtyDetailUseCase(gh<_i862.SpecialtyDetailRepository>()));
-    gh.lazySingleton<_i130.SpecialtyDetailBloc>(
-        () => _i130.SpecialtyDetailBloc(gh<_i190.GetSpecialtyDetailUseCase>()));
+    gh.lazySingleton<_i593.SpecialtyDetailBloc>(
+        () => _i593.SpecialtyDetailBloc(gh<_i190.GetSpecialtyDetailUseCase>()));
     return this;
   }
 }

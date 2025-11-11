@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-class MenuItem {
-  final IconData icon;
-  final String label;
-  final String route;
-
-  const MenuItem(this.icon, this.label, this.route);
-}
+import 'package:inpo_mobile_app/core/constants/constants.dart';
 
 class AnimatedFabMenu extends StatefulWidget {
   const AnimatedFabMenu({super.key});
@@ -20,13 +13,6 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isOpen = false;
-
-  final List<MenuItem> _menuItems = const [
-    MenuItem(Icons.person_outline, 'Контакты', '/contacts'),
-    MenuItem(Icons.newspaper_outlined, 'Новости', '/news'),
-    MenuItem(Icons.engineering_outlined, 'Профессии', '/specialties'),
-    MenuItem(Icons.home_outlined, 'Главная', '/'),
-  ];
 
   @override
   void initState() {
@@ -97,7 +83,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
   }
 
   List<Widget> _buildMenuItems() {
-    return _menuItems.asMap().entries.map((entry) {
+    return Constants.menuItems.asMap().entries.map((entry) {
       final index = entry.key;
       final item = entry.value;
 
@@ -109,6 +95,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
         onTap: () {
           if (item.route.isNotEmpty) {
             context.go(item.route);
+            // this.widget.onTap(item.route);
           }
           _toggleMenu();
         },

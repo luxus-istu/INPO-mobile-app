@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:inpo_mobile_app/core/domain/entities/news_item.dart';
 import 'package:inpo_mobile_app/core/domain/usecases/get_news_usecase.dart';
 import 'package:injectable/injectable.dart';
 
-import 'news_event.dart';
-import 'news_state.dart';
+part 'news_event.dart';
+part 'news_state.dart';
 
 @lazySingleton
 class NewsBloc extends Bloc<NewsEvent, NewsState> {

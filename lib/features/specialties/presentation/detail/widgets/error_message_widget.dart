@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_detail_state.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
 
 class ErrorMessageWidget extends StatelessWidget {
   final String route;

@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_detail_bloc.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_detail_state.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/widgets/error_message_widget.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/detail/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:url_launcher2/url_launcher_string.dart';
 
@@ -15,12 +14,17 @@ class SpecialtyDetailPage extends StatefulWidget {
   State<SpecialtyDetailPage> createState() => _SpecialtyDetailPageState();
 }
 
-class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
+class _SpecialtyDetailPageState extends State<SpecialtyDetailPage>
+    with AutomaticKeepAliveClientMixin {
   bool _showAllDisciplines = false;
   bool _showAllCompetencies = false;
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<SpecialtyDetailBloc, SpecialtyDetailState>(
         bloc: getIt<SpecialtyDetailBloc>(),
         builder: (context, state) {

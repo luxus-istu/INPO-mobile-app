@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'specialty_detail_bloc.dart';
 
 abstract class SpecialtyDetailEvent extends Equatable {
   const SpecialtyDetailEvent();

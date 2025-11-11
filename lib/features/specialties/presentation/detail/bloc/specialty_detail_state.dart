@@ -1,5 +1,4 @@
-import 'package:equatable/equatable.dart';
-import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty_detail.dart';
+part of 'specialty_detail_bloc.dart';
 
 sealed class SpecialtyDetailState extends Equatable {
   const SpecialtyDetailState();

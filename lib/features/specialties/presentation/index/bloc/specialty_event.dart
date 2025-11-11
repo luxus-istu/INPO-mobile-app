@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+part of 'specialty_bloc.dart';
 
 sealed class SpecialtyEvent extends Equatable {
   const SpecialtyEvent();

@@ -1,8 +1,6 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_bloc.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_event.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/bloc/specialty_state.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/widgets/specialty_grid_item.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/index/bloc/specialty_bloc.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/index/widgets/specialty_grid_item.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +14,11 @@ class SpecialtiesPage extends StatefulWidget {
   State<SpecialtiesPage> createState() => _SpecialtiesPageState();
 }
 
-class _SpecialtiesPageState extends State<SpecialtiesPage> {
+class _SpecialtiesPageState extends State<SpecialtiesPage>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   void initState() {
     super.initState();
@@ -25,6 +27,7 @@ class _SpecialtiesPageState extends State<SpecialtiesPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return BlocBuilder<SpecialtyBloc, SpecialtyState>(
       bloc: getIt<SpecialtyBloc>(),
       builder: (context, state) {
@@ -32,18 +35,18 @@ class _SpecialtiesPageState extends State<SpecialtiesPage> {
           return Scaffold(
             backgroundColor: Colors.white,
             appBar: AppBar(
-              toolbarHeight: 158,
+              toolbarHeight: 220,
               title: const SizedBox.shrink(),
               flexibleSpace: const HeaderWidget(labelName: "ПРОФЕССИИ"),
             ),
             body: GridView.builder(
-              padding:
-                  const EdgeInsets.only(bottom: 62, top: 62, right: 8, left: 8),
+              padding: const EdgeInsets.only(bottom: 64, left: 8, right: 8),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3, // Количество колонок
-                  crossAxisSpacing: 8, // Горизонтальный отступ
-                  mainAxisSpacing: 8, // Вертикальный отступ
-                  childAspectRatio: .7),
+                crossAxisCount: 3,
+                crossAxisSpacing: 8,
+                mainAxisSpacing: 8,
+                childAspectRatio: .7,
+              ),
               itemCount: state.specialties.length,
               itemBuilder: (context, index) {
                 final specialty = state.specialties[index];

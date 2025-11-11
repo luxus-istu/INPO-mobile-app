@@ -1,9 +1,11 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
+import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/usecases/get_specialties_usecase.dart';
 import 'package:injectable/injectable.dart';
 
-import 'specialty_event.dart';
-import 'specialty_state.dart';
+part 'specialty_event.dart';
+part 'specialty_state.dart';
 
 @lazySingleton
 class SpecialtyBloc extends Bloc<SpecialtyEvent, SpecialtyState> {

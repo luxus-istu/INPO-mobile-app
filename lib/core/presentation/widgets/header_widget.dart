@@ -55,6 +55,7 @@ class HeaderWidget extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 62),
         ],
       ),
     );
