@@ -22,8 +22,8 @@ class SpecialtyDetailLoaded extends SpecialtyDetailState {
 }
 
 class SpecialtyDetailError extends SpecialtyDetailState {
-  final String message;
-  const SpecialtyDetailError(this.message);
+  final Exception error;
+  const SpecialtyDetailError(this.error);
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [error];
 }

@@ -1,5 +1,5 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
-import 'package:inpo_mobile_app/features/home/presentation/bloc/news_bloc.dart';
+import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/features/news/presentation/widgets/news_card.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';

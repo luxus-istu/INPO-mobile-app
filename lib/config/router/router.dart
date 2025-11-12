@@ -1,4 +1,5 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
+import 'package:inpo_mobile_app/features/chat/presentation/pages/chat_bot_page.dart';
 import 'package:inpo_mobile_app/features/contacts/presentation/pages/contacts_page.dart';
 import 'package:inpo_mobile_app/features/home/presentation/pages/home_page.dart';
 import 'package:inpo_mobile_app/features/news/presentation/pages/news_page.dart';
@@ -34,4 +35,5 @@ final GoRouter router = GoRouter(initialLocation: '/', routes: [
       ]),
   GoRoute(path: "/news", builder: (_, __) => const NewsPage()),
   GoRoute(path: "/contacts", builder: (_, __) => const ContactsPage()),
+  GoRoute(path: '/chat', builder: (context, state) => const ChatBotPage()),
 ]);

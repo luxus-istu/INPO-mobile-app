@@ -1,23 +1,26 @@
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
+import 'package:inpo_mobile_app/core/resources/data_state.dart';
 import 'package:inpo_mobile_app/features/specialties/data/models/specialty_detail_model.dart';
 
 abstract class SpecialtyDetailRemoteDataSource {
-  Future<SpecialtyDetailModel> getSpecialtyDetailFromUrl(String url);
+  Future<DataState<SpecialtyDetailModel>> getSpecialtyDetailFromUrl(String url);
 }
 
 @LazySingleton(as: SpecialtyDetailRemoteDataSource)
 class SpecialtyDetailRemoteDataSourceImpl
     implements SpecialtyDetailRemoteDataSource {
-  const SpecialtyDetailRemoteDataSourceImpl();
+  final Dio dio;
+  SpecialtyDetailRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<SpecialtyDetailModel> getSpecialtyDetailFromUrl(String url) async {
-    final response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      return SpecialtyDetailModel.fromHtml(response.body, url);
-    } else {
-      throw Exception('Failed to load specialty detail');
+  Future<DataState<SpecialtyDetailModel>> getSpecialtyDetailFromUrl(
+      String url) async {
+    try {
+      final response = await dio.get(url);
+      return DataSuccess(SpecialtyDetailModel.fromHtml(response.data, url));
+    } on DioException catch (e) {
+      return DataFailed(e);
     }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:inpo_mobile_app/core/resources/data_state.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/usecases/get_specialties_usecase.dart';
 import 'package:injectable/injectable.dart';
@@ -22,9 +23,12 @@ class SpecialtyBloc extends Bloc<SpecialtyEvent, SpecialtyState> {
     emit(const SpecialtyLoading());
     try {
       final specialties = await _getSpecialtiesUseCase();
-      emit(SpecialtyLoaded(specialties));
-    } catch (e) {
-      emit(SpecialtyError(e.toString()));
+      if (specialties is DataFailed) {
+        return emit(SpecialtyError(specialties.error!));
+      }
+      emit(SpecialtyLoaded(specialties.data!));
+    } on Exception catch (e) {
+      return emit(SpecialtyError(e));
     }
   }
 }

@@ -1,31 +1,31 @@
+import 'package:dio/dio.dart';
 import 'package:inpo_mobile_app/core/constants/constants.dart';
 import 'package:inpo_mobile_app/core/data/models/news_item_model.dart';
-import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' as parser;
 import 'package:injectable/injectable.dart';
+import 'package:inpo_mobile_app/core/resources/data_state.dart';
 
 abstract class NewsRemoteDataSource {
-  Future<List<NewsItemModel>> getNewsFromHtml();
+  Future<DataState<List<NewsItemModel>>> getNewsFromHtml();
 }
 
 @LazySingleton(as: NewsRemoteDataSource)
 class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
-  const NewsRemoteDataSourceImpl();
+  final Dio dio;
+  const NewsRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<List<NewsItemModel>> getNewsFromHtml() async {
-    final response = await http.get(Uri.parse(Constants.newsUrl));
-
-    if (response.statusCode == 200) {
-      final document = parser.parse(response.body);
+  Future<DataState<List<NewsItemModel>>> getNewsFromHtml() async {
+    try {
+      final response = await dio.get(Constants.newsUrl);
+      final document = parser.parse(response.data);
 
       final newsElements = document.querySelectorAll('div.mediaTileList-item');
-      return newsElements
+      return DataSuccess(newsElements
           .map((element) => NewsItemModel.fromHtml(element))
-          .toList();
-    } else {
-      throw Exception(
-          'Failed to load news. Status code: ${response.statusCode}');
+          .toList());
+    } on DioException catch (e) {
+      return DataFailed(e);
     }
   }
 }

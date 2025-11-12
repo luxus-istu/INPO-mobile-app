@@ -1,8 +1,8 @@
 import 'package:inpo_mobile_app/core/data/datasources/news_remote_data_source.dart';
-import 'package:inpo_mobile_app/core/data/models/news_item_model.dart';
 import 'package:inpo_mobile_app/core/domain/entities/news_item.dart';
 import 'package:inpo_mobile_app/core/domain/repositories/news_repository.dart';
 import 'package:injectable/injectable.dart';
+import 'package:inpo_mobile_app/core/resources/data_state.dart';
 
 @LazySingleton(as: NewsRepository)
 class NewsRepositoryImpl implements NewsRepository {
@@ -11,9 +11,13 @@ class NewsRepositoryImpl implements NewsRepository {
   NewsRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<NewsItem>> getNews() async {
-    final List<NewsItemModel> newsModels =
-        await remoteDataSource.getNewsFromHtml();
-    return newsModels.map((model) => model.toDomainEntity()).toList();
+  Future<DataState<List<NewsItem>>> getNews() async {
+    try {
+      final newsModels = await remoteDataSource.getNewsFromHtml();
+      return DataSuccess(
+          newsModels.data!.map((model) => model.toDomainEntity()).toList());
+    } on Exception catch (e) {
+      return DataFailed(e);
+    }
   }
 }

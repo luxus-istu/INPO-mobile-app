@@ -42,9 +42,9 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
   @override
   Widget build(BuildContext context) {
     _controller.forward();
-    final screenHeight = MediaQuery.of(context).size.height;
+    final screenHeight = MediaQuery.sizeOf(context).height;
     final appBarHeight = AppBar().preferredSize.height;
-    final statusBarHeight = MediaQuery.of(context).padding.top;
+    final statusBarHeight = MediaQuery.paddingOf(context).top;
 
     final availableHeight = screenHeight - appBarHeight - statusBarHeight;
     final desiredHeight = availableHeight * 0.8;
@@ -55,27 +55,19 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
         children: [
           _buildAnimatedImage(
             imageUrl: _getUrl(0),
-            width: 96,
-            height: 96,
-            left: 26,
-            top: 60,
+            width: 110,
+            height: 110,
+            left: 62,
+            top: 42,
             animationDelay: 0,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(1),
-            width: 60,
-            height: 60,
-            left: 167,
-            top: 102,
-            animationDelay: 0.1,
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(2),
             width: 110,
             height: 110,
-            right: 16,
-            top: 35,
-            animationDelay: 0.2,
+            right: 62,
+            top: 42,
+            animationDelay: 0.1,
           ),
           Positioned(
             top: 184,
@@ -94,71 +86,41 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
             ),
           ),
           _buildAnimatedImage(
+            imageUrl: _getUrl(2),
+            width: 98,
+            height: 98,
+            left: 74,
+            top: 289,
+            animationDelay: 0.2,
+          ),
+          _buildAnimatedImage(
             imageUrl: _getUrl(3),
-            width: 96,
-            height: 96,
-            left: 71,
+            width: 98,
+            height: 98,
+            right: 74,
             top: 289,
             animationDelay: 0.3,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(4),
-            width: 80,
-            height: 80,
-            right: 86,
-            top: 282,
+            width: 128,
+            height: 128,
+            left: 44,
+            top: 423,
             animationDelay: 0.4,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(5),
-            width: 160,
-            height: 160,
-            left: 16,
+            width: 128,
+            height: 128,
+            right: 44,
             top: 423,
             animationDelay: 0.5,
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(6),
-            width: 140,
-            height: 140,
-            right: 16,
-            top: 417,
-            animationDelay: 0.6,
           ),
         ],
       ),
     );
   }
-
-  // Widget _buildAnimatedImage({
-  //   required String? imageUrl,
-  //   required double width,
-  //   required double height,
-  //   double? left,
-  //   double? top,
-  //   double? right,
-  //   double? bottom,
-  //   required double animationDelay,
-  // }) {
-  //   // Создаем анимацию для прозрачности с задержкой
-  //   final animation = CurvedAnimation(
-  //     parent: _controller,
-  //     curve: Interval(animationDelay, 1.0,
-  //         curve: Curves.easeOut), // Плавная кривая
-  //   );
-
-  //   // Используем FadeTransition для анимации прозрачности
-  //   return FadeTransition(
-  //     opacity: animation,
-  //     child: Positioned(
-  //       left: left,
-  //       top: top,
-  //       right: right,
-  //       bottom: bottom,
-  //       child: _buildImageWidget(imageUrl, width, height),
-  //     ),
-  //   );
-  // }
 
   Widget _buildAnimatedImage({
     required String? imageUrl,

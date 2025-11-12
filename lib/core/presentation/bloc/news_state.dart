@@ -25,7 +25,7 @@ class NewsLoaded extends NewsState {
 }
 
 class NewsError extends NewsState {
-  final String message;
+  final Exception message;
 
   const NewsError(this.message);
 

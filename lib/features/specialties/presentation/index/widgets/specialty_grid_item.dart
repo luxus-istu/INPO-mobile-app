@@ -39,6 +39,7 @@ class SpecialtyGridItem extends StatelessWidget {
                 fontWeight: FontWeight.w600,
                 fontFamily: "SF Pro Display",
                 fontSize: 16,
+                color: Colors.white,
               ),
             ),
           ],

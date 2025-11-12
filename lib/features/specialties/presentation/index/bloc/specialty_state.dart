@@ -25,8 +25,7 @@ class SpecialtyLoaded extends SpecialtyState {
 }
 
 class SpecialtyError extends SpecialtyState {
-  final String message;
-
+  final Exception message;
   const SpecialtyError(this.message);
 
   @override

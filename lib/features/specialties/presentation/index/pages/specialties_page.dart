@@ -14,11 +14,7 @@ class SpecialtiesPage extends StatefulWidget {
   State<SpecialtiesPage> createState() => _SpecialtiesPageState();
 }
 
-class _SpecialtiesPageState extends State<SpecialtiesPage>
-    with AutomaticKeepAliveClientMixin {
-  @override
-  bool get wantKeepAlive => true;
-
+class _SpecialtiesPageState extends State<SpecialtiesPage> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +23,6 @@ class _SpecialtiesPageState extends State<SpecialtiesPage>
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
     return BlocBuilder<SpecialtyBloc, SpecialtyState>(
       bloc: getIt<SpecialtyBloc>(),
       builder: (context, state) {
