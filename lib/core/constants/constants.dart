@@ -4,7 +4,7 @@ import 'package:inpo_mobile_app/core/domain/entities/menu_item.dart';
 final class Constants {
   static const String AI_FRIENDLY_ERROR_MESSAGE =
       "Извините, я не могу обработать ваш запрос и дать вам ответ на вопрос. Уточните, либо напишите запрос по другому.";
-  static const int MAX_CHAT_HISTOY_LENGHT = 5;
+  static const int MAX_CHAT_HISTOY_LENGHT = 50;
   static const String openRouterBaseUrl =
       'https://openrouter.ai/api/v1/chat/completions';
   static const String model = 'kwaipilot/kat-coder-pro:free';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/constants/constants.dart';
+import 'package:inpo_mobile_app/core/util/responsive.dart';
 
 class AnimatedFabMenu extends StatefulWidget {
   const AnimatedFabMenu({super.key});
@@ -53,8 +54,18 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
 
   Widget _buildMainFab() {
     return Positioned(
-      right: 16,
-      bottom: 16,
+      right: Responsive.getResponsiveValue(
+        context,
+        mobile: 16,
+        tablet: 24,
+        desktop: 32,
+      ),
+      bottom: Responsive.getResponsiveValue(
+        context,
+        mobile: 16,
+        tablet: 24,
+        desktop: 32,
+      ),
       child: FloatingActionButton(
         onPressed: _toggleMenu,
         backgroundColor: Colors.white,
@@ -74,7 +85,12 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
           child: Icon(
             _isOpen ? Icons.close : Icons.menu,
             key: ValueKey(_isOpen),
-            size: 40,
+            size: Responsive.getResponsiveValue(
+              context,
+              mobile: 40,
+              tablet: 48,
+              desktop: 56,
+            ),
             color: Colors.black,
           ),
         ),
@@ -87,7 +103,19 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
       final index = entry.key;
       final item = entry.value;
 
-      final bottomPosition = 16.0 + (index + 1) * 64.0;
+      final baseBottom = Responsive.getResponsiveValue(
+        context,
+        mobile: 16.0,
+        tablet: 24.0,
+        desktop: 32.0,
+      );
+      final spacing = Responsive.getResponsiveValue(
+        context,
+        mobile: 64.0,
+        tablet: 72.0,
+        desktop: 80.0,
+      );
+      final bottomPosition = baseBottom + (index + 1) * spacing;
 
       return _buildPositionedItem(
         icon: item.icon,
@@ -121,7 +149,12 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
       animation: animation,
       builder: (context, child) {
         return Positioned(
-          right: 16,
+          right: Responsive.getResponsiveValue(
+            context,
+            mobile: 16,
+            tablet: 24,
+            desktop: 32,
+          ),
           bottom: bottomPosition,
           child: FadeTransition(
             opacity: animation,
@@ -135,8 +168,28 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
               )),
               child: FloatingActionButton.extended(
                 onPressed: onTap,
-                icon: Icon(icon, color: Colors.black, size: 24),
-                label: Text(label, style: const TextStyle(color: Colors.black)),
+                icon: Icon(
+                  icon,
+                  color: Colors.black,
+                  size: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 24,
+                    tablet: 28,
+                    desktop: 32,
+                  ),
+                ),
+                label: Text(
+                  label,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: Responsive.getResponsiveValue(
+                      context,
+                      mobile: 14,
+                      tablet: 16,
+                      desktop: 18,
+                    ),
+                  ),
+                ),
                 backgroundColor: Colors.white,
                 elevation: 2,
                 shape: const RoundedRectangleBorder(

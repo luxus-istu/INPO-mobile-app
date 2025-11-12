@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:inpo_mobile_app/core/util/responsive.dart';
 
 class ImageCollageWidget extends StatefulWidget {
   final List<String> imageUrls;
@@ -24,6 +25,12 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
       vsync: this,
       duration: const Duration(milliseconds: 1500),
     );
+    // Запускаем анимацию один раз при инициализации, а не при каждом build
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        _controller.forward();
+      }
+    });
   }
 
   @override
@@ -41,13 +48,66 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
 
   @override
   Widget build(BuildContext context) {
-    _controller.forward();
-    final screenHeight = MediaQuery.sizeOf(context).height;
-    final appBarHeight = AppBar().preferredSize.height;
+    final screenSize = MediaQuery.sizeOf(context);
+    final screenWidth = screenSize.width;
+    final screenHeight = screenSize.height;
+    const appBarHeight = kToolbarHeight;
     final statusBarHeight = MediaQuery.paddingOf(context).top;
 
     final availableHeight = screenHeight - appBarHeight - statusBarHeight;
     final desiredHeight = availableHeight * 0.8;
+
+    double responsiveSize(double base) {
+      final scaleFactor = (screenWidth / 375)
+          .clamp(0.85, Responsive.isDesktop(context) ? 1.6 : 1.2);
+      return base * scaleFactor;
+    }
+
+    final imageSize1 = responsiveSize(110.0);
+    final imageSize2 = responsiveSize(98.0);
+    final imageSize3 = responsiveSize(128.0);
+    final leftOffset1 = Responsive.getResponsiveValue(
+      context,
+      mobile: 62.0,
+      tablet: 80.0,
+      desktop: 100.0,
+    );
+    final leftOffset2 = Responsive.getResponsiveValue(
+      context,
+      mobile: 74.0,
+      tablet: 90.0,
+      desktop: 110.0,
+    );
+    final leftOffset3 = Responsive.getResponsiveValue(
+      context,
+      mobile: 44.0,
+      tablet: 60.0,
+      desktop: 80.0,
+    );
+    final topOffset1 = Responsive.getResponsiveValue(
+      context,
+      mobile: 42.0,
+      tablet: 60.0,
+      desktop: 80.0,
+    );
+    final topOffset2 = Responsive.getResponsiveValue(
+      context,
+      mobile: 289.0,
+      tablet: 350.0,
+      desktop: 400.0,
+    );
+    final topOffset3 = Responsive.getResponsiveValue(
+      context,
+      mobile: 423.0,
+      tablet: 500.0,
+      desktop: 580.0,
+    );
+    final textTop = Responsive.getResponsiveValue(
+      context,
+      mobile: 184.0,
+      tablet: 220.0,
+      desktop: 260.0,
+    );
 
     return SizedBox(
       height: desiredHeight,
@@ -55,29 +115,39 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
         children: [
           _buildAnimatedImage(
             imageUrl: _getUrl(0),
-            width: 110,
-            height: 110,
-            left: 62,
-            top: 42,
+            width: imageSize1,
+            height: imageSize1,
+            left: leftOffset1,
+            top: topOffset1,
             animationDelay: 0,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(1),
-            width: 110,
-            height: 110,
-            right: 62,
-            top: 42,
+            width: imageSize1,
+            height: imageSize1,
+            right: leftOffset1,
+            top: topOffset1,
             animationDelay: 0.1,
           ),
           Positioned(
-            top: 184,
+            top: textTop,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: const Text(
+              padding: Responsive.getResponsivePadding(
+                context,
+                mobile: const EdgeInsets.symmetric(horizontal: 24),
+                tablet: const EdgeInsets.symmetric(horizontal: 40),
+                desktop: const EdgeInsets.symmetric(horizontal: 60),
+              ),
+              child: Text(
                 'Больше, чем обычный\nтехнический институт',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 32,
+                    tablet: 40,
+                    desktop: 48,
+                  ),
                   fontWeight: FontWeight.w700,
                   fontFamily: "SF Pro Display",
                   color: const Color(0xFF4069D3),
@@ -87,34 +157,34 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(2),
-            width: 98,
-            height: 98,
-            left: 74,
-            top: 289,
+            width: imageSize2,
+            height: imageSize2,
+            left: leftOffset2,
+            top: topOffset2,
             animationDelay: 0.2,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(3),
-            width: 98,
-            height: 98,
-            right: 74,
-            top: 289,
+            width: imageSize2,
+            height: imageSize2,
+            right: leftOffset2,
+            top: topOffset2,
             animationDelay: 0.3,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(4),
-            width: 128,
-            height: 128,
-            left: 44,
-            top: 423,
+            width: imageSize3,
+            height: imageSize3,
+            left: leftOffset3,
+            top: topOffset3,
             animationDelay: 0.4,
           ),
           _buildAnimatedImage(
             imageUrl: _getUrl(5),
-            width: 128,
-            height: 128,
-            right: 44,
-            top: 423,
+            width: imageSize3,
+            height: imageSize3,
+            right: leftOffset3,
+            top: topOffset3,
             animationDelay: 0.5,
           ),
         ],

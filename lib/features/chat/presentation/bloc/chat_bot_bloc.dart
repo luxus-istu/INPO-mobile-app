@@ -36,8 +36,12 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
 
   Future<void> _onSendMessage(
       ChatBotRequestEvent event, Emitter<ChatBotState> emit) async {
-    final List<MessageEntity> currentMessages =
-        state is ChatBotLoaded ? (state as ChatBotLoaded).messages : [];
+    // Оптимизация: используем pattern matching для более эффективной проверки
+    final List<MessageEntity> currentMessages = switch (state) {
+      ChatBotLoaded( messages: final msgs) => msgs,
+      ChatBotProcessing( messages: final msgs) => msgs,
+      _ => <MessageEntity>[],
+    };
 
     final userMessage = MessageEntity(
       text: event.request,

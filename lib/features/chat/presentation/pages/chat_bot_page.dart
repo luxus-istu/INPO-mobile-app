@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/util/responsive.dart';
 import 'package:inpo_mobile_app/features/chat/domain/entities/message_entity.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/bloc/chat_bot_bloc.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/widgets/typing_indicator.dart';
@@ -34,6 +35,8 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
   @override
   Widget build(BuildContext context) {
+    final maxWidth = Responsive.getMaxContentWidth(context);
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -42,7 +45,13 @@ class _ChatBotPageState extends State<ChatBotPage> {
         shadowColor: Colors.white,
         animateColor: false,
         surfaceTintColor: Colors.white,
-        toolbarHeight: 245,
+        elevation: 0,
+        toolbarHeight: Responsive.getResponsiveValue(
+          context,
+          mobile: 211,
+          tablet: 262,
+          desktop: 220,
+        ),
         title: const SizedBox.shrink(),
         flexibleSpace:
             HeaderWidget(labelName: "ЧАТ-БОТ", onTap: () => context.go('/')),
@@ -63,28 +72,33 @@ class _ChatBotPageState extends State<ChatBotPage> {
           }
         },
         builder: (context, state) {
-          return Column(
-            children: [
-              if (state is ChatBotError)
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  color: Colors.red.shade300,
-                  child: Row(
-                    children: [
-                      const Icon(Icons.error_outline, color: Colors.white),
-                      const SizedBox(width: 8),
-                      Expanded(
-                          child: Text(state.exception.toString(),
-                              style: const TextStyle(color: Colors.white))),
-                    ],
+          return Center(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: maxWidth),
+              child: Column(
+                children: [
+                  if (state is ChatBotError)
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      color: Colors.red.shade300,
+                      child: Row(
+                        children: [
+                          const Icon(Icons.error_outline, color: Colors.white),
+                          const SizedBox(width: 8),
+                          Expanded(
+                              child: Text(state.exception.toString(),
+                                  style: const TextStyle(color: Colors.white))),
+                        ],
+                      ),
+                    ),
+                  Expanded(
+                    child: _buildBody(state, _scrollController),
                   ),
-                ),
-              Expanded(
-                child: _buildBody(state, _scrollController),
+                  _buildMessageComposer(
+                      context, _textController, state is ChatBotProcessing),
+                ],
               ),
-              _buildMessageComposer(
-                  context, _textController, state is ChatBotProcessing),
-            ],
+            ),
           );
         },
       ),
@@ -104,7 +118,12 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
       return ListView.builder(
         controller: scrollController,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: Responsive.getResponsivePadding(
+          context,
+          mobile: const EdgeInsets.symmetric(horizontal: 16),
+          tablet: const EdgeInsets.symmetric(horizontal: 32),
+          desktop: const EdgeInsets.symmetric(horizontal: 48),
+        ),
         itemCount: messages.length + (state is ChatBotProcessing ? 1 : 0),
         itemBuilder: (_, index) {
           if (index == messages.length && state is ChatBotProcessing) {
@@ -151,7 +170,12 @@ class _ChatBotPageState extends State<ChatBotPage> {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontFamily: "SF Pro Display",
-                      fontSize: 16,
+                      fontSize: Responsive.getResponsiveValue(
+                        context,
+                        mobile: 16,
+                        tablet: 18,
+                        desktop: 20,
+                      ),
                       color: isUser ? Colors.white : Colors.black,
                     ),
                   ),
@@ -175,8 +199,19 @@ class _ChatBotPageState extends State<ChatBotPage> {
   Widget _buildMessageComposer(
       BuildContext context, TextEditingController controller, bool isLoading) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      margin: const EdgeInsets.only(bottom: 32, left: 16, right: 16, top: 16),
+      padding: Responsive.getResponsivePadding(
+        context,
+        mobile: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        tablet: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        desktop: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      ),
+      margin: Responsive.getResponsivePadding(
+        context,
+        mobile: const EdgeInsets.only(bottom: 32, left: 16, right: 16, top: 16),
+        tablet: const EdgeInsets.only(bottom: 32, left: 32, right: 32, top: 16),
+        desktop:
+            const EdgeInsets.only(bottom: 32, left: 48, right: 48, top: 16),
+      ),
       decoration: const BoxDecoration(
         color: Color(0xffF3F3F3),
         borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -187,12 +222,17 @@ class _ChatBotPageState extends State<ChatBotPage> {
             child: TextField(
               controller: controller,
               enabled: !isLoading,
-              decoration: const InputDecoration.collapsed(
-                  hintStyle: const TextStyle(
+              decoration: InputDecoration.collapsed(
+                  hintStyle: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontFamily: "SF Pro Display",
-                    fontSize: 16,
-                    color: Color(0xff8F8F8F),
+                    fontSize: Responsive.getResponsiveValue(
+                      context,
+                      mobile: 16,
+                      tablet: 18,
+                      desktop: 20,
+                    ),
+                    color: const Color(0xff8F8F8F),
                   ),
                   hintText: 'Задай свой вопрос...'),
               onSubmitted: (text) {
@@ -220,12 +260,25 @@ class _ChatBotPageState extends State<ChatBotPage> {
                 }
               },
               child: Container(
-                padding: const EdgeInsets.all(8),
+                padding: EdgeInsets.all(Responsive.getResponsiveValue(
+                  context,
+                  mobile: 8,
+                  tablet: 10,
+                  desktop: 12,
+                )),
                 decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                     color: Color(0xff9FBAFF)),
-                child: const Icon(Icons.arrow_upward,
-                    size: 32, color: Colors.white),
+                child: Icon(
+                  Icons.arrow_upward,
+                  size: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 32,
+                    tablet: 36,
+                    desktop: 40,
+                  ),
+                  color: Colors.white,
+                ),
               ),
             )
         ],

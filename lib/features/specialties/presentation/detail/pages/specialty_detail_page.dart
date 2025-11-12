@@ -5,6 +5,7 @@ import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/util/responsive.dart';
 import 'package:url_launcher2/url_launcher_string.dart';
 
 class SpecialtyDetailPage extends StatefulWidget {
@@ -27,11 +28,21 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
             return ErrorMessageWidget(error: state);
           }
           if (state is SpecialtyDetailLoaded) {
+            final maxWidth = Responsive.getMaxContentWidth(context);
+            
             return Scaffold(
               backgroundColor: Colors.white,
-              body: ListView(
-                padding: const EdgeInsets.only(top: 57, left: 16, right: 16),
-                children: [
+              body: Center(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxWidth: maxWidth),
+                  child: ListView(
+                    padding: Responsive.getResponsivePadding(
+                      context,
+                      mobile: const EdgeInsets.only(top: 57, left: 16, right: 16),
+                      tablet: const EdgeInsets.only(top: 57, left: 32, right: 32),
+                      desktop: const EdgeInsets.only(top: 57, left: 48, right: 48),
+                    ),
+                    children: [
                   HeaderWidget(
                     labelName: state.detail.title!,
                     onTap: () => context.pop(),
@@ -43,14 +54,27 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Icon(state.detail.icon!,
-                                size: 80, color: const Color(0xFF4069D3)),
+                            Icon(
+                              state.detail.icon!,
+                              size: Responsive.getResponsiveValue(
+                                context,
+                                mobile: 80,
+                                tablet: 100,
+                                desktop: 120,
+                              ),
+                              color: const Color(0xFF4069D3),
+                            ),
                             Text(
                               state.detail.duration!,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style: TextStyle(
+                                fontSize: Responsive.getResponsiveValue(
+                                  context,
+                                  mobile: 16,
+                                  tablet: 18,
+                                  desktop: 20,
+                                ),
                                 fontFamily: "SF Pro Display",
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF8F8F8F),
@@ -65,8 +89,13 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                           children: [
                             Text(
                               state.detail.code!,
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style: TextStyle(
+                                fontSize: Responsive.getResponsiveValue(
+                                  context,
+                                  mobile: 16,
+                                  tablet: 18,
+                                  desktop: 20,
+                                ),
                                 fontFamily: "Onder",
                                 fontWeight: FontWeight.w400,
                                 color: const Color(0xFF000080),
@@ -74,20 +103,30 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             ),
                             Text(
                               state.detail.title!,
-                              maxLines: 3,
+                              maxLines: Responsive.isTablet(context) ? 4 : 3,
                               overflow: TextOverflow.ellipsis,
                               textAlign: TextAlign.end,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontFamily: "SF Pro Display",
-                                fontSize: 16,
+                                fontSize: Responsive.getResponsiveValue(
+                                  context,
+                                  mobile: 16,
+                                  tablet: 18,
+                                  desktop: 20,
+                                ),
                                 fontWeight: FontWeight.bold,
                                 color: const Color(0xFF4069D3),
                               ),
                             ),
                             Text(
                               '${state.detail.seats!} мест',
-                              style: const TextStyle(
-                                fontSize: 16,
+                              style: TextStyle(
+                                fontSize: Responsive.getResponsiveValue(
+                                  context,
+                                  mobile: 16,
+                                  tablet: 18,
+                                  desktop: 20,
+                                ),
                                 fontWeight: FontWeight.bold,
                                 fontFamily: "SF Pro Display",
                                 color: const Color(0xFF8F8F8F),
@@ -98,19 +137,39 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 60),
-                  const Text(
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 60,
+                    tablet: 72,
+                    desktop: 84,
+                  )),
+                  Text(
                     'ОПИСАНИЕ',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: Responsive.getResponsiveValue(
+                        context,
+                        mobile: 15,
+                        tablet: 18,
+                        desktop: 20,
+                      ),
                       fontFamily: "Onder",
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF000080),
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 12,
+                    tablet: 16,
+                    desktop: 20,
+                  )),
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: Responsive.getResponsivePadding(
+                      context,
+                      mobile: const EdgeInsets.all(16),
+                      tablet: const EdgeInsets.all(20),
+                      desktop: const EdgeInsets.all(24),
+                    ),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(16)),
@@ -125,16 +184,26 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           "В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:",
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: Responsive.getResponsiveValue(
+                              context,
+                              mobile: 15,
+                              tablet: 17,
+                              desktop: 19,
+                            ),
                             fontFamily: "SF Pro Display",
                             fontWeight: FontWeight.w400,
-                            color: Color(0xFF000080),
+                            color: const Color(0xFF000080),
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        SizedBox(height: Responsive.getResponsiveValue(
+                          context,
+                          mobile: 12,
+                          tablet: 16,
+                          desktop: 20,
+                        )),
                         ...state.detail.competencies!
                             .take(_showAllCompetencies
                                 ? state.detail.competencies!.length
@@ -142,8 +211,13 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             .map(
                               (item) => Text(
                                 '• $item',
-                                style: const TextStyle(
-                                  fontSize: 15,
+                                style: TextStyle(
+                                  fontSize: Responsive.getResponsiveValue(
+                                    context,
+                                    mobile: 15,
+                                    tablet: 17,
+                                    desktop: 19,
+                                  ),
                                   fontFamily: "SF Pro Display",
                                   fontWeight: FontWeight.bold,
                                   color: const Color(0xFF4069D3),
@@ -183,19 +257,39 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 48),
-                  const Text(
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 48,
+                    tablet: 56,
+                    desktop: 64,
+                  )),
+                  Text(
                     'ГИД ПО ДИСЦИПЛИНАМ',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: Responsive.getResponsiveValue(
+                        context,
+                        mobile: 15,
+                        tablet: 18,
+                        desktop: 20,
+                      ),
                       fontFamily: "Onder",
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF000080),
                     ),
                   ),
-                  const SizedBox(height: 18),
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 18,
+                    tablet: 24,
+                    desktop: 28,
+                  )),
                   Container(
-                    padding: const EdgeInsets.all(16),
+                    padding: Responsive.getResponsivePadding(
+                      context,
+                      mobile: const EdgeInsets.all(16),
+                      tablet: const EdgeInsets.all(20),
+                      desktop: const EdgeInsets.all(24),
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -206,8 +300,13 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             .map(
                               (item) => Text(
                                 '• $item',
-                                style: const TextStyle(
-                                  fontSize: 15,
+                                style: TextStyle(
+                                  fontSize: Responsive.getResponsiveValue(
+                                    context,
+                                    mobile: 15,
+                                    tablet: 17,
+                                    desktop: 19,
+                                  ),
                                   fontFamily: "SF Pro Display",
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black,
@@ -247,27 +346,48 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       ],
                     ),
                   ),
-                  const Text(
+                  Text(
                     'ГДЕ ВОЗЬМУТ НА РАБОТУ И ПРАКТИКУ?',
                     style: TextStyle(
-                      fontSize: 15,
+                      fontSize: Responsive.getResponsiveValue(
+                        context,
+                        mobile: 15,
+                        tablet: 18,
+                        desktop: 20,
+                      ),
                       fontFamily: "Onder",
                       fontWeight: FontWeight.w400,
                       color: const Color(0xFF000080),
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 16,
+                    tablet: 20,
+                    desktop: 24,
+                  )),
                   ...state.detail.companies!.map(
                     (company) => Text(
                       company,
-                      style: const TextStyle(
+                      style: TextStyle(
+                        fontSize: Responsive.getResponsiveValue(
+                          context,
+                          mobile: 15,
+                          tablet: 17,
+                          desktop: 19,
+                        ),
                         color: const Color(0xFF000080),
                         fontFamily: "SF Pro Display",
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  const SizedBox(height: 60),
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 60,
+                    tablet: 72,
+                    desktop: 84,
+                  )),
                   Center(
                     child: ElevatedButton(
                       onPressed: () async {
@@ -276,17 +396,34 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF9FBAFF),
                         foregroundColor: const Color(0xFF3A6BD9),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 30, vertical: 16),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: Responsive.getResponsiveValue(
+                            context,
+                            mobile: 30,
+                            tablet: 40,
+                            desktop: 50,
+                          ),
+                          vertical: Responsive.getResponsiveValue(
+                            context,
+                            mobile: 16,
+                            tablet: 20,
+                            desktop: 24,
+                          ),
+                        ),
                         elevation: 8,
                         shape: const RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(16)),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Поступить',
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: Responsive.getResponsiveValue(
+                            context,
+                            mobile: 20,
+                            tablet: 24,
+                            desktop: 28,
+                          ),
                           fontFamily: "SF Pro Display",
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
@@ -294,8 +431,15 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 60),
-                ],
+                  SizedBox(height: Responsive.getResponsiveValue(
+                    context,
+                    mobile: 60,
+                    tablet: 72,
+                    desktop: 84,
+                  )),
+                    ],
+                  ),
+                ),
               ),
             );
           }
