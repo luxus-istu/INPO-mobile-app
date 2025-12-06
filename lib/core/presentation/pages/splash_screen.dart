@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:inpo_mobile_app/core/util/responsive.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -10,14 +9,8 @@ class SplashScreen extends StatelessWidget {
       color: const Color(0xFF4069D3),
       child: SafeArea(
         bottom: false,
-        minimum: EdgeInsets.only(
-          top: Responsive.getResponsiveValue(
-            context,
-            mobile: 106,
-            tablet: 120,
-            desktop: 140,
-          ),
-        ),
+        minimum: const EdgeInsets.only(
+            top: 106), // Фиксированный отступ для мобильных
         child: Stack(
           children: [
             Column(
@@ -29,21 +22,12 @@ class SplashScreen extends StatelessWidget {
                     fontFamily: "Onder",
                     decoration: TextDecoration.none,
                     fontWeight: FontWeight.w400,
-                    fontSize: Responsive.getResponsiveValue(
-                      context,
-                      mobile: 40,
-                      tablet: 56,
-                      desktop: 72,
-                    ),
+                    fontSize: 40, // Фиксированный размер шрифта для мобильных
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: Responsive.getResponsiveValue(
-                  context,
-                  mobile: 10,
-                  tablet: 16,
-                  desktop: 20,
-                )),
+                const SizedBox(
+                    height: 10), // Фиксированный отступ для мобильных
                 Align(
                   alignment: Alignment.centerRight,
                   child: Text(
@@ -52,12 +36,7 @@ class SplashScreen extends StatelessWidget {
                       fontFamily: "Onder",
                       decoration: TextDecoration.none,
                       fontWeight: FontWeight.w400,
-                      fontSize: Responsive.getResponsiveValue(
-                        context,
-                        mobile: 28,
-                        tablet: 40,
-                        desktop: 52,
-                      ),
+                      fontSize: 28, // Фиксированный размер шрифта для мобильных
                       color: Colors.white,
                     ),
                   ),
@@ -72,12 +51,7 @@ class SplashScreen extends StatelessWidget {
               child: Image.asset(
                 "assets/images/statue_cutted.png",
                 fit: BoxFit.contain,
-                scale: Responsive.getResponsiveValue(
-                  context,
-                  mobile: 2,
-                  tablet: 1.5,
-                  desktop: 1.2,
-                ),
+                scale: 2, // Фиксированный масштаб для мобильных
                 alignment: Alignment.bottomCenter,
               ),
             ),

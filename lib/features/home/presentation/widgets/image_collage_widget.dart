@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:inpo_mobile_app/core/util/responsive.dart';
 
 class ImageCollageWidget extends StatefulWidget {
   final List<String> imageUrls;
@@ -51,63 +50,31 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
     final screenSize = MediaQuery.sizeOf(context);
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
-    const appBarHeight = kToolbarHeight;
-    final statusBarHeight = MediaQuery.paddingOf(context).top;
 
-    final availableHeight = screenHeight - appBarHeight - statusBarHeight;
-    final desiredHeight = availableHeight * 0.8;
+    // Базовый размер для вычислений (стандартная ширина мобильного устройства)
+    const baseWidth = 375.0;
 
-    double responsiveSize(double base) {
-      final scaleFactor = (screenWidth / 375)
-          .clamp(0.85, Responsive.isDesktop(context) ? 1.6 : 1.2);
-      return base * scaleFactor;
-    }
+    // Коэффициент масштабирования на основе ширины экрана
+    final scaleFactor = (screenWidth / baseWidth).clamp(0.8, 1.2);
 
-    final imageSize1 = responsiveSize(110.0);
-    final imageSize2 = responsiveSize(98.0);
-    final imageSize3 = responsiveSize(128.0);
-    final leftOffset1 = Responsive.getResponsiveValue(
-      context,
-      mobile: 62.0,
-      tablet: 80.0,
-      desktop: 100.0,
-    );
-    final leftOffset2 = Responsive.getResponsiveValue(
-      context,
-      mobile: 74.0,
-      tablet: 90.0,
-      desktop: 110.0,
-    );
-    final leftOffset3 = Responsive.getResponsiveValue(
-      context,
-      mobile: 44.0,
-      tablet: 60.0,
-      desktop: 80.0,
-    );
-    final topOffset1 = Responsive.getResponsiveValue(
-      context,
-      mobile: 42.0,
-      tablet: 60.0,
-      desktop: 80.0,
-    );
-    final topOffset2 = Responsive.getResponsiveValue(
-      context,
-      mobile: 289.0,
-      tablet: 350.0,
-      desktop: 400.0,
-    );
-    final topOffset3 = Responsive.getResponsiveValue(
-      context,
-      mobile: 423.0,
-      tablet: 500.0,
-      desktop: 580.0,
-    );
-    final textTop = Responsive.getResponsiveValue(
-      context,
-      mobile: 184.0,
-      tablet: 220.0,
-      desktop: 260.0,
-    );
+    // Адаптивная высота виджета (60% от высоты экрана)
+    final desiredHeight = screenHeight * 0.6;
+
+    // Адаптивные размеры изображений
+    final imageSize1 = 110.0 * scaleFactor;
+    final imageSize2 = 98.0 * scaleFactor;
+    final imageSize3 = 128.0 * scaleFactor;
+
+    // Адаптивные отступы
+    final horizontalPadding = 16.0 * scaleFactor;
+    final leftOffset1 = 62.0 * scaleFactor;
+    final leftOffset2 = 74.0 * scaleFactor;
+    final leftOffset3 = 44.0 * scaleFactor;
+    final topOffset1 = 42.0 * scaleFactor;
+    final topOffset2 = 289.0 * scaleFactor;
+    final topOffset3 = 423.0 * scaleFactor;
+    final textTop = 184.0 * scaleFactor;
+    final fontSize = 32.0 * scaleFactor;
 
     return SizedBox(
       height: desiredHeight,
@@ -132,22 +99,12 @@ class _ImageCollageWidgetState extends State<ImageCollageWidget>
           Positioned(
             top: textTop,
             child: Padding(
-              padding: Responsive.getResponsivePadding(
-                context,
-                mobile: const EdgeInsets.symmetric(horizontal: 24),
-                tablet: const EdgeInsets.symmetric(horizontal: 40),
-                desktop: const EdgeInsets.symmetric(horizontal: 60),
-              ),
+              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
               child: Text(
                 'Больше, чем обычный\nтехнический институт',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: Responsive.getResponsiveValue(
-                    context,
-                    mobile: 32,
-                    tablet: 40,
-                    desktop: 48,
-                  ),
+                  fontSize: fontSize,
                   fontWeight: FontWeight.w700,
                   fontFamily: "SF Pro Display",
                   color: const Color(0xFF4069D3),
