@@ -3,7 +3,6 @@ import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/features/news/presentation/widgets/news_card.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
-import 'package:inpo_mobile_app/core/util/responsive.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
@@ -16,10 +15,16 @@ class NewsPage extends StatefulWidget {
 }
 
 class _NewsPageState extends State<NewsPage> {
+  static const double _expandedHeight = 160;
+  static const double _collapseThreshold = _expandedHeight - kToolbarHeight;
+  bool _isAppBarCollapsed = false;
+
   @override
   void initState() {
     super.initState();
-    getIt<NewsBloc>().add(const FetchNews());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getIt<NewsBloc>().add(const FetchNews());
+    });
   }
 
   @override
@@ -28,69 +33,59 @@ class _NewsPageState extends State<NewsPage> {
       bloc: getIt<NewsBloc>(),
       builder: (context, state) {
         if (state is NewsLoaded) {
-          final maxWidth = Responsive.getMaxContentWidth(context);
-          final isTablet = Responsive.isTablet(context);
-          final isDesktop = Responsive.isDesktop(context);
-          
           return Scaffold(
             backgroundColor: Colors.white,
-            body: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxWidth),
-                child: isTablet || isDesktop
-                    ? Column(
-                        children: [
-                          const HeaderWidget(labelName: "НОВОСТИ"),
-                          Expanded(
-                            child: GridView.builder(
-                              padding: Responsive.getResponsivePadding(
-                                context,
-                                mobile: EdgeInsets.zero,
-                                tablet: const EdgeInsets.all(24),
-                                desktop: const EdgeInsets.all(32),
-                              ),
-                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: isDesktop ? 2 : 2,
-                                crossAxisSpacing: Responsive.getResponsiveValue(
-                                  context,
-                                  mobile: 16,
-                                  tablet: 24,
-                                  desktop: 32,
-                                ),
-                                mainAxisSpacing: Responsive.getResponsiveValue(
-                                  context,
-                                  mobile: 16,
-                                  tablet: 24,
-                                  desktop: 32,
-                                ),
-                                childAspectRatio: Responsive.getResponsiveValue(
-                                  context,
-                                  mobile: 1.0,
-                                  tablet: 1.2,
-                                  desktop: 1.3,
-                                ),
-                              ),
-                              itemCount: state.news.length,
-                              itemBuilder: (context, index) {
-                                return NewsCard(newsItem: state.news[index]);
-                              },
-                            ),
-                          ),
-                        ],
-                      )
-                    : ListView(
-                        children: [
-                          const HeaderWidget(labelName: "НОВОСТИ"),
-                          SizedBox(height: Responsive.getResponsiveValue(
-                            context,
-                            mobile: 46,
-                            tablet: 56,
-                            desktop: 64,
-                          )),
-                          ...state.news.map((item) => NewsCard(newsItem: item))
-                        ],
+            body: NotificationListener<ScrollNotification>(
+              onNotification: (scrollNotification) {
+                if (scrollNotification is ScrollUpdateNotification) {
+                  if (scrollNotification.metrics.pixels >= _collapseThreshold &&
+                      !_isAppBarCollapsed) {
+                    setState(() {
+                      _isAppBarCollapsed = true;
+                    });
+                  } else if (scrollNotification.metrics.pixels <
+                          _collapseThreshold &&
+                      _isAppBarCollapsed) {
+                    setState(() {
+                      _isAppBarCollapsed = false;
+                    });
+                  }
+                }
+                return false;
+              },
+              child: CustomScrollView(slivers: [
+                SliverAppBar(
+                  expandedHeight: _expandedHeight,
+                  pinned: true,
+                  surfaceTintColor: Colors.white,
+                  backgroundColor: Colors.white,
+                  shadowColor: Colors.black26,
+                  title: AnimatedOpacity(
+                    duration: const Duration(milliseconds: 100),
+                    opacity: _isAppBarCollapsed ? 1.0 : 0.0,
+                    child: const Text(
+                      "НОВОСТИ",
+                      style: TextStyle(
+                        fontFamily: "Onder",
+                        decoration: TextDecoration.none,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16,
+                        color: const Color(0xFF4069D3),
                       ),
-              ),
+                    ),
+                  ),
+                  centerTitle: true,
+                  flexibleSpace: const FlexibleSpaceBar(
+                    background: HeaderWidget(
+                      labelName: "НОВОСТИ",
+                    ),
+                  ),
+                ),
+                SliverList(
+                    delegate: SliverChildListDelegate([
+                  ...state.news.map((item) => NewsCard(newsItem: item))
+                ])),
+              ]),
             ),
             floatingActionButton: const AnimatedFabMenu(),
           );
