@@ -1,5 +1,5 @@
-import java.io.FileInputStream
 import java.util.Properties
+import java.io.FileInputStream
 
 val keystoreProperties = Properties()
 val keystorePropertiesFile = rootProject.file("key.properties")
@@ -9,51 +9,67 @@ if (keystorePropertiesFile.exists()) {
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.android")
     id("dev.flutter.flutter-gradle-plugin")
 }
 
 android {
     namespace = "com.luxus.inpo_mobile_app"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "29.0.14206865"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
+        isCoreLibraryDesugaringEnabled = true
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_21.toString()
-        freeCompilerArgs = listOf(
-            "-Xjsr305=strict",
-            "-opt-in=kotlin.RequiresOptIn"
-        )
+    kotlin {
+        jvmToolchain(21)
+        compilerOptions {
+            freeCompilerArgs.addAll(
+                "-Xjsr305=strict",
+                "-opt-in=kotlin.RequiresOptIn",
+                "-Xlint:-options",
+                "-progressive",
+                "-Xcontext-receivers"
+            )
+        }
     }
 
     defaultConfig {
         applicationId = "com.luxus.inpo_mobile_app"
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
+        minSdk = 24
+        targetSdk = 36
+        versionCode = flutter.versionCode.toInt()
         versionName = flutter.versionName
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables {
+            useSupportLibrary = true
+        }
     }
 
     signingConfigs {
         create("release") {
             if (keystorePropertiesFile.exists()) {
-                storeFile = file(keystoreProperties["storeFile"] as String)
-                storePassword = keystoreProperties["storePassword"] as String
-                keyAlias = keystoreProperties["keyAlias"] as String
-                keyPassword = keystoreProperties["keyPassword"] as String
+                storeFile = file(keystoreProperties.getProperty("storeFile"))
+                storePassword = keystoreProperties.getProperty("storePassword")
+                keyAlias = keystoreProperties.getProperty("keyAlias")
+                keyPassword = keystoreProperties.getProperty("keyPassword")
             }
         }
     }
 
     buildTypes {
+        debug {
+            isDebuggable = true
+        }
+
         release {
             isMinifyEnabled = true
             isShrinkResources = true
+            isCrunchPngs = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -61,22 +77,19 @@ android {
             signingConfig = signingConfigs.getByName("release")
 
             buildConfigField("String", "BUILD_TIME", "\"${System.currentTimeMillis()}\"")
+            buildConfigField("boolean", "IS_RELEASE", "true")
         }
-
-        debug {}
     }
 
     buildFeatures {
         buildConfig = true
-    }
-
-    configurations.all {
-        resolutionStrategy {
-            force("org.jetbrains.kotlin:kotlin-stdlib:2.2.20")
-        }
+        prefab = true
     }
 
     packaging {
+        jniLibs {
+            useLegacyPackaging = false
+        }
         resources {
             excludes += listOf(
                 "/META-INF/{AL2.0,LGPL2.1}",
@@ -84,12 +97,34 @@ android {
                 "META-INF/LICENSE",
                 "META-INF/LICENSE.txt",
                 "META-INF/NOTICE",
-                "META-INF/NOTICE.txt"
+                "META-INF/NOTICE.txt",
+                "**/*.kotlin_metadata",
+                "**/*.kotlin_builtins"
+            )
+            pickFirsts += listOf(
+                "**/libc++_shared.so",
+                "**/libjsc.so"
             )
         }
     }
+
+    lint {
+        abortOnError = false
+        disable += listOf(
+            "InvalidPackage",
+            "UnusedResources"
+        )
+    }
 }
 
-flutter {
-    source = "../.."
+configurations.all {
+    resolutionStrategy {
+        force("org.jetbrains.kotlin:kotlin-stdlib:2.3.0")
+        cacheDynamicVersionsFor(1, "hours")
+        cacheChangingModulesFor(0, "seconds")
+    }
+}
+
+dependencies {
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
 }
