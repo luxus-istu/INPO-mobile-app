@@ -52,34 +52,13 @@ final class _ChatBotPageState extends State<ChatBotPage> {
   Widget build(BuildContext context) {
     // Responsive values
     final isTablet = context.isTablet;
-    final isDesktop = context.isDesktop;
 
     // Responsive sizing
-    final appBarHeight = isDesktop
-        ? 250.0
-        : isTablet
-            ? 230.0
-            : 211.0;
-    final errorMargin = isDesktop
-        ? 24.0
-        : isTablet
-            ? 20.0
-            : 16.0;
-    final errorPadding = isDesktop
-        ? 16.0
-        : isTablet
-            ? 14.0
-            : 12.0;
-    final errorFontSize = isDesktop
-        ? 16.0
-        : isTablet
-            ? 15.0
-            : 14.0;
-    final errorBorderRadius = isDesktop
-        ? 16.0
-        : isTablet
-            ? 14.0
-            : 12.0;
+    final appBarHeight = isTablet ? 230.0 : 211.0;
+    final errorMargin = isTablet ? 20.0 : 16.0;
+    final errorPadding = isTablet ? 14.0 : 12.0;
+    final errorFontSize = isTablet ? 15.0 : 14.0;
+    final errorBorderRadius = isTablet ? 14.0 : 12.0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -152,15 +131,15 @@ final class _ChatBotPageState extends State<ChatBotPage> {
 
               // Основной контент
               Expanded(
-                child: _buildMessageList(state, isTablet, isDesktop),
+                child: _buildMessageList(state, isTablet),
               ),
 
               // Индикатор стриминга
               if (_isStreaming && state is ChatBotProcessing)
-                _buildStreamingIndicator(state, isTablet, isDesktop),
+                _buildStreamingIndicator(state, isTablet),
 
               // Поле ввода
-              _buildMessageInput(context, state, isTablet, isDesktop),
+              _buildMessageInput(context, state, isTablet),
             ],
           );
         },
@@ -168,33 +147,13 @@ final class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildMessageList(ChatBotState state, bool isTablet, bool isDesktop) {
+  Widget _buildMessageList(ChatBotState state, bool isTablet) {
     // Responsive sizing
-    final loadingFontSize = isDesktop
-        ? 18.0
-        : isTablet
-            ? 17.0
-            : 16.0;
-    final emptyIconSize = isDesktop
-        ? 80.0
-        : isTablet
-            ? 72.0
-            : 64.0;
-    final emptyTitleFontSize = isDesktop
-        ? 20.0
-        : isTablet
-            ? 19.0
-            : 18.0;
-    final emptySubtitleFontSize = isDesktop
-        ? 16.0
-        : isTablet
-            ? 15.0
-            : 14.0;
-    final listPadding = isDesktop
-        ? 24.0
-        : isTablet
-            ? 20.0
-            : 16.0;
+    final loadingFontSize = isTablet ? 17.0 : 16.0;
+    final emptyIconSize = isTablet ? 72.0 : 64.0;
+    final emptyTitleFontSize = isTablet ? 19.0 : 18.0;
+    final emptySubtitleFontSize = isTablet ? 15.0 : 14.0;
+    final listPadding = isTablet ? 20.0 : 16.0;
 
     if (state is ChatBotInitial || state is ChatBotLoading) {
       return Center(
@@ -263,8 +222,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               index == messages.length - 1 &&
               !isUser;
 
-          return _buildMessageItem(
-              message, isUser, isStreaming, isTablet, isDesktop);
+          return _buildMessageItem(message, isUser, isStreaming, isTablet);
         },
       );
     }
@@ -272,59 +230,19 @@ final class _ChatBotPageState extends State<ChatBotPage> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildMessageItem(MessageEntity message, bool isUser, bool isStreaming,
-      bool isTablet, bool isDesktop) {
+  Widget _buildMessageItem(
+      MessageEntity message, bool isUser, bool isStreaming, bool isTablet) {
     // Responsive sizing
-    final avatarSize = isDesktop
-        ? 40.0
-        : isTablet
-            ? 36.0
-            : 32.0;
-    final avatarIconSize = isDesktop
-        ? 22.0
-        : isTablet
-            ? 20.0
-            : 18.0;
-    final senderFontSize = isDesktop
-        ? 14.0
-        : isTablet
-            ? 13.0
-            : 12.0;
-    final messageFontSize = isDesktop
-        ? 18.0
-        : isTablet
-            ? 17.0
-            : 16.0;
-    final timeFontSize = isDesktop
-        ? 13.0
-        : isTablet
-            ? 12.0
-            : 11.0;
-    final messageMargin = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 16.0;
-    final messagePadding = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 16.0;
-    final borderRadius = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 16.0;
-    final maxMessageWidth = isDesktop
-        ? 0.6
-        : isTablet
-            ? 0.65
-            : 0.75;
-    final avatarMargin = isDesktop
-        ? 16.0
-        : isTablet
-            ? 14.0
-            : 12.0;
+    final avatarSize = isTablet ? 36.0 : 32.0;
+    final avatarIconSize = isTablet ? 20.0 : 18.0;
+    final senderFontSize = isTablet ? 13.0 : 12.0;
+    final messageFontSize = isTablet ? 17.0 : 16.0;
+    final timeFontSize = isTablet ? 12.0 : 11.0;
+    final messageMargin = isTablet ? 18.0 : 16.0;
+    final messagePadding = isTablet ? 18.0 : 16.0;
+    final borderRadius = isTablet ? 18.0 : 16.0;
+    final maxMessageWidth = isTablet ? 0.65 : 0.75;
+    final avatarMargin = isTablet ? 14.0 : 12.0;
 
     return Container(
       margin: EdgeInsets.only(bottom: messageMargin),
@@ -472,54 +390,17 @@ final class _ChatBotPageState extends State<ChatBotPage> {
   //   );
   // }
 
-  Widget _buildStreamingIndicator(
-      ChatBotProcessing state, bool isTablet, bool isDesktop) {
+  Widget _buildStreamingIndicator(ChatBotProcessing state, bool isTablet) {
     // Responsive sizing
-    final paddingHorizontal = isDesktop
-        ? 24.0
-        : isTablet
-            ? 20.0
-            : 16.0;
-    final paddingVertical = isDesktop
-        ? 16.0
-        : isTablet
-            ? 14.0
-            : 12.0;
-    final dotSize = isDesktop
-        ? 10.0
-        : isTablet
-            ? 9.0
-            : 8.0;
-    final dotMargin = isDesktop
-        ? 10.0
-        : isTablet
-            ? 9.0
-            : 8.0;
-    final fontSize = isDesktop
-        ? 16.0
-        : isTablet
-            ? 15.0
-            : 14.0;
-    final buttonPaddingHorizontal = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 16.0;
-    final buttonPaddingVertical = isDesktop
-        ? 10.0
-        : isTablet
-            ? 9.0
-            : 8.0;
-    final buttonFontSize = isDesktop
-        ? 16.0
-        : isTablet
-            ? 15.0
-            : 14.0;
-    final borderRadius = isDesktop
-        ? 10.0
-        : isTablet
-            ? 9.0
-            : 8.0;
+    final paddingHorizontal = isTablet ? 20.0 : 16.0;
+    final paddingVertical = isTablet ? 14.0 : 12.0;
+    final dotSize = isTablet ? 9.0 : 8.0;
+    final dotMargin = isTablet ? 9.0 : 8.0;
+    final fontSize = isTablet ? 15.0 : 14.0;
+    final buttonPaddingHorizontal = isTablet ? 18.0 : 16.0;
+    final buttonPaddingVertical = isTablet ? 9.0 : 8.0;
+    final buttonFontSize = isTablet ? 15.0 : 14.0;
+    final borderRadius = isTablet ? 9.0 : 8.0;
 
     return Container(
       padding: EdgeInsets.symmetric(
@@ -580,56 +461,20 @@ final class _ChatBotPageState extends State<ChatBotPage> {
   }
 
   Widget _buildMessageInput(
-      BuildContext context, ChatBotState state, bool isTablet, bool isDesktop) {
+      BuildContext context, ChatBotState state, bool isTablet) {
     final isProcessing = state is ChatBotProcessing;
     final isButtonDisabled = _textController.text.isEmpty || isProcessing;
 
     // Responsive sizing
-    final padding = isDesktop
-        ? 24.0
-        : isTablet
-            ? 20.0
-            : 16.0;
-    final inputBorderRadius = isDesktop
-        ? 16.0
-        : isTablet
-            ? 14.0
-            : 12.0;
-    final hintFontSize = isDesktop
-        ? 18.0
-        : isTablet
-            ? 17.0
-            : 16.0;
-    final inputPadding = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 16.0;
-    final buttonSize = isDesktop
-        ? 56.0
-        : isTablet
-            ? 52.0
-            : 48.0;
-    final buttonBorderRadius = isDesktop
-        ? 14.0
-        : isTablet
-            ? 13.0
-            : 12.0;
-    final buttonIconSize = isDesktop
-        ? 28.0
-        : isTablet
-            ? 26.0
-            : 24.0;
-    final progressSize = isDesktop
-        ? 24.0
-        : isTablet
-            ? 22.0
-            : 20.0;
-    final spacing = isDesktop
-        ? 16.0
-        : isTablet
-            ? 14.0
-            : 12.0;
+    final padding = isTablet ? 20.0 : 16.0;
+    final inputBorderRadius = isTablet ? 14.0 : 12.0;
+    final hintFontSize = isTablet ? 17.0 : 16.0;
+    final inputPadding = isTablet ? 18.0 : 16.0;
+    final buttonSize = isTablet ? 52.0 : 48.0;
+    final buttonBorderRadius = isTablet ? 13.0 : 12.0;
+    final buttonIconSize = isTablet ? 26.0 : 24.0;
+    final progressSize = isTablet ? 22.0 : 20.0;
+    final spacing = isTablet ? 14.0 : 12.0;
 
     return Container(
       padding: EdgeInsets.all(padding),
@@ -646,11 +491,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
           Expanded(
             child: Container(
               constraints: BoxConstraints(
-                maxHeight: isDesktop
-                    ? 140
-                    : isTablet
-                        ? 130
-                        : 120,
+                maxHeight: isTablet ? 130 : 120,
               ),
               decoration: BoxDecoration(
                 color: const Color(0xffF5F7FA),

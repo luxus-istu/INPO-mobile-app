@@ -8,17 +8,17 @@ class ResponsiveHelper {
   static const double desktopBreakpoint = 1200;
 
   /// Device type detection
+  static bool isDesktop(BuildContext context) {
+    return MediaQuery.of(context).size.width >= desktopBreakpoint;
+  }
+
+  /// Device type detection
   static bool isMobile(BuildContext context) {
     return MediaQuery.of(context).size.width < mobileBreakpoint;
   }
 
   static bool isTablet(BuildContext context) {
-    return MediaQuery.of(context).size.width >= mobileBreakpoint &&
-        MediaQuery.of(context).size.width < desktopBreakpoint;
-  }
-
-  static bool isDesktop(BuildContext context) {
-    return MediaQuery.of(context).size.width >= desktopBreakpoint;
+    return MediaQuery.of(context).size.width >= mobileBreakpoint;
   }
 
   /// Screen size categories
@@ -32,7 +32,12 @@ class ResponsiveHelper {
   }
 
   static bool isLargeScreen(BuildContext context) {
-    return MediaQuery.of(context).size.width >= 600;
+    return MediaQuery.of(context).size.width >= 600 &&
+        MediaQuery.of(context).size.width < desktopBreakpoint;
+  }
+
+  static bool isExtraLargeScreen(BuildContext context) {
+    return MediaQuery.of(context).size.width >= desktopBreakpoint;
   }
 
   /// Get responsive value based on screen size
@@ -44,7 +49,8 @@ class ResponsiveHelper {
   }) {
     if (isDesktop(context) && desktop != null) {
       return desktop;
-    } else if (isTablet(context) && tablet != null) {
+    }
+    if (isTablet(context) && tablet != null) {
       return tablet;
     }
     return mobile;
@@ -55,11 +61,8 @@ class ResponsiveHelper {
     required BuildContext context,
     EdgeInsets? mobile,
     EdgeInsets? tablet,
-    EdgeInsets? desktop,
   }) {
-    if (isDesktop(context) && desktop != null) {
-      return desktop;
-    } else if (isTablet(context) && tablet != null) {
+    if (isTablet(context) && tablet != null) {
       return tablet;
     }
     return mobile ?? EdgeInsets.zero;
@@ -70,13 +73,10 @@ class ResponsiveHelper {
     required BuildContext context,
     required double mobile,
     double? tablet,
-    double? desktop,
   }) {
     final screenWidth = MediaQuery.of(context).size.width;
 
-    if (isDesktop(context) && desktop != null) {
-      return desktop;
-    } else if (isTablet(context) && tablet != null) {
+    if (isTablet(context) && tablet != null) {
       return tablet;
     }
 
@@ -95,11 +95,8 @@ class ResponsiveHelper {
     required BuildContext context,
     required double mobile,
     double? tablet,
-    double? desktop,
   }) {
-    if (isDesktop(context) && desktop != null) {
-      return desktop;
-    } else if (isTablet(context) && tablet != null) {
+    if (isTablet(context) && tablet != null) {
       return tablet;
     }
 
@@ -123,7 +120,8 @@ class ResponsiveHelper {
   }) {
     if (isDesktop(context)) {
       return desktop;
-    } else if (isTablet(context)) {
+    }
+    if (isTablet(context)) {
       return tablet;
     }
     return mobile;
@@ -134,11 +132,8 @@ class ResponsiveHelper {
     required BuildContext context,
     required double mobile,
     double? tablet,
-    double? desktop,
   }) {
-    if (isDesktop(context) && desktop != null) {
-      return desktop;
-    } else if (isTablet(context) && tablet != null) {
+    if (isTablet(context) && tablet != null) {
       return tablet;
     }
     return mobile;
@@ -165,11 +160,8 @@ class ResponsiveHelper {
     required BuildContext context,
     required Size mobileSize,
     Size? tabletSize,
-    Size? desktopSize,
   }) {
-    if (isDesktop(context) && desktopSize != null) {
-      return desktopSize;
-    } else if (isTablet(context) && tabletSize != null) {
+    if (isTablet(context) && tabletSize != null) {
       return tabletSize;
     }
     return mobileSize;
@@ -184,9 +176,72 @@ class ResponsiveHelper {
   }) {
     if (isDesktop(context) && desktop != null) {
       return desktop;
-    } else if (isTablet(context) && tablet != null) {
+    }
+    if (isTablet(context) && tablet != null) {
       return tablet;
     }
     return mobile;
+  }
+
+  /// Responsive typography scale based on screen size
+  static double responsiveFontSizeScale({
+    required BuildContext context,
+    required double baseSize,
+    double scaleFactor = 1.0,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    if (isDesktop(context)) {
+      return baseSize * scaleFactor * 1.2;
+    } else if (isTablet(context)) {
+      return baseSize * scaleFactor * 1.1;
+    } else if (screenWidth > 450) {
+      return baseSize * scaleFactor * 1.05;
+    } else if (screenWidth < 360) {
+      return baseSize * scaleFactor * 0.95;
+    }
+
+    return baseSize * scaleFactor;
+  }
+
+  /// Get responsive typography preset
+  static TextStyle responsiveTypography({
+    required BuildContext context,
+    required TextStyle baseStyle,
+    TextStyle? tabletStyle,
+    TextStyle? desktopStyle,
+  }) {
+    if (isDesktop(context) && desktopStyle != null) {
+      return desktopStyle;
+    }
+    if (isTablet(context) && tabletStyle != null) {
+      return tabletStyle;
+    }
+    return baseStyle;
+  }
+
+  /// Get device type as string for debugging
+  static String getDeviceType(BuildContext context) {
+    if (isDesktop(context)) {
+      return 'Desktop';
+    } else if (isTablet(context)) {
+      return 'Tablet';
+    } else if (isLargeScreen(context)) {
+      return 'Large Mobile';
+    } else if (isMediumScreen(context)) {
+      return 'Medium Mobile';
+    } else {
+      return 'Small Mobile';
+    }
+  }
+
+  /// Check if screen size is between min and max width
+  static bool isScreenWidthBetween({
+    required BuildContext context,
+    required double minWidth,
+    required double maxWidth,
+  }) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    return screenWidth >= minWidth && screenWidth <= maxWidth;
   }
 }

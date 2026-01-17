@@ -1,5 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:inpo_mobile_app/core/resources/data_state.dart';
+import 'package:inpo_mobile_app/core/utils/logger.dart';
 import 'package:inpo_mobile_app/features/chat/data/datasources/local/chat_local_datasource.dart';
 import 'package:inpo_mobile_app/features/chat/data/datasources/remote/chat_remote_datasource.dart';
 import 'package:inpo_mobile_app/features/chat/data/models/message_model.dart';
@@ -32,7 +33,7 @@ final class ChatRepositoryImpl implements ChatRepository {
 
       yield* remoteDataSource.sendMessage(messagesResult.data!);
     } catch (e) {
-      print('Repository error: ${e.toString()}');
+      AppLogger.error('Repository error: ${e.toString()}');
       yield DataState.failure(Exception('Repository error: ${e.toString()}'));
     }
   }

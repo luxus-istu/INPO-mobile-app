@@ -4,13 +4,11 @@ import 'package:flutter/material.dart';
 final class ImageCollageWidget extends StatefulWidget {
   final List<String> imageUrls;
   final bool isTablet;
-  final bool isDesktop;
 
   const ImageCollageWidget({
     super.key,
     required this.imageUrls,
     this.isTablet = false,
-    this.isDesktop = false,
   });
 
   @override
@@ -59,10 +57,7 @@ final class _ImageCollageWidgetState extends State<ImageCollageWidget>
     double baseWidth;
     double heightPercentage;
 
-    if (widget.isDesktop) {
-      baseWidth = 1200.0;
-      heightPercentage = 0.4;
-    } else if (widget.isTablet) {
+    if (widget.isTablet) {
       baseWidth = 800.0;
       heightPercentage = 0.5;
     } else {
@@ -76,49 +71,29 @@ final class _ImageCollageWidgetState extends State<ImageCollageWidget>
     // Адаптивная высота виджета
     final desiredHeight = screenHeight * heightPercentage;
 
-    // Адаптивные размеры изображений (different layout for tablets/desktop)
-    final imageSize1 = widget.isDesktop
-        ? 150.0 * scaleFactor
-        : widget.isTablet
-            ? 130.0 * scaleFactor
-            : 110.0 * scaleFactor;
-    final imageSize2 = widget.isDesktop
-        ? 130.0 * scaleFactor
-        : widget.isTablet
-            ? 110.0 * scaleFactor
-            : 98.0 * scaleFactor;
-    final imageSize3 = widget.isDesktop
-        ? 160.0 * scaleFactor
-        : widget.isTablet
-            ? 140.0 * scaleFactor
-            : 128.0 * scaleFactor;
+    // Адаптивные размеры изображений (different layout for tablets)
+    final imageSize1 =
+        widget.isTablet ? 130.0 * scaleFactor : 110.0 * scaleFactor;
+    final imageSize2 =
+        widget.isTablet ? 110.0 * scaleFactor : 98.0 * scaleFactor;
+    final imageSize3 =
+        widget.isTablet ? 140.0 * scaleFactor : 128.0 * scaleFactor;
 
     // Адаптивные отступы
-    final horizontalPadding = widget.isDesktop
-        ? 32.0 * scaleFactor
-        : widget.isTablet
-            ? 24.0 * scaleFactor
-            : 16.0 * scaleFactor;
+    final horizontalPadding =
+        widget.isTablet ? 24.0 * scaleFactor : 16.0 * scaleFactor;
 
-    // Different layout for tablets/desktop vs mobile
-    if (widget.isTablet || widget.isDesktop) {
-      // Tablet/Desktop layout - more spread out
-      final leftOffset1 =
-          widget.isDesktop ? 100.0 * scaleFactor : 80.0 * scaleFactor;
-      final leftOffset2 =
-          widget.isDesktop ? 120.0 * scaleFactor : 100.0 * scaleFactor;
-      final leftOffset3 =
-          widget.isDesktop ? 80.0 * scaleFactor : 60.0 * scaleFactor;
-      final topOffset1 =
-          widget.isDesktop ? 60.0 * scaleFactor : 50.0 * scaleFactor;
-      final topOffset2 =
-          widget.isDesktop ? 320.0 * scaleFactor : 280.0 * scaleFactor;
-      final topOffset3 =
-          widget.isDesktop ? 450.0 * scaleFactor : 400.0 * scaleFactor;
-      final textTop =
-          widget.isDesktop ? 200.0 * scaleFactor : 180.0 * scaleFactor;
-      final fontSize =
-          widget.isDesktop ? 40.0 * scaleFactor : 36.0 * scaleFactor;
+    // Different layout for tablets vs mobile
+    if (widget.isTablet) {
+      // Tablet layout - more spread out
+      final leftOffset1 = 80.0 * scaleFactor;
+      final leftOffset2 = 100.0 * scaleFactor;
+      final leftOffset3 = 60.0 * scaleFactor;
+      final topOffset1 = 50.0 * scaleFactor;
+      final topOffset2 = 280.0 * scaleFactor;
+      final topOffset3 = 400.0 * scaleFactor;
+      final textTop = 180.0 * scaleFactor;
+      final fontSize = 36.0 * scaleFactor;
 
       return SizedBox(
         height: desiredHeight,

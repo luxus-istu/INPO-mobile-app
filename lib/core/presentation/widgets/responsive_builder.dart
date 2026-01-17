@@ -5,22 +5,18 @@ import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
 class ResponsiveBuilder extends StatelessWidget {
   final Widget Function(BuildContext) mobileBuilder;
   final Widget Function(BuildContext)? tabletBuilder;
-  final Widget Function(BuildContext)? desktopBuilder;
   final Widget? child;
 
   const ResponsiveBuilder({
     super.key,
     required this.mobileBuilder,
     this.tabletBuilder,
-    this.desktopBuilder,
     this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (ResponsiveHelper.isDesktop(context) && desktopBuilder != null) {
-      return desktopBuilder!(context);
-    } else if (ResponsiveHelper.isTablet(context) && tabletBuilder != null) {
+    if (ResponsiveHelper.isTablet(context) && tabletBuilder != null) {
       return tabletBuilder!(context);
     } else if (child != null) {
       return child!;
@@ -33,13 +29,11 @@ class ResponsiveBuilder extends StatelessWidget {
     required BuildContext context,
     required T mobile,
     T? tablet,
-    T? desktop,
   }) {
     return ResponsiveHelper.responsiveValue(
       context: context,
       mobile: mobile,
       tablet: tablet,
-      desktop: desktop,
     );
   }
 }
@@ -85,11 +79,8 @@ class AdaptiveBuilder extends StatelessWidget {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
     final isTablet = ResponsiveHelper.isTablet(context);
-    final isDesktop = ResponsiveHelper.isDesktop(context);
 
-    if (isDesktop && desktopBuilder != null) {
-      return desktopBuilder!(context);
-    } else if (isTablet) {
+    if (isTablet) {
       if (isLandscape && tabletLandscapeBuilder != null) {
         return tabletLandscapeBuilder!(context);
       } else if (!isLandscape && tabletPortraitBuilder != null) {

@@ -11,45 +11,16 @@ class ContactsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     // Responsive values
     final isTablet = context.isTablet;
-    final isDesktop = context.isDesktop;
     final isMobile = context.isMobile;
 
     // Responsive sizing
-    final titleFontSize = isDesktop
-        ? 18.0
-        : isTablet
-            ? 16.0
-            : 14.0;
-    final contactFontSize = isDesktop
-        ? 24.0
-        : isTablet
-            ? 22.0
-            : 20.0;
-    final iconSize = isDesktop
-        ? 28.0
-        : isTablet
-            ? 24.0
-            : 20.0;
-    final imageHeight = isDesktop
-        ? 300.0
-        : isTablet
-            ? 250.0
-            : 200.0;
-    final borderRadius = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 15.0;
-    final horizontalPadding = isDesktop
-        ? 32.0
-        : isTablet
-            ? 24.0
-            : 16.0;
-    final spacing = isDesktop
-        ? 40.0
-        : isTablet
-            ? 30.0
-            : 20.0;
+    final titleFontSize = isTablet ? 16.0 : 14.0;
+    final contactFontSize = isTablet ? 22.0 : 20.0;
+    final iconSize = isTablet ? 24.0 : 20.0;
+    final imageHeight = isTablet ? 250.0 : 200.0;
+    final borderRadius = isTablet ? 18.0 : 15.0;
+    final horizontalPadding = isTablet ? 24.0 : 16.0;
+    final spacing = isTablet ? 30.0 : 20.0;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -165,7 +136,7 @@ class ContactsPage extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
           child: Image.asset(
-            "assets/images/contacts_image.jpg",
+            "assets/images/contacts_image.webp",
             width: double.infinity,
             height: imageHeight,
             fit: BoxFit.cover,
@@ -279,7 +250,7 @@ class ContactsPage extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(borderRadius),
             child: Image.asset(
-              "assets/images/contacts_image.jpg",
+              "assets/images/contacts_image.webp",
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,

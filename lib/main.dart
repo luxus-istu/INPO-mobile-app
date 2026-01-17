@@ -1,11 +1,16 @@
 import 'package:inpo_mobile_app/config/router/router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
+import 'package:inpo_mobile_app/core/services/image_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Configure image caching before any widgets are built
+  ImageService.configureImageCache();
+
   await configureDependencies();
   runApp(const MyApp());
 }
@@ -38,9 +43,8 @@ class MyApp extends StatelessWidget {
               child: child!,
               breakpoints: [
                 const Breakpoint(start: 0, end: 450, name: MOBILE),
-                const Breakpoint(start: 451, end: 800, name: TABLET),
-                const Breakpoint(start: 801, end: 1920, name: DESKTOP),
-                const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
+                const Breakpoint(
+                    start: 451, end: double.infinity, name: TABLET),
               ],
             );
           },

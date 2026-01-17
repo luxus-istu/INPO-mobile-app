@@ -2,6 +2,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:inpo_mobile_app/core/domain/entities/news_item.dart';
 import 'package:inpo_mobile_app/core/domain/usecases/get_news_usecase.dart';
+import 'package:inpo_mobile_app/core/resources/data_state.dart';
 import 'package:injectable/injectable.dart';
 
 part 'news_event.dart';
@@ -19,9 +20,13 @@ final class NewsBloc extends Bloc<NewsEvent, NewsState> {
     emit(const NewsLoading());
     try {
       final news = await this._getNewsUseCase();
+      if (news is DataFailed) {
+        emit(NewsError(news.error!));
+        return;
+      }
       emit(NewsLoaded(news.data!));
     } on Exception catch (e) {
-      emit(NewsError(e));
+      emit(NewsError(Exception('Failed to fetch news: ${e.toString()}')));
     }
   }
 }

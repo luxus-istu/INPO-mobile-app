@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:injectable/injectable.dart';
 import 'package:inpo_mobile_app/core/constants/constants.dart';
 import 'package:inpo_mobile_app/core/resources/data_state.dart';
+import 'package:inpo_mobile_app/core/utils/logger.dart';
 import 'package:inpo_mobile_app/features/chat/data/datasources/remote/chat_remote_datasource.dart';
 import 'package:inpo_mobile_app/features/chat/domain/entities/message_entity.dart';
 import 'package:remove_markdown/remove_markdown.dart';
@@ -70,7 +71,7 @@ final class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
                     yield DataState.success(textChunk.removeMarkdown());
                   }
                 } catch (e) {
-                  print('Ошибка парсинга чанка: $e');
+                  AppLogger.error('Ошибка парсинга чанка: $e');
                   yield DataState.failure(
                       Exception('Ошибка парсинга ответа ИИ: ${e.toString()}'));
                   return;
@@ -82,7 +83,7 @@ final class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
           buffer = lines.last;
         }
       } catch (e) {
-        print('Remote data source error: ${e.toString()}');
+        AppLogger.error('Remote data source error: ${e.toString()}');
 
         // Handle rate limiting specifically
         if (e.toString().contains('429') ||
@@ -103,7 +104,7 @@ final class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
         timeout.cancel();
       }
     } catch (e) {
-      print('Remote data source error: ${e.toString()}');
+      AppLogger.error('Remote data source error: ${e.toString()}');
 
       // Handle rate limiting specifically
       if (e.toString().contains('429') ||

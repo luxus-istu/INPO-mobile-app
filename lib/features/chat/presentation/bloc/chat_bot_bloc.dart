@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:injectable/injectable.dart';
 import 'package:inpo_mobile_app/core/resources/data_state.dart';
+import 'package:inpo_mobile_app/core/utils/logger.dart';
 import 'package:inpo_mobile_app/features/chat/domain/entities/message_entity.dart';
 import 'package:inpo_mobile_app/features/chat/domain/usecases/get_messages_use_case.dart';
 import 'package:inpo_mobile_app/features/chat/domain/usecases/save_message_use_case.dart';
@@ -115,7 +116,7 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
         _handleStreamResponse(dataState);
       },
       onError: (error) {
-        print('Stream error: ${error.toString()}');
+        AppLogger.error('Stream error: ${error.toString()}');
         add(_ChatBotStreamError(Exception(error.toString())));
       },
       onDone: () {
@@ -160,7 +161,7 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       },
       failure: (error) {
         // Передаем ошибку через событие
-        print(error);
+        AppLogger.error('Stream failure: $error');
         add(_ChatBotStreamError(error));
       },
     );
@@ -183,7 +184,7 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
 
   Future<void> _onStreamError(
       _ChatBotStreamError event, Emitter<ChatBotState> emit) async {
-    print('Stream error handled: ${event.error}');
+    AppLogger.error('Stream error handled: ${event.error}');
     await _cancelCurrentStream();
 
     // Track rate limit errors
@@ -221,7 +222,7 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       // После сохранения загружаем обновленные сообщения
       add(const ChatBotLoadEvent());
     } on Exception catch (e) {
-      print('Stream completion error: ${e.toString()}');
+      AppLogger.error('Stream completion error: ${e.toString()}');
       emit(
           ChatBotError(Exception('Ошибка сохранения ответа: ${e.toString()}')));
     }

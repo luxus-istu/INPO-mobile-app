@@ -1,6 +1,7 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/lazy_image_widget.dart';
 import 'package:inpo_mobile_app/features/home/presentation/widgets/image_collage_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
@@ -19,15 +20,15 @@ final class HomePage extends StatefulWidget {
 final class _HomePageState extends State<HomePage> {
   static const List<_HomeCardData> _cardsData = [
     _HomeCardData(
-      imagePath: "assets/images/home_image_0.jpg",
+      imagePath: "assets/images/home_image_0.webp",
       title: "Постоянное участие в\nмеждународных конкурсах и\nолимпиадах",
     ),
     _HomeCardData(
-      imagePath: "assets/images/home_image_1.jpg",
+      imagePath: "assets/images/home_image_1.webp",
       title: "Креативная студенческая\nжизнь",
     ),
     _HomeCardData(
-      imagePath: "assets/images/home_image_2.jpg",
+      imagePath: "assets/images/home_image_2.webp",
       title: "Большое разнообразие\nспециальностей",
     ),
   ];
@@ -42,7 +43,6 @@ final class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     // Get responsive values based on screen size
     final isTablet = context.isTablet;
-    final isDesktop = context.isDesktop;
     final isMobile = context.isMobile;
 
     // Responsive dimensions
@@ -50,35 +50,30 @@ final class _HomePageState extends State<HomePage> {
       context: context,
       mobile: context.screenHeight * 0.7,
       tablet: context.screenHeight * 0.6,
-      desktop: context.screenHeight * 0.5,
     );
 
     final cardHeight = ResponsiveHelper.responsiveValue<double>(
       context: context,
       mobile: context.screenWidth * 0.6,
       tablet: context.screenWidth * 0.4,
-      desktop: context.screenWidth * 0.3,
     );
 
     final titleFontSize = ResponsiveHelper.responsiveFontSize(
       context: context,
       mobile: context.screenWidth < 360 ? 28.0 : 32.0,
       tablet: 36.0,
-      desktop: 40.0,
     );
 
     final cardFontSize = ResponsiveHelper.responsiveFontSize(
       context: context,
       mobile: context.screenWidth < 360 ? 18.0 : 20.0,
       tablet: 22.0,
-      desktop: 24.0,
     );
 
     final spacing = ResponsiveHelper.responsiveSpacing(
       context: context,
       mobile: context.screenHeight * 0.03,
       tablet: context.screenHeight * 0.04,
-      desktop: context.screenHeight * 0.05,
     );
 
     // Determine layout based on screen size
@@ -86,7 +81,6 @@ final class _HomePageState extends State<HomePage> {
       context: context,
       mobile: 1,
       tablet: 2,
-      desktop: 3,
     );
 
     return BlocBuilder<NewsBloc, NewsState>(
@@ -109,7 +103,6 @@ final class _HomePageState extends State<HomePage> {
                     child: ImageCollageWidget(
                       imageUrls: imageUrls,
                       isTablet: isTablet,
-                      isDesktop: isDesktop,
                     ),
                   ),
                   SizedBox(height: spacing),
@@ -192,23 +185,32 @@ final class _HomePageState extends State<HomePage> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            imagePath,
+          child: LazyImageWidget(
+            imageUrl: imagePath,
             width: double.infinity,
             height: cardHeight,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: double.infinity,
-                height: cardHeight,
-                color: Colors.grey[300],
-                child: const Icon(
-                  Icons.broken_image,
-                  size: 40,
-                  color: Colors.grey,
-                ),
-              );
-            },
+            borderRadius: 15,
+            placeholder: Container(
+              width: double.infinity,
+              height: cardHeight,
+              color: Colors.grey[100],
+              child: const Icon(
+                Icons.image,
+                size: 32,
+                color: Colors.grey,
+              ),
+            ),
+            errorWidget: Container(
+              width: double.infinity,
+              height: cardHeight,
+              color: Colors.grey[300],
+              child: const Icon(
+                Icons.broken_image,
+                size: 40,
+                color: Colors.grey,
+              ),
+            ),
           ),
         ),
         const SizedBox(height: 12),

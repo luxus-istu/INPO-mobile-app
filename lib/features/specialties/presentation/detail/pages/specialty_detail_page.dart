@@ -24,7 +24,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
   bool _showAllCompetencies = false;
 
   double get _expandedHeight {
-    if (context.isDesktop) return _desktopExpandedHeight;
+    if (context.isLargeScreen) return _desktopExpandedHeight;
     if (context.isTablet) return _tabletExpandedHeight;
     return _mobileExpandedHeight;
   }
@@ -41,7 +41,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
           }
           if (state is SpecialtyDetailLoaded) {
             // Determine if we should use tablet/desktop layout
-            final isTabletOrDesktop = context.isTablet || context.isDesktop;
+            final isTabletOrDesktop = context.isTablet || context.isLargeScreen;
 
             if (isTabletOrDesktop) {
               return _buildTabletDesktopLayout(state);
@@ -205,13 +205,13 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         "В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:",
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: "SF Pro Display",
                           fontWeight: FontWeight.w400,
-                          color: const Color(0xFF000080),
+                          color: Color(0xFF000080),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -385,7 +385,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
 
   Widget _buildTabletDesktopLayout(SpecialtyDetailLoaded state) {
     // Responsive sizing for tablet/desktop
-    final isDesktop = context.isDesktop;
+    final isDesktop = context.isLargeScreen;
     final iconSize = isDesktop ? 120.0 : 100.0;
     final titleFontSize = isDesktop ? 24.0 : 20.0;
     final subtitleFontSize = isDesktop ? 20.0 : 18.0;

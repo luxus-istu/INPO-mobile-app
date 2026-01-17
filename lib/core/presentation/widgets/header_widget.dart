@@ -12,19 +12,13 @@ final class HeaderWidget extends StatelessWidget {
     // Get responsive values based on screen size
     final isTablet = context.isTablet;
 
-    // Responsive font sizes
-    final logoFontSize = ResponsiveHelper.responsiveValue<double>(
-      context: context,
-      mobile: context.screenWidth < 360 ? 40.0 : 48.0,
-      tablet: context.screenWidth < 700 ? 56.0 : 64.0,
-      desktop: 72.0,
-    );
+    // Responsive font sizes - matching home screen sizes
+    final logoFontSize = 48.0;
 
     final labelFontSize = ResponsiveHelper.responsiveValue<double>(
       context: context,
       mobile: context.screenWidth < 360 ? 14.0 : 16.0,
-      tablet: context.screenWidth < 700 ? 18.0 : 20.0,
-      desktop: 24.0,
+      tablet: 18.0,
     );
 
     // Responsive padding
@@ -32,28 +26,24 @@ final class HeaderWidget extends StatelessWidget {
       context: context,
       mobile: context.screenHeight < 700 ? 60.0 : 78.0,
       tablet: context.screenHeight < 900 ? 70.0 : 90.0,
-      desktop: 100.0,
     );
 
     final backButtonSize = ResponsiveHelper.responsiveValue<double>(
       context: context,
       mobile: context.screenWidth < 360 ? 18.0 : 20.0,
       tablet: context.screenWidth < 700 ? 22.0 : 24.0,
-      desktop: 28.0,
     );
 
     final spacing = ResponsiveHelper.responsiveValue<double>(
       context: context,
       mobile: context.screenHeight < 700 ? 8.0 : 12.0,
       tablet: context.screenHeight < 900 ? 12.0 : 16.0,
-      desktop: 20.0,
     );
 
     final bottomPadding = ResponsiveHelper.responsiveValue<double>(
       context: context,
       mobile: context.screenHeight < 700 ? 20.0 : 28.0,
       tablet: context.screenHeight < 900 ? 28.0 : 36.0,
-      desktop: 44.0,
     );
 
     return Container(

@@ -15,10 +15,7 @@ extension ScreenSizeExtensions on BuildContext {
   bool get isMobile => screenWidth < 600;
 
   /// Check if the current device is a tablet
-  bool get isTablet => screenWidth >= 600 && screenWidth < 1200;
-
-  /// Check if the current device is a desktop
-  bool get isDesktop => screenWidth >= 1200;
+  bool get isTablet => screenWidth >= 600;
 
   /// Check if the screen is small (typically small phones)
   bool get isSmallScreen => screenWidth < 360;
@@ -86,9 +83,7 @@ extension ScreenSizeExtensions on BuildContext {
 
   /// Get the number of columns for grid layouts based on screen size
   int get gridColumns {
-    if (isDesktop) {
-      return 4;
-    } else if (isTablet) {
+    if (isTablet) {
       return 3;
     } else {
       return 2;
@@ -99,10 +94,8 @@ extension ScreenSizeExtensions on BuildContext {
   double get imageAspectRatio {
     if (isMobile) {
       return 16 / 9;
-    } else if (isTablet) {
-      return 4 / 3;
     } else {
-      return 3 / 2;
+      return 4 / 3;
     }
   }
 
@@ -110,10 +103,8 @@ extension ScreenSizeExtensions on BuildContext {
   double responsiveElevation(double baseElevation) {
     if (isMobile) {
       return baseElevation;
-    } else if (isTablet) {
-      return baseElevation * 1.2;
     } else {
-      return baseElevation * 1.5;
+      return baseElevation * 1.2;
     }
   }
 
@@ -121,10 +112,8 @@ extension ScreenSizeExtensions on BuildContext {
   Size responsiveButtonSize(Size baseSize) {
     if (isMobile) {
       return baseSize;
-    } else if (isTablet) {
-      return Size(baseSize.width * 1.2, baseSize.height * 1.2);
     } else {
-      return Size(baseSize.width * 1.5, baseSize.height * 1.5);
+      return Size(baseSize.width * 1.2, baseSize.height * 1.2);
     }
   }
 }

@@ -18,11 +18,9 @@ final class NewsPage extends StatefulWidget {
 final class _NewsPageState extends State<NewsPage> {
   static const double _mobileExpandedHeight = 160;
   static const double _tabletExpandedHeight = 200;
-  static const double _desktopExpandedHeight = 240;
   bool _isAppBarCollapsed = false;
 
   double get _expandedHeight {
-    if (context.isDesktop) return _desktopExpandedHeight;
     if (context.isTablet) return _tabletExpandedHeight;
     return _mobileExpandedHeight;
   }
@@ -41,18 +39,13 @@ final class _NewsPageState extends State<NewsPage> {
   Widget build(BuildContext context) {
     // Responsive values
     final isTablet = context.isTablet;
-    final isDesktop = context.isDesktop;
 
     // Responsive font size for title
-    final titleFontSize = isDesktop
-        ? 20.0
-        : isTablet
-            ? 18.0
-            : 16.0;
+    final titleFontSize = isTablet ? 18.0 : 16.0;
 
     // Determine layout type
-    final useGridLayout = isTablet || isDesktop;
-    final crossAxisCount = isDesktop ? 2 : 1;
+    final useGridLayout = isTablet;
+    final crossAxisCount = 1;
 
     return BlocBuilder<NewsBloc, NewsState>(
       bloc: getIt<NewsBloc>(),
@@ -125,7 +118,6 @@ final class _NewsPageState extends State<NewsPage> {
                         return NewsCard(
                           newsItem: item,
                           isTablet: isTablet,
-                          isDesktop: isDesktop,
                         );
                       },
                     ),
@@ -136,7 +128,6 @@ final class _NewsPageState extends State<NewsPage> {
                       ...state.news.map((item) => NewsCard(
                             newsItem: item,
                             isTablet: isTablet,
-                            isDesktop: isDesktop,
                           ))
                     ]),
                   ),

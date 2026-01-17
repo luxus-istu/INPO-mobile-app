@@ -19,11 +19,9 @@ final class SpecialtiesPage extends StatefulWidget {
 final class _SpecialtiesPageState extends State<SpecialtiesPage> {
   static const double _mobileExpandedHeight = 160;
   static const double _tabletExpandedHeight = 200;
-  static const double _desktopExpandedHeight = 240;
   bool _isAppBarCollapsed = false;
 
   double get _expandedHeight {
-    if (context.isDesktop) return _desktopExpandedHeight;
     if (context.isTablet) return _tabletExpandedHeight;
     return _mobileExpandedHeight;
   }
@@ -42,14 +40,12 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
   Widget build(BuildContext context) {
     // Get responsive values
     final isTablet = context.isTablet;
-    final isDesktop = context.isDesktop;
 
     // Responsive grid columns
     final crossAxisCount = ResponsiveHelper.responsiveGridColumns(
       context: context,
       mobile: 2,
       tablet: 3,
-      desktop: 4,
     );
 
     // Responsive spacing
@@ -57,7 +53,6 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
       context: context,
       mobile: 8.0,
       tablet: 12.0,
-      desktop: 16.0,
     );
 
     // Responsive aspect ratio
@@ -65,7 +60,6 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
       context: context,
       mobile: 0.7,
       tablet: 0.8,
-      desktop: 0.9,
     );
 
     // Responsive font size for title
@@ -73,7 +67,6 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
       context: context,
       mobile: 16.0,
       tablet: 18.0,
-      desktop: 20.0,
     );
 
     return BlocBuilder<SpecialtyBloc, SpecialtyState>(
@@ -134,7 +127,6 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
                           context: context,
                           mobile: 64.0,
                           tablet: 80.0,
-                          desktop: 96.0,
                         ),
                         left: spacing,
                         right: spacing,
@@ -152,7 +144,6 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
                           return SpecialtyGridItem(
                             specialty: specialty,
                             isTablet: isTablet,
-                            isDesktop: isDesktop,
                           );
                         },
                       ),
