@@ -8,16 +8,17 @@ import 'package:inpo_mobile_app/features/chat/presentation/bloc/chat_bot_bloc.da
 import 'package:inpo_mobile_app/features/chat/presentation/widgets/typing_indicator.dart';
 import 'package:intl/intl.dart';
 
-class ChatBotPage extends StatefulWidget {
+final class ChatBotPage extends StatefulWidget {
   const ChatBotPage({super.key});
 
   @override
   State<ChatBotPage> createState() => _ChatBotPageState();
 }
 
-class _ChatBotPageState extends State<ChatBotPage> {
+final class _ChatBotPageState extends State<ChatBotPage> {
   final TextEditingController _textController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool _isStreaming = false;
 
   @override
   void initState() {
@@ -34,6 +35,18 @@ class _ChatBotPageState extends State<ChatBotPage> {
     super.dispose();
   }
 
+  void _scrollToBottom() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_scrollController.hasClients) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +58,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         animateColor: false,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 211, // Фиксированная высота для мобильных
+        toolbarHeight: 211,
         title: const SizedBox.shrink(),
         flexibleSpace:
             HeaderWidget(labelName: "ЧАТ-БОТ", onTap: () => context.go('/')),
@@ -54,39 +67,65 @@ class _ChatBotPageState extends State<ChatBotPage> {
         bloc: getIt<ChatBotBloc>(),
         listener: (context, state) {
           if (state is ChatBotLoaded || state is ChatBotProcessing) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              if (_scrollController.hasClients) {
-                _scrollController.animateTo(
-                  _scrollController.position.maxScrollExtent,
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeOut,
-                );
-              }
-            });
+            _scrollToBottom();
+          }
+
+          // Обновляем флаг стриминга
+          if (state is ChatBotProcessing) {
+            _isStreaming = true;
+          } else {
+            _isStreaming = false;
           }
         },
         builder: (context, state) {
           return Column(
             children: [
+              // Баннер ошибки
               if (state is ChatBotError)
                 Container(
-                  padding: const EdgeInsets.all(8),
-                  color: Colors.red.shade300,
+                  padding: const EdgeInsets.all(12),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.red.shade200),
+                  ),
                   child: Row(
                     children: [
-                      const Icon(Icons.error_outline, color: Colors.white),
-                      const SizedBox(width: 8),
+                      Icon(Icons.error_outline, color: Colors.red.shade700),
+                      const SizedBox(width: 12),
                       Expanded(
-                          child: Text(state.exception.toString(),
-                              style: const TextStyle(color: Colors.white))),
+                        child: Text(
+                          _getErrorMessage(state.error),
+                          style: TextStyle(
+                            color: Colors.red.shade700,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.close,
+                            color: Colors.red.shade700, size: 20),
+                        onPressed: () {
+                          getIt<ChatBotBloc>().add(const ChatBotLoadEvent());
+                        },
+                      ),
                     ],
                   ),
                 ),
+
+              // Основной контент
               Expanded(
-                child: _buildBody(state, _scrollController),
+                child: _buildMessageList(state),
               ),
-              _buildMessageComposer(
-                  context, _textController, state is ChatBotProcessing),
+
+              // Индикатор стриминга
+              if (_isStreaming && state is ChatBotProcessing)
+                _buildStreamingIndicator(state),
+
+              // Поле ввода
+              _buildMessageInput(context, state),
             ],
           );
         },
@@ -94,10 +133,24 @@ class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildBody(ChatBotState state, ScrollController scrollController) {
+  Widget _buildMessageList(ChatBotState state) {
     if (state is ChatBotInitial || state is ChatBotLoading) {
-      return const Center(
-          child: CircularProgressIndicator(color: Color(0xff4069D3)));
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(color: Theme.of(context).primaryColor),
+            const SizedBox(height: 16),
+            Text(
+              'Загружаю историю...',
+              style: TextStyle(
+                color: Colors.grey.shade600,
+                fontSize: 16,
+              ),
+            ),
+          ],
+        ),
+      );
     }
 
     if (state is ChatBotLoaded || state is ChatBotProcessing) {
@@ -105,19 +158,50 @@ class _ChatBotPageState extends State<ChatBotPage> {
           ? state.messages
           : (state as ChatBotProcessing).messages;
 
-      return ListView.builder(
-        controller: scrollController,
-        padding: const EdgeInsets.symmetric(
-            horizontal: 16), // Фиксированный отступ для мобильных
-        itemCount: messages.length + (state is ChatBotProcessing ? 1 : 0),
-        itemBuilder: (_, index) {
-          if (index == messages.length && state is ChatBotProcessing) {
-            return const TypingIndicator();
-          }
+      if (messages.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.chat_bubble_outline,
+                size: 64,
+                color: Colors.grey.shade300,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Задайте вопрос чат-боту',
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey.shade600,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Я помогу вам с любыми вопросами',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey.shade500,
+                ),
+              ),
+            ],
+          ),
+        );
+      }
 
+      return ListView.builder(
+        controller: _scrollController,
+        padding: const EdgeInsets.all(16),
+        itemCount: messages.length,
+        itemBuilder: (context, index) {
           final message = messages[index];
           final isUser = message.sender == 'user';
-          return _buildMessageBubble(message, isUser);
+          final isStreaming = state is ChatBotProcessing &&
+              index == messages.length - 1 &&
+              !isUser;
+
+          return _buildMessageItem(message, isUser, isStreaming);
         },
       );
     }
@@ -125,50 +209,200 @@ class _ChatBotPageState extends State<ChatBotPage> {
     return const SizedBox.shrink();
   }
 
-  String _formatTime(DateTime timestamp) {
-    return DateFormat('HH:mm').format(timestamp);
-  }
-
-  Widget _buildMessageBubble(MessageEntity message, bool isUser) {
+  Widget _buildMessageItem(
+      MessageEntity message, bool isUser, bool isStreaming) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      color: Colors.white,
+      margin: const EdgeInsets.only(bottom: 16),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment:
             isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
+          if (!isUser)
+            Container(
+              width: 32,
+              height: 32,
+              margin: const EdgeInsets.only(right: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xff4069D3),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: const Icon(
+                Icons.smart_toy,
+                color: Colors.white,
+                size: 18,
+              ),
+            ),
           Flexible(
             child: Column(
               crossAxisAlignment:
                   isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: isUser
-                        ? const Color(0xff4069D3)
-                        : const Color(0xffF3F3F3),
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: Text(
-                    message.text,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontFamily: "SF Pro Display",
-                      fontSize: 16, // Фиксированный размер шрифта для мобильных
-                      color: isUser ? Colors.white : Colors.black,
-                    ),
+                // Имя отправителя
+                Text(
+                  isUser ? 'Вы' : 'ИИ-ассистент',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: Colors.grey.shade600,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
                 const SizedBox(height: 4),
+
+                // Сообщение
+                Container(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.75,
+                  ),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: isUser
+                        ? const Color(0xff4069D3)
+                        : const Color(0xffF5F7FA),
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(16),
+                      topRight: const Radius.circular(16),
+                      bottomLeft: isUser
+                          ? const Radius.circular(16)
+                          : const Radius.circular(4),
+                      bottomRight: isUser
+                          ? const Radius.circular(4)
+                          : const Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        message.text,
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: isUser ? Colors.white : Colors.black,
+                          height: 1.5,
+                        ),
+                      ),
+                      if (isStreaming) const TypingIndicator(),
+                    ],
+                  ),
+                ),
+
+                // Время
+                const SizedBox(height: 4),
                 Text(
                   _formatTime(message.timestamp),
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xff8F8F8F),
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: Colors.grey.shade500,
                   ),
                 ),
               ],
+            ),
+          ),
+          if (isUser)
+            Container(
+              width: 32,
+              height: 32,
+              margin: const EdgeInsets.only(left: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Icon(
+                Icons.person,
+                color: Colors.grey.shade600,
+                size: 18,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  // Widget _buildTypingIndicator() {
+  //   return Container(
+  //     margin: const EdgeInsets.only(top: 8),
+  //     child: Row(
+  //       mainAxisSize: MainAxisSize.min,
+  //       children: [
+  //         _buildTypingDot(const Duration(milliseconds: 0)),
+  //         _buildTypingDot(const Duration(milliseconds: 200)),
+  //         _buildTypingDot(const Duration(milliseconds: 400)),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildTypingDot(Duration delay) {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 2),
+  //     child: TweenAnimationBuilder(
+  //       tween: Tween<double>(begin: 0, end: 1),
+  //       duration: const Duration(milliseconds: 1200),
+  //       // delay: delay,
+  //       builder: (context, value, child) {
+  //         return Opacity(
+  //           opacity: value < 0.5 ? value * 2 : 2 - (value * 2),
+  //           child: Container(
+  //             width: 6,
+  //             height: 6,
+  //             decoration: BoxDecoration(
+  //               color: Colors.grey.shade400,
+  //               borderRadius: BorderRadius.circular(3),
+  //             ),
+  //           ),
+  //         );
+  //       },
+  //     ),
+  //   );
+  // }
+
+  Widget _buildStreamingIndicator(ChatBotProcessing state) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      color: Colors.blue.shade50,
+      child: Row(
+        children: [
+          Container(
+            width: 8,
+            height: 8,
+            margin: const EdgeInsets.only(right: 8),
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          Expanded(
+            child: Text(
+              'ИИ-ассистент печатает...',
+              style: TextStyle(
+                color: Colors.blue.shade800,
+                fontSize: 14,
+              ),
+            ),
+          ),
+          Container(
+            margin: const EdgeInsets.only(left: 8),
+            child: ElevatedButton(
+              onPressed: () {
+                getIt<ChatBotBloc>().add(const ChatBotCancelStreamEvent());
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade100,
+                foregroundColor: Colors.red.shade800,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+              ),
+              child: const Text(
+                'ОСТАНОВИТЬ',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ],
@@ -176,73 +410,171 @@ class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildMessageComposer(
-      BuildContext context, TextEditingController controller, bool isLoading) {
+  Widget _buildMessageInput(BuildContext context, ChatBotState state) {
+    final isProcessing = state is ChatBotProcessing;
+    final isButtonDisabled = _textController.text.isEmpty || isProcessing;
+
     return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: 16, vertical: 16), // Фиксированный отступ для мобильных
-      margin: const EdgeInsets.only(
-          bottom: 32,
-          left: 16,
-          right: 16,
-          top: 16), // Фиксированный отступ для мобильных
-      decoration: const BoxDecoration(
-        color: Color(0xffF3F3F3),
-        borderRadius: BorderRadius.all(Radius.circular(16)),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(color: Colors.grey.shade200),
+        ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Flexible(
-            child: TextField(
-              controller: controller,
-              enabled: !isLoading,
-              decoration: InputDecoration.collapsed(
-                  hintStyle: const TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontFamily: "SF Pro Display",
-                    fontSize: 16, // Фиксированный размер шрифта для мобильных
-                    color: Color(0xff8F8F8F),
+          // Поле ввода
+          Expanded(
+            child: Container(
+              constraints: BoxConstraints(
+                maxHeight: 120,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xffF5F7FA),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.grey.shade200),
+              ),
+              child: TextField(
+                controller: _textController,
+                enabled: !isProcessing,
+                maxLines: null,
+                keyboardType: TextInputType.multiline,
+                decoration: InputDecoration(
+                  hintText: 'Напишите сообщение...',
+                  hintStyle: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 16,
                   ),
-                  hintText: 'Задай свой вопрос...'),
-              onSubmitted: (text) {
-                if (text.isNotEmpty && !isLoading) {
-                  getIt<ChatBotBloc>().add(ChatBotRequestEvent(text));
-                  controller.clear();
-                }
-              },
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.all(16),
+                  suffixIcon: _textController.text.isNotEmpty
+                      ? IconButton(
+                          icon: Icon(Icons.clear, color: Colors.grey.shade500),
+                          onPressed: () {
+                            _textController.clear();
+                            setState(() {});
+                          },
+                        )
+                      : null,
+                ),
+                onChanged: (value) {
+                  setState(() {});
+                },
+                onSubmitted: (text) {
+                  _sendMessage();
+                },
+              ),
             ),
           ),
-          if (isLoading)
-            const Padding(
-              padding: EdgeInsets.all(8),
-              child: CircularProgressIndicator(
-                color: Color(0xff4069D3),
-              ),
-            )
-          else
-            GestureDetector(
-              onTap: () {
-                if (controller.text.isNotEmpty) {
-                  getIt<ChatBotBloc>()
-                      .add(ChatBotRequestEvent(controller.text));
-                  controller.clear();
-                }
-              },
-              child: Container(
-                padding: const EdgeInsets.all(
-                    8), // Фиксированный отступ для мобильных
-                decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    color: Color(0xff9FBAFF)),
-                child: const Icon(
-                  Icons.arrow_upward,
-                  size: 32, // Фиксированный размер иконки для мобильных
-                  color: Colors.white,
+
+          const SizedBox(width: 12),
+
+          // Кнопка отправки
+          Container(
+            width: 48,
+            height: 48,
+            decoration: BoxDecoration(
+              color: isButtonDisabled
+                  ? Colors.grey.shade300
+                  : const Color(0xff4069D3),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              borderRadius: BorderRadius.circular(12),
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: isButtonDisabled ? null : _sendMessage,
+                child: Center(
+                  child: isProcessing
+                      ? SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : Icon(
+                          Icons.send,
+                          color: Colors.white,
+                          size: 24,
+                        ),
                 ),
               ),
-            )
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  void _sendMessage() {
+    final text = _textController.text.trim();
+    if (text.isNotEmpty) {
+      getIt<ChatBotBloc>().add(ChatBotRequestEvent(text));
+      _textController.clear();
+      setState(() {});
+    }
+  }
+
+  String _getErrorMessage(Exception error) {
+    final errorString = error.toString();
+
+    // Handle rate limiting (429 status code)
+    if (errorString.contains('429') ||
+        errorString.contains('Too Many Requests')) {
+      return 'Слишком много запросов. Пожалуйста, подождите несколько минут перед повторной попыткой.';
+    }
+
+    // Handle unprocessable entity (422 status code)
+    if (errorString.contains('422') ||
+        errorString.contains('Unprocessable Entity')) {
+      return 'Некорректный запрос. Пожалуйста, проверьте ваше сообщение и попробуйте снова.';
+    }
+
+    // Handle common streaming errors
+    if (errorString.contains('Connection failed') ||
+        errorString.contains('SocketException') ||
+        errorString.contains('Failed host lookup')) {
+      return 'Ошибка соединения. Проверьте интернет-соединение.';
+    }
+
+    if (errorString.contains('timeout') || errorString.contains('Timeout')) {
+      return 'Тайм-аут соединения. Сервер не отвечает.';
+    }
+
+    if (errorString.contains('Failed to get AI response')) {
+      return 'Не удалось получить ответ от ИИ. Попробуйте позже.';
+    }
+
+    if (errorString.contains('Stream error')) {
+      return 'Ошибка потоковой передачи. Попробуйте отправить сообщение снова.';
+    }
+
+    if (errorString.contains('DioException') ||
+        errorString.contains('bad response')) {
+      return 'Ошибка сервера. Попробуйте отправить сообщение позже.';
+    }
+
+    // Default error message
+    return 'Произошла ошибка: ${error.toString().split(':').length > 1 ? error.toString().split(':')[1].trim() : 'неизвестная ошибка'}';
+  }
+
+  String _formatTime(DateTime timestamp) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final messageDate =
+        DateTime(timestamp.year, timestamp.month, timestamp.day);
+
+    if (messageDate.isAtSameMomentAs(today)) {
+      return DateFormat('HH:mm').format(timestamp);
+    } else if (messageDate.isAfter(today.subtract(const Duration(days: 1)))) {
+      return 'Вчера ${DateFormat('HH:mm').format(timestamp)}';
+    } else {
+      return DateFormat('dd.MM.yyyy HH:mm').format(timestamp);
+    }
   }
 }
