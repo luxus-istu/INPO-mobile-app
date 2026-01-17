@@ -136,7 +136,15 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
   void _handleStreamResponse(DataState<String> dataState) {
     dataState.when(
       success: (chunk) {
-        _accumulatedResponse += chunk;
+        if (_accumulatedResponse.isEmpty) {
+          _accumulatedResponse = chunk;
+        } else if (chunk.startsWith(_accumulatedResponse)) {
+          // Likely full text, update to new full
+          _accumulatedResponse = chunk;
+        } else {
+          // Incremental
+          _accumulatedResponse += chunk;
+        }
 
         // Обновляем текущее сообщение AI
         _currentAiMessage = _currentAiMessage.copyWith(

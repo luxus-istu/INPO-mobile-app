@@ -1,7 +1,7 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
-import 'package:inpo_mobile_app/core/presentation/widgets/lazy_image_widget.dart';
+
 import 'package:inpo_mobile_app/features/home/presentation/widgets/image_collage_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
@@ -183,32 +183,23 @@ final class _HomePageState extends State<HomePage> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(15),
-          child: LazyImageWidget(
-            imageUrl: imagePath,
+          child: Image.asset(
+            imagePath,
             width: double.infinity,
             height: cardHeight,
             fit: BoxFit.cover,
-            borderRadius: 15,
-            placeholder: Container(
-              width: double.infinity,
-              height: cardHeight,
-              color: Colors.grey[100],
-              child: const Icon(
-                Icons.image,
-                size: 32,
-                color: Colors.grey,
-              ),
-            ),
-            errorWidget: Container(
-              width: double.infinity,
-              height: cardHeight,
-              color: Colors.grey[300],
-              child: const Icon(
-                Icons.broken_image,
-                size: 40,
-                color: Colors.grey,
-              ),
-            ),
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: double.infinity,
+                height: cardHeight,
+                color: Colors.grey[100],
+                child: const Icon(
+                  Icons.image,
+                  color: Colors.grey,
+                  size: 32,
+                ),
+              );
+            },
           ),
         ),
         const SizedBox(height: 12),
