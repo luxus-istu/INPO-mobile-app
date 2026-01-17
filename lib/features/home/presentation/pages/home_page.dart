@@ -20,9 +20,9 @@ final class HomePage extends StatefulWidget {
 
 final class _HomePageState extends State<HomePage> {
   static const List<String> _imagePaths = [
-    "assets/images/home_image_0.webp",
-    "assets/images/home_image_1.webp",
-    "assets/images/home_image_2.webp",
+    "assets/images/home_image_0.jpg",
+    "assets/images/home_image_1.jpg",
+    "assets/images/home_image_2.jpg",
   ];
 
   @override

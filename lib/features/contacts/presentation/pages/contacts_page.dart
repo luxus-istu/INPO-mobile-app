@@ -139,7 +139,7 @@ class ContactsPage extends StatelessWidget {
         ClipRRect(
           borderRadius: BorderRadius.circular(borderRadius),
           child: Image.asset(
-            "assets/images/contacts_image.webp",
+            "assets/images/contacts_image.jpg",
             width: double.infinity,
             height: imageHeight,
             fit: BoxFit.cover,
@@ -255,7 +255,7 @@ class ContactsPage extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(borderRadius),
             child: Image.asset(
-              "assets/images/contacts_image.webp",
+              "assets/images/contacts_image.jpg",
               width: double.infinity,
               height: double.infinity,
               fit: BoxFit.cover,
