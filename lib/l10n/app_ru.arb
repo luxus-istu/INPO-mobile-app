@@ -135,5 +135,73 @@
   "joinUs": "ПРИСОЕДИНЯЙСЯ\nК НАМ!",
   "@joinUs": {
     "description": "Призыв к действию 'Присоединяйся к нам'"
+  },
+  "moreThanInstitute": "Больше, чем обычный\nтехнический институт",
+  "@moreThanInstitute": {
+    "description": "Текст наложения на коллаж изображений"
+  },
+  "description": "ОПИСАНИЕ",
+  "@description": {
+    "description": "Заголовок раздела описания"
+  },
+  "disciplinesGuide": "ГИД ПО ДИСЦИПЛИНАМ",
+  "@disciplinesGuide": {
+    "description": "Заголовок раздела руководства по дисциплинам"
+  },
+  "employmentOpportunities": "ГДЕ ВОЗЬМУТ НА РАБОТУ И ПРАКТИКУ?",
+  "@employmentOpportunities": {
+    "description": "Заголовок раздела возможностей трудоустройства"
+  },
+  "enroll": "Поступить",
+  "@enroll": {
+    "description": "Текст кнопки поступления"
+  },
+  "seats": "мест",
+  "@seats": {
+    "description": "Суффикс количества доступных мест"
+  },
+  "showMore": "Подробнее",
+  "@showMore": {
+    "description": "Текст кнопки показать больше"
+  },
+  "hide": "Скрыть",
+  "@hide": {
+    "description": "Текст кнопки скрыть"
+  },
+  "competenciesIntro": "В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:",
+  "@competenciesIntro": {
+    "description": "Вводный текст для раздела компетенций"
+  },
+  "loadingHistory": "Загружаю историю...",
+  "@loadingHistory": {
+    "description": "Сообщение загрузки истории чата"
+  },
+  "askQuestion": "Задайте вопрос чат-боту",
+  "@askQuestion": {
+    "description": "Подсказка ввода чата"
+  },
+  "helpWithQuestions": "Я помогу вам с любыми вопросами",
+  "@helpWithQuestions": {
+    "description": "Подзаголовок чат-бота"
+  },
+  "you": "Вы",
+  "@you": {
+    "description": "Метка пользователя в чате"
+  },
+  "aiAssistant": "ИИ-ассистент",
+  "@aiAssistant": {
+    "description": "Метка ИИ-ассистента в чате"
+  },
+  "aiTyping": "ИИ-ассистент печатает...",
+  "@aiTyping": {
+    "description": "Индикатор печати ИИ"
+  },
+  "stop": "ОСТАНОВИТЬ",
+  "@stop": {
+    "description": "Текст кнопки остановки"
+  },
+  "typeMessage": "Напишите сообщение...",
+  "@typeMessage": {
+    "description": "Подсказка ввода сообщения"
   }
 }

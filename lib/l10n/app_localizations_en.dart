@@ -111,4 +111,58 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get joinUs => 'JOIN\nUS!';
+
+  @override
+  String get moreThanInstitute =>
+      'More than just an\nordinary technical institute';
+
+  @override
+  String get description => 'DESCRIPTION';
+
+  @override
+  String get disciplinesGuide => 'DISCIPLINES GUIDE';
+
+  @override
+  String get employmentOpportunities =>
+      'WHERE WILL THEY HIRE FOR WORK AND INTERNSHIP?';
+
+  @override
+  String get enroll => 'Enroll';
+
+  @override
+  String get seats => 'seats';
+
+  @override
+  String get showMore => 'More details';
+
+  @override
+  String get hide => 'Hide';
+
+  @override
+  String get competenciesIntro =>
+      'As a result of mastering the training program, the graduate will be professionally prepared for the following types of activities:';
+
+  @override
+  String get loadingHistory => 'Loading history...';
+
+  @override
+  String get askQuestion => 'Ask the chatbot a question';
+
+  @override
+  String get helpWithQuestions => 'I will help you with any questions';
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get aiAssistant => 'AI Assistant';
+
+  @override
+  String get aiTyping => 'AI Assistant is typing...';
+
+  @override
+  String get stop => 'STOP';
+
+  @override
+  String get typeMessage => 'Type a message...';
 }

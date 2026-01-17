@@ -111,4 +111,56 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get joinUs => 'ПРИСОЕДИНЯЙСЯ\nК НАМ!';
+
+  @override
+  String get moreThanInstitute => 'Больше, чем обычный\nтехнический институт';
+
+  @override
+  String get description => 'ОПИСАНИЕ';
+
+  @override
+  String get disciplinesGuide => 'ГИД ПО ДИСЦИПЛИНАМ';
+
+  @override
+  String get employmentOpportunities => 'ГДЕ ВОЗЬМУТ НА РАБОТУ И ПРАКТИКУ?';
+
+  @override
+  String get enroll => 'Поступить';
+
+  @override
+  String get seats => 'мест';
+
+  @override
+  String get showMore => 'Подробнее';
+
+  @override
+  String get hide => 'Скрыть';
+
+  @override
+  String get competenciesIntro =>
+      'В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:';
+
+  @override
+  String get loadingHistory => 'Загружаю историю...';
+
+  @override
+  String get askQuestion => 'Задайте вопрос чат-боту';
+
+  @override
+  String get helpWithQuestions => 'Я помогу вам с любыми вопросами';
+
+  @override
+  String get you => 'Вы';
+
+  @override
+  String get aiAssistant => 'ИИ-ассистент';
+
+  @override
+  String get aiTyping => 'ИИ-ассистент печатает...';
+
+  @override
+  String get stop => 'ОСТАНОВИТЬ';
+
+  @override
+  String get typeMessage => 'Напишите сообщение...';
 }

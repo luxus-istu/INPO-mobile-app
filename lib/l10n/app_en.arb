@@ -135,5 +135,73 @@
   "joinUs": "JOIN\nUS!",
   "@joinUs": {
     "description": "Join us call to action"
+  },
+  "moreThanInstitute": "More than just an\nordinary technical institute",
+  "@moreThanInstitute": {
+    "description": "Image collage overlay text"
+  },
+  "description": "DESCRIPTION",
+  "@description": {
+    "description": "Description section header"
+  },
+  "disciplinesGuide": "DISCIPLINES GUIDE",
+  "@disciplinesGuide": {
+    "description": "Disciplines guide section header"
+  },
+  "employmentOpportunities": "WHERE WILL THEY HIRE FOR WORK AND INTERNSHIP?",
+  "@employmentOpportunities": {
+    "description": "Employment opportunities section header"
+  },
+  "enroll": "Enroll",
+  "@enroll": {
+    "description": "Enroll button text"
+  },
+  "seats": "seats",
+  "@seats": {
+    "description": "Number of available seats suffix"
+  },
+  "showMore": "More details",
+  "@showMore": {
+    "description": "Show more button text"
+  },
+  "hide": "Hide",
+  "@hide": {
+    "description": "Hide button text"
+  },
+  "competenciesIntro": "As a result of mastering the training program, the graduate will be professionally prepared for the following types of activities:",
+  "@competenciesIntro": {
+    "description": "Introduction text for competencies section"
+  },
+  "loadingHistory": "Loading history...",
+  "@loadingHistory": {
+    "description": "Loading chat history message"
+  },
+  "askQuestion": "Ask the chatbot a question",
+  "@askQuestion": {
+    "description": "Chat input placeholder"
+  },
+  "helpWithQuestions": "I will help you with any questions",
+  "@helpWithQuestions": {
+    "description": "Chatbot subtitle"
+  },
+  "you": "You",
+  "@you": {
+    "description": "User label in chat"
+  },
+  "aiAssistant": "AI Assistant",
+  "@aiAssistant": {
+    "description": "AI assistant label in chat"
+  },
+  "aiTyping": "AI Assistant is typing...",
+  "@aiTyping": {
+    "description": "AI typing indicator"
+  },
+  "stop": "STOP",
+  "@stop": {
+    "description": "Stop button text"
+  },
+  "typeMessage": "Type a message...",
+  "@typeMessage": {
+    "description": "Message input hint"
   }
 }

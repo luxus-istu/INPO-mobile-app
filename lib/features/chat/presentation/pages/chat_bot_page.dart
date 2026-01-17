@@ -165,7 +165,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
             CircularProgressIndicator(color: Theme.of(context).primaryColor),
             SizedBox(height: listPadding * 0.75),
             Text(
-              'Загружаю историю...',
+              AppLocalizations.of(context)!.loadingHistory,
               style: TextStyle(
                 color: Colors.grey.shade600,
                 fontSize: loadingFontSize,
@@ -193,7 +193,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               ),
               SizedBox(height: listPadding),
               Text(
-                'Задайте вопрос чат-боту',
+                AppLocalizations.of(context)!.askQuestion,
                 style: TextStyle(
                   fontSize: emptyTitleFontSize,
                   color: Colors.grey.shade600,
@@ -202,7 +202,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               ),
               SizedBox(height: listPadding * 0.5),
               Text(
-                'Я помогу вам с любыми вопросами',
+                AppLocalizations.of(context)!.helpWithQuestions,
                 style: TextStyle(
                   fontSize: emptySubtitleFontSize,
                   color: Colors.grey.shade500,
@@ -275,7 +275,9 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               children: [
                 // Имя отправителя
                 Text(
-                  isUser ? 'Вы' : 'ИИ-ассистент',
+                  isUser
+                      ? AppLocalizations.of(context)!.you
+                      : AppLocalizations.of(context)!.aiAssistant,
                   style: TextStyle(
                     fontSize: senderFontSize,
                     color: Colors.grey.shade600,
@@ -423,7 +425,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
           ),
           Expanded(
             child: Text(
-              'ИИ-ассистент печатает...',
+              AppLocalizations.of(context)!.aiTyping,
               style: TextStyle(
                 color: Colors.blue.shade800,
                 fontSize: fontSize,
@@ -449,7 +451,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                 elevation: 0,
               ),
               child: Text(
-                'ОСТАНОВИТЬ',
+                AppLocalizations.of(context)!.stop,
                 style: TextStyle(
                   fontSize: buttonFontSize,
                   fontWeight: FontWeight.bold,
@@ -506,7 +508,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
-                  hintText: 'Напишите сообщение...',
+                  hintText: AppLocalizations.of(context)!.typeMessage,
                   hintStyle: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: hintFontSize,

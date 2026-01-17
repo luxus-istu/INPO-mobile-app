@@ -6,6 +6,7 @@ import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/sp
 import 'package:inpo_mobile_app/core/presentation/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class SpecialtyDetailPage extends StatefulWidget {
@@ -165,7 +166,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             ),
                           ),
                           Text(
-                            '${state.detail.seats!} мест',
+                            '${state.detail.seats!} ${AppLocalizations.of(context)!.seats}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -179,9 +180,9 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                   ],
                 ),
                 const SizedBox(height: 60),
-                const Text(
-                  'ОПИСАНИЕ',
-                  style: TextStyle(
+                Text(
+                  AppLocalizations.of(context)!.description,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontFamily: "Onder",
                     fontWeight: FontWeight.w400,
@@ -205,8 +206,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:",
+                      Text(
+                        AppLocalizations.of(context)!.competenciesIntro,
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: "SF Pro Display",
@@ -242,7 +243,9 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                _showAllCompetencies ? 'Скрыть' : 'Подробнее',
+                                _showAllCompetencies
+                                    ? AppLocalizations.of(context)!.hide
+                                    : AppLocalizations.of(context)!.showMore,
                                 style: const TextStyle(
                                   color: const Color(0xFF000080),
                                   fontFamily: "SF Pro Display",
@@ -264,7 +267,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                 ),
                 const SizedBox(height: 48),
                 Text(
-                  'ГИД ПО ДИСЦИПЛИНАМ',
+                  AppLocalizations.of(context)!.disciplinesGuide,
                   style: TextStyle(
                     fontSize: 15,
                     fontFamily: "Onder",
@@ -305,7 +308,9 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                _showAllDisciplines ? 'Скрыть' : 'Подробнее',
+                                _showAllDisciplines
+                                    ? AppLocalizations.of(context)!.hide
+                                    : AppLocalizations.of(context)!.showMore,
                                 style: const TextStyle(
                                   color: Color(0xFF000080),
                                   fontFamily: "SF Pro Display",
@@ -326,7 +331,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                   ),
                 ),
                 Text(
-                  'ГДЕ ВОЗЬМУТ НА РАБОТУ И ПРАКТИКУ?',
+                  AppLocalizations.of(context)!.employmentOpportunities,
                   style: TextStyle(
                     fontSize: 15,
                     fontFamily: "Onder",
@@ -364,7 +369,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       ),
                     ),
                     child: Text(
-                      'Поступить',
+                      AppLocalizations.of(context)!.enroll,
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: "SF Pro Display",
@@ -475,7 +480,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                           ),
                         ),
                         Text(
-                          '${state.detail.seats!} мест',
+                          '${state.detail.seats!} ${AppLocalizations.of(context)!.seats}',
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontWeight: FontWeight.bold,
@@ -526,7 +531,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:",
+                                AppLocalizations.of(context)!.competenciesIntro,
                                 style: TextStyle(
                                   fontSize: subtitleFontSize,
                                   fontFamily: "SF Pro Display",
@@ -568,7 +573,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                       Text(
                                         _showAllCompetencies
                                             ? 'Скрыть'
-                                            : 'Подробнее',
+                                            : AppLocalizations.of(context)!
+                                                .showMore,
                                         style: TextStyle(
                                           color: const Color(0xFF000080),
                                           fontFamily: "SF Pro Display",
@@ -600,7 +606,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'ГИД ПО ДИСЦИПЛИНАМ',
+                          AppLocalizations.of(context)!.disciplinesGuide,
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontFamily: "Onder",
@@ -647,7 +653,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                       Text(
                                         _showAllDisciplines
                                             ? 'Скрыть'
-                                            : 'Подробнее',
+                                            : AppLocalizations.of(context)!
+                                                .showMore,
                                         style: TextStyle(
                                           color: Color(0xFF000080),
                                           fontFamily: "SF Pro Display",
@@ -670,7 +677,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                         ),
                         SizedBox(height: spacing),
                         Text(
-                          'ГДЕ ВОЗЬМУТ НА РАБОТУ И ПРАКТИКУ?',
+                          AppLocalizations.of(context)!.employmentOpportunities,
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontFamily: "Onder",
@@ -717,7 +724,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                     ),
                   ),
                   child: Text(
-                    'Поступить',
+                    AppLocalizations.of(context)!.enroll,
                     style: TextStyle(
                       fontSize: buttonFontSize,
                       fontFamily: "SF Pro Display",

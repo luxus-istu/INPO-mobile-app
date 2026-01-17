@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty_detail.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 class SpecialtyInfoCard extends StatelessWidget {
   final SpecialtyDetail detail;
@@ -22,13 +23,13 @@ class SpecialtyInfoCard extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionHeader('ОПИСАНИЕ'),
+        _buildSectionHeader(AppLocalizations.of(context)!.description),
         const SizedBox(height: 12),
-        _buildDescriptionCard(),
+        _buildDescriptionCard(context),
         const SizedBox(height: 48),
-        _buildSectionHeader('ГИД ПО ДИСЦИПЛИНАМ'),
+        _buildSectionHeader(AppLocalizations.of(context)!.disciplinesGuide),
         const SizedBox(height: 18),
-        _buildDisciplinesSection(),
+        _buildDisciplinesSection(context),
       ],
     );
   }
@@ -45,7 +46,7 @@ class SpecialtyInfoCard extends StatelessWidget {
     );
   }
 
-  Widget _buildDescriptionCard() {
+  Widget _buildDescriptionCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: const BoxDecoration(
@@ -62,8 +63,8 @@ class SpecialtyInfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "В результате освоения программы обучения выпускник будет профессионально готов к следующим видам деятельности:",
+          Text(
+            AppLocalizations.of(context)!.competenciesIntro,
             style: TextStyle(
               fontSize: 15,
               fontFamily: "SF Pro Display",
@@ -75,7 +76,9 @@ class SpecialtyInfoCard extends StatelessWidget {
           ..._buildCompetencyItems(),
           if (detail.competencies!.length > 3)
             _buildToggleButton(
-              showAllCompetencies ? 'Скрыть' : 'Подробнее',
+              showAllCompetencies
+                  ? AppLocalizations.of(context)!.hide
+                  : AppLocalizations.of(context)!.showMore,
               onToggleCompetencies,
             ),
         ],
@@ -100,7 +103,7 @@ class SpecialtyInfoCard extends StatelessWidget {
         .toList();
   }
 
-  Widget _buildDisciplinesSection() {
+  Widget _buildDisciplinesSection(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -109,7 +112,9 @@ class SpecialtyInfoCard extends StatelessWidget {
           ..._buildDisciplineItems(),
           if (detail.disciplines!.length > 3)
             _buildToggleButton(
-              showAllDisciplines ? 'Скрыть' : 'Подробнее',
+              showAllDisciplines
+                  ? AppLocalizations.of(context)!.hide
+                  : AppLocalizations.of(context)!.showMore,
               onToggleDisciplines,
             ),
         ],

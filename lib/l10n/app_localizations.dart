@@ -301,6 +301,108 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'JOIN\nUS!'**
   String get joinUs;
+
+  /// Image collage overlay text
+  ///
+  /// In en, this message translates to:
+  /// **'More than just an\nordinary technical institute'**
+  String get moreThanInstitute;
+
+  /// Description section header
+  ///
+  /// In en, this message translates to:
+  /// **'DESCRIPTION'**
+  String get description;
+
+  /// Disciplines guide section header
+  ///
+  /// In en, this message translates to:
+  /// **'DISCIPLINES GUIDE'**
+  String get disciplinesGuide;
+
+  /// Employment opportunities section header
+  ///
+  /// In en, this message translates to:
+  /// **'WHERE WILL THEY HIRE FOR WORK AND INTERNSHIP?'**
+  String get employmentOpportunities;
+
+  /// Enroll button text
+  ///
+  /// In en, this message translates to:
+  /// **'Enroll'**
+  String get enroll;
+
+  /// Number of available seats suffix
+  ///
+  /// In en, this message translates to:
+  /// **'seats'**
+  String get seats;
+
+  /// Show more button text
+  ///
+  /// In en, this message translates to:
+  /// **'More details'**
+  String get showMore;
+
+  /// Hide button text
+  ///
+  /// In en, this message translates to:
+  /// **'Hide'**
+  String get hide;
+
+  /// Introduction text for competencies section
+  ///
+  /// In en, this message translates to:
+  /// **'As a result of mastering the training program, the graduate will be professionally prepared for the following types of activities:'**
+  String get competenciesIntro;
+
+  /// Loading chat history message
+  ///
+  /// In en, this message translates to:
+  /// **'Loading history...'**
+  String get loadingHistory;
+
+  /// Chat input placeholder
+  ///
+  /// In en, this message translates to:
+  /// **'Ask the chatbot a question'**
+  String get askQuestion;
+
+  /// Chatbot subtitle
+  ///
+  /// In en, this message translates to:
+  /// **'I will help you with any questions'**
+  String get helpWithQuestions;
+
+  /// User label in chat
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// AI assistant label in chat
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant'**
+  String get aiAssistant;
+
+  /// AI typing indicator
+  ///
+  /// In en, this message translates to:
+  /// **'AI Assistant is typing...'**
+  String get aiTyping;
+
+  /// Stop button text
+  ///
+  /// In en, this message translates to:
+  /// **'STOP'**
+  String get stop;
+
+  /// Message input hint
+  ///
+  /// In en, this message translates to:
+  /// **'Type a message...'**
+  String get typeMessage;
 }
 
 class _AppLocalizationsDelegate

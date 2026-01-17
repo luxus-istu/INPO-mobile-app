@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty_detail.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 class SpecialtyHeader extends StatelessWidget {
   final SpecialtyDetail detail;
@@ -60,7 +61,7 @@ class SpecialtyHeader extends StatelessWidget {
                 ),
               ),
               Text(
-                '${detail.seats!} мест',
+                '${detail.seats!} ${AppLocalizations.of(context)!.seats}',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
