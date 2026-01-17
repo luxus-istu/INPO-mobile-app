@@ -1,11 +1,11 @@
 import 'package:inpo_mobile_app/core/resources/data_state.dart';
-import 'package:inpo_mobile_app/features/specialties/data/datasources/specialties_remote_data_source.dart';
+import 'package:inpo_mobile_app/features/specialties/data/datasources/remote/specialties_remote_data_source.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/repositories/specialty_repository.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: SpecialtyRepository)
-class SpecialtyRepositoryImpl implements SpecialtyRepository {
+final class SpecialtyRepositoryImpl implements SpecialtyRepository {
   final SpecialtiesRemoteDataSource remoteDataSource;
   SpecialtyRepositoryImpl(this.remoteDataSource);
 

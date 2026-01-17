@@ -1,26 +1,29 @@
+import 'package:hive_ce/hive_ce.dart';
 import 'package:inpo_mobile_app/features/chat/domain/entities/message_entity.dart';
 
-class MessageModel extends MessageEntity {
-  const MessageModel({
-    required super.text,
-    required super.sender,
-    required super.timestamp,
+part 'message_model.g.dart';
+
+@HiveType(typeId: 0)
+final class MessageModel extends HiveObject {
+  @HiveField(0)
+  final String? text;
+  @HiveField(1)
+  final String? sender;
+  @HiveField(2)
+  final DateTime timestamp;
+
+  MessageModel({
+    this.text,
+    this.sender,
+    required this.timestamp,
   });
 
-  factory MessageModel.fromJson(Map<String, dynamic> json) {
-    return MessageModel(
-      text: json['text'],
-      sender: json['sender'],
-      timestamp: DateTime.parse(json['timestamp']),
+  MessageEntity toEntity() {
+    return MessageEntity(
+      text: this.text ?? "",
+      sender: this.sender ?? "",
+      timestamp: timestamp,
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'text': text,
-      'sender': sender,
-      'timestamp': timestamp.toIso8601String(),
-    };
   }
 
   factory MessageModel.fromEntity(MessageEntity entity) {

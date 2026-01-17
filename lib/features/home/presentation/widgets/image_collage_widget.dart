@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ImageCollageWidget extends StatefulWidget {
+final class ImageCollageWidget extends StatefulWidget {
   final List<String> imageUrls;
 
   const ImageCollageWidget({
@@ -13,7 +13,7 @@ class ImageCollageWidget extends StatefulWidget {
   State<ImageCollageWidget> createState() => _ImageCollageWidgetState();
 }
 
-class _ImageCollageWidgetState extends State<ImageCollageWidget>
+final class _ImageCollageWidgetState extends State<ImageCollageWidget>
     with TickerProviderStateMixin {
   late final AnimationController _controller;
 

@@ -6,9 +6,9 @@ import 'package:inpo_mobile_app/features/chat/domain/repositories/chat_repositor
 
 @lazySingleton
 final class GetMessagesUseCase
-    extends UseCase<DataState<List<MessageEntity>>, void> {
+    implements UseCase<DataState<List<MessageEntity>>, void> {
   final ChatRepository repository;
-  GetMessagesUseCase(this.repository);
+  const GetMessagesUseCase(this.repository);
 
   Future<DataState<List<MessageEntity>>> call({void params}) async {
     return await repository.getMessages();

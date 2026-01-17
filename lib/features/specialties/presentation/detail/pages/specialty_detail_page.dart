@@ -5,7 +5,7 @@ import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
-import 'package:url_launcher2/url_launcher_string.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class SpecialtyDetailPage extends StatefulWidget {
   const SpecialtyDetailPage({super.key});
@@ -332,9 +332,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                         SizedBox(height: 60),
                         Center(
                           child: ElevatedButton(
-                            onPressed: () async {
-                              await launchUrlString(state.detail.link!);
-                            },
+                            onPressed: () async =>
+                                await launchUrlString(state.detail.link!),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF9FBAFF),
                               foregroundColor: const Color(0xFF3A6BD9),

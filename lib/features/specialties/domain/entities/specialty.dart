@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-class Specialty extends Equatable {
+final class Specialty extends Equatable {
   final String? code; // Код специальности, например "38.02.01"
   final String? title; // Название, например "Экономика и бухгалтерский учет"
   final String?

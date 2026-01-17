@@ -1,4 +1,6 @@
-class MessageEntity {
+import 'package:equatable/equatable.dart';
+
+final class MessageEntity extends Equatable {
   final String text;
   final String sender;
   final DateTime timestamp;
@@ -9,15 +11,21 @@ class MessageEntity {
     required this.timestamp,
   });
 
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is MessageEntity &&
-          runtimeType == other.runtimeType &&
-          text == other.text &&
-          sender == other.sender &&
-          timestamp == other.timestamp;
+  Map<String, dynamic> toJson() {
+    return {
+      "role": this.sender,
+      "content": this.text,
+    };
+  }
+
+  MessageEntity copyWith({String? text, String? sender}) {
+    return MessageEntity(
+      sender: sender ?? this.sender,
+      text: text ?? this.text,
+      timestamp: this.timestamp,
+    );
+  }
 
   @override
-  int get hashCode => text.hashCode ^ sender.hashCode ^ timestamp.hashCode;
+  List<Object?> get props => [this.text, this.sender, this.timestamp];
 }

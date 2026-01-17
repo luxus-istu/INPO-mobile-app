@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-class HeaderWidget extends StatelessWidget {
+final class HeaderWidget extends StatelessWidget {
   final String labelName;
   final VoidCallback? onTap;
-
   const HeaderWidget({super.key, required this.labelName, this.onTap});
 
   @override

@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
 
-class HomePage extends StatefulWidget {
+final class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+final class _HomePageState extends State<HomePage> {
   static const List<_HomeCardData> _cardsData = [
     _HomeCardData(
       imagePath: "assets/images/home_image_0.jpg",

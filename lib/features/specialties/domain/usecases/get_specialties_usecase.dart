@@ -5,9 +5,10 @@ import 'package:inpo_mobile_app/features/specialties/domain/repositories/special
 import 'package:injectable/injectable.dart';
 
 @lazySingleton
-class GetSpecialtiesUseCase extends UseCase<DataState<List<Specialty>>, void> {
+class GetSpecialtiesUseCase
+    implements UseCase<DataState<List<Specialty>>, void> {
   final SpecialtyRepository _repository;
-  GetSpecialtiesUseCase(this._repository);
+  const GetSpecialtiesUseCase(this._repository);
 
   Future<DataState<List<Specialty>>> call({void params}) async {
     return await _repository.getSpecialties();

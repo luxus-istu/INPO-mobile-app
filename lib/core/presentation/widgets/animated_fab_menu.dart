@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/constants/constants.dart';
 
-class AnimatedFabMenu extends StatefulWidget {
+final class AnimatedFabMenu extends StatefulWidget {
   const AnimatedFabMenu({super.key});
 
   @override
   State<AnimatedFabMenu> createState() => _AnimatedFabMenuState();
 }
 
-class _AnimatedFabMenuState extends State<AnimatedFabMenu>
+final class _AnimatedFabMenuState extends State<AnimatedFabMenu>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
   bool _isOpen = false;
@@ -83,7 +83,7 @@ class _AnimatedFabMenuState extends State<AnimatedFabMenu>
   }
 
   List<Widget> _buildMenuItems() {
-    return Constants.menuItems.asMap().entries.map((entry) {
+    return Constants.MENU_ITEMS.asMap().entries.map((entry) {
       final index = entry.key;
       final item = entry.value;
 

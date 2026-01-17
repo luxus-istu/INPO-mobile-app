@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty.dart';
 import 'package:inpo_mobile_app/core/presentation/helpers/specialty_icon_mapper.dart';
 
-class SpecialtyModel {
+final class SpecialtyModel extends Equatable {
   final String? code;
   final String? title;
   final String? formOfEducation;
@@ -44,10 +45,19 @@ class SpecialtyModel {
 
   Specialty toDomainEntity() {
     return Specialty(
-        code: code,
-        title: title,
-        formOfEducation: formOfEducation,
-        link: link,
-        icon: SpecialtyIconMapper.getIconForCode(code!));
+      code: code,
+      title: title,
+      formOfEducation: formOfEducation,
+      link: link,
+      icon: this.getIconData(),
+    );
   }
+
+  @override
+  List<Object?> get props => [
+        this.code,
+        this.title,
+        this.formOfEducation,
+        this.link,
+      ];
 }

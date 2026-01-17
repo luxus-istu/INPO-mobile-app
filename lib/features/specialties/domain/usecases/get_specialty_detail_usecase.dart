@@ -6,10 +6,9 @@ import 'package:inpo_mobile_app/features/specialties/domain/repositories/special
 
 @lazySingleton
 class GetSpecialtyDetailUseCase
-    extends UseCase<DataState<SpecialtyDetail>, String> {
+    implements UseCase<DataState<SpecialtyDetail>, String> {
   final SpecialtyDetailRepository _repository;
-
-  GetSpecialtyDetailUseCase(this._repository);
+  const GetSpecialtyDetailUseCase(this._repository);
 
   Future<DataState<SpecialtyDetail>> call({String? params}) async {
     return await _repository.getSpecialtyDetail(params!);

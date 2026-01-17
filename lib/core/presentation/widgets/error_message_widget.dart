@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
 
-class ErrorMessageWidget extends StatelessWidget {
+final class ErrorMessageWidget extends StatelessWidget {
   final SpecialtyDetailError error;
   const ErrorMessageWidget({super.key, required this.error});
 

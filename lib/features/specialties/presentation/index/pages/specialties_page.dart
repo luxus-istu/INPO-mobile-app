@@ -7,14 +7,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
 
-class SpecialtiesPage extends StatefulWidget {
+final class SpecialtiesPage extends StatefulWidget {
   const SpecialtiesPage({super.key});
 
   @override
   State<SpecialtiesPage> createState() => _SpecialtiesPageState();
 }
 
-class _SpecialtiesPageState extends State<SpecialtiesPage> {
+final class _SpecialtiesPageState extends State<SpecialtiesPage> {
   static const double _expandedHeight = 160;
   static const double _collapseThreshold = _expandedHeight - kToolbarHeight;
   bool _isAppBarCollapsed = false;

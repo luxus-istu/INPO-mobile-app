@@ -8,7 +8,7 @@ part 'news_event.dart';
 part 'news_state.dart';
 
 @lazySingleton
-class NewsBloc extends Bloc<NewsEvent, NewsState> {
+final class NewsBloc extends Bloc<NewsEvent, NewsState> {
   final GetNewsUseCase _getNewsUseCase;
 
   NewsBloc(this._getNewsUseCase) : super(const NewsInitial()) {

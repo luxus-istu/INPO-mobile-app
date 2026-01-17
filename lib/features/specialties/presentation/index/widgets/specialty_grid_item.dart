@@ -2,7 +2,7 @@ import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty.d
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class SpecialtyGridItem extends StatelessWidget {
+final class SpecialtyGridItem extends StatelessWidget {
   final Specialty specialty;
 
   const SpecialtyGridItem({

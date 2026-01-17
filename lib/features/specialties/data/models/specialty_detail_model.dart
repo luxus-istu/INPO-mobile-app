@@ -1,9 +1,10 @@
+import 'package:equatable/equatable.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart' as parser;
 import 'package:inpo_mobile_app/core/presentation/helpers/specialty_icon_mapper.dart';
 import 'package:inpo_mobile_app/features/specialties/domain/entities/specialty_detail.dart';
 
-class SpecialtyDetailModel {
+final class SpecialtyDetailModel extends Equatable {
   final String? title;
   final String? description;
   final String? seats;
@@ -216,15 +217,29 @@ class SpecialtyDetailModel {
 
   SpecialtyDetail toDomainEntity() {
     return SpecialtyDetail(
-        link: link,
-        title: title,
-        description: description,
-        seats: seats,
-        duration: duration,
-        companies: companies,
-        disciplines: disciplines,
-        competencies: competencies, // Добавляем компетенции
-        code: code, // Добавляем код специальности
-        icon: SpecialtyIconMapper.getIconForCode(code!));
+      link: link,
+      title: title,
+      description: description,
+      seats: seats,
+      duration: duration,
+      companies: companies,
+      disciplines: disciplines,
+      competencies: competencies, // Добавляем компетенции
+      code: code, // Добавляем код специальности
+      icon: this.getIconData(),
+    );
   }
+
+  @override
+  List<Object?> get props => [
+        this.title,
+        this.description,
+        this.seats,
+        this.duration,
+        this.companies,
+        this.disciplines,
+        this.competencies,
+        this.code,
+        this.link,
+      ];
 }

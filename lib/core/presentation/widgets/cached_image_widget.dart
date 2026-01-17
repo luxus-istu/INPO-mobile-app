@@ -1,8 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-/// Переиспользуемый виджет для загрузки изображений с кешированием
-class CachedImageWidget extends StatelessWidget {
+final class CachedImageWidget extends StatelessWidget {
   final String? imageUrl;
   final double? width;
   final double? height;
@@ -48,4 +47,3 @@ class CachedImageWidget extends StatelessWidget {
     );
   }
 }
-

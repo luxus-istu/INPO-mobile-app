@@ -9,7 +9,7 @@ part 'specialty_event.dart';
 part 'specialty_state.dart';
 
 @lazySingleton
-class SpecialtyBloc extends Bloc<SpecialtyEvent, SpecialtyState> {
+final class SpecialtyBloc extends Bloc<SpecialtyEvent, SpecialtyState> {
   final GetSpecialtiesUseCase _getSpecialtiesUseCase;
 
   SpecialtyBloc({required GetSpecialtiesUseCase getSpecialtiesUseCase})
