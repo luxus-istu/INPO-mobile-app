@@ -3,6 +3,8 @@ import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/features/home/presentation/widgets/image_collage_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
+import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
@@ -38,15 +40,54 @@ final class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.sizeOf(context);
-    final screenHeight = screenSize.height;
-    final screenWidth = screenSize.width;
+    // Get responsive values based on screen size
+    final isTablet = context.isTablet;
+    final isDesktop = context.isDesktop;
+    final isMobile = context.isMobile;
 
-    final imageHeight = screenHeight * 0.7;
-    final cardHeight = screenWidth * 0.6;
-    final titleFontSize = screenWidth < 360 ? 28.0 : 32.0;
-    final cardFontSize = screenWidth < 360 ? 18.0 : 20.0;
-    final spacing = screenHeight * 0.03;
+    // Responsive dimensions
+    final imageHeight = ResponsiveHelper.responsiveValue<double>(
+      context: context,
+      mobile: context.screenHeight * 0.7,
+      tablet: context.screenHeight * 0.6,
+      desktop: context.screenHeight * 0.5,
+    );
+
+    final cardHeight = ResponsiveHelper.responsiveValue<double>(
+      context: context,
+      mobile: context.screenWidth * 0.6,
+      tablet: context.screenWidth * 0.4,
+      desktop: context.screenWidth * 0.3,
+    );
+
+    final titleFontSize = ResponsiveHelper.responsiveFontSize(
+      context: context,
+      mobile: context.screenWidth < 360 ? 28.0 : 32.0,
+      tablet: 36.0,
+      desktop: 40.0,
+    );
+
+    final cardFontSize = ResponsiveHelper.responsiveFontSize(
+      context: context,
+      mobile: context.screenWidth < 360 ? 18.0 : 20.0,
+      tablet: 22.0,
+      desktop: 24.0,
+    );
+
+    final spacing = ResponsiveHelper.responsiveSpacing(
+      context: context,
+      mobile: context.screenHeight * 0.03,
+      tablet: context.screenHeight * 0.04,
+      desktop: context.screenHeight * 0.05,
+    );
+
+    // Determine layout based on screen size
+    final crossAxisCount = ResponsiveHelper.responsiveGridColumns(
+      context: context,
+      mobile: 1,
+      tablet: 2,
+      desktop: 3,
+    );
 
     return BlocBuilder<NewsBloc, NewsState>(
       bloc: getIt<NewsBloc>(),
@@ -65,11 +106,17 @@ final class _HomePageState extends State<HomePage> {
                   const HeaderWidget(labelName: "ГЛАВНАЯ\nСТРАНИЦА"),
                   SizedBox(
                     height: imageHeight,
-                    child: ImageCollageWidget(imageUrls: imageUrls),
+                    child: ImageCollageWidget(
+                      imageUrls: imageUrls,
+                      isTablet: isTablet,
+                      isDesktop: isDesktop,
+                    ),
                   ),
                   SizedBox(height: spacing),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.responsiveHorizontalPadding,
+                    ),
                     child: Column(
                       children: [
                         Text(
@@ -83,21 +130,41 @@ final class _HomePageState extends State<HomePage> {
                           ),
                         ),
                         SizedBox(height: spacing),
-                        ...List.generate(_cardsData.length, (index) {
-                          final card = _cardsData[index];
-                          return Padding(
-                            padding: EdgeInsets.only(
-                              bottom:
-                                  index == _cardsData.length - 1 ? 0 : spacing,
-                            ),
-                            child: _buildCardWidget(
-                              imagePath: card.imagePath,
-                              title: card.title,
-                              cardHeight: cardHeight,
-                              fontSize: cardFontSize,
-                            ),
-                          );
-                        }),
+                        // Use grid layout for tablets/desktop, list for mobile
+                        if (isMobile)
+                          ...List.generate(_cardsData.length, (index) {
+                            final card = _cardsData[index];
+                            return Padding(
+                              padding: EdgeInsets.only(
+                                bottom: index == _cardsData.length - 1
+                                    ? 0
+                                    : spacing,
+                              ),
+                              child: _buildCardWidget(
+                                imagePath: card.imagePath,
+                                title: card.title,
+                                cardHeight: cardHeight,
+                                fontSize: cardFontSize,
+                              ),
+                            );
+                          })
+                        else
+                          GridView.count(
+                            crossAxisCount: crossAxisCount,
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            mainAxisSpacing: spacing,
+                            crossAxisSpacing: spacing,
+                            children: List.generate(_cardsData.length, (index) {
+                              final card = _cardsData[index];
+                              return _buildCardWidget(
+                                imagePath: card.imagePath,
+                                title: card.title,
+                                cardHeight: cardHeight,
+                                fontSize: cardFontSize,
+                              );
+                            }),
+                          ),
                       ],
                     ),
                   ),

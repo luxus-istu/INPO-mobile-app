@@ -115,15 +115,15 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i805.SaveMessageUseCase(gh<_i831.ChatRepository>()));
     gh.lazySingleton<_i966.GetNewsUseCase>(
         () => _i966.GetNewsUseCase(gh<_i702.NewsRepository>()));
+    gh.lazySingleton<_i553.NewsBloc>(
+        () => _i553.NewsBloc(gh<_i966.GetNewsUseCase>()));
+    gh.lazySingleton<_i190.GetSpecialtyDetailUseCase>(() =>
+        _i190.GetSpecialtyDetailUseCase(gh<_i862.SpecialtyDetailRepository>()));
     gh.lazySingleton<_i552.ChatBotBloc>(() => _i552.ChatBotBloc(
           gh<_i1071.GetMessagesUseCase>(),
           gh<_i833.SendMessageUseCase>(),
           gh<_i805.SaveMessageUseCase>(),
         ));
-    gh.lazySingleton<_i553.NewsBloc>(
-        () => _i553.NewsBloc(gh<_i966.GetNewsUseCase>()));
-    gh.lazySingleton<_i190.GetSpecialtyDetailUseCase>(() =>
-        _i190.GetSpecialtyDetailUseCase(gh<_i862.SpecialtyDetailRepository>()));
     gh.lazySingleton<_i593.SpecialtyDetailBloc>(
         () => _i593.SpecialtyDetailBloc(gh<_i190.GetSpecialtyDetailUseCase>()));
     return this;

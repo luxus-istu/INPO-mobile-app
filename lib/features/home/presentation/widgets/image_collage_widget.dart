@@ -3,10 +3,14 @@ import 'package:flutter/material.dart';
 
 final class ImageCollageWidget extends StatefulWidget {
   final List<String> imageUrls;
+  final bool isTablet;
+  final bool isDesktop;
 
   const ImageCollageWidget({
     super.key,
     required this.imageUrls,
+    this.isTablet = false,
+    this.isDesktop = false,
   });
 
   @override
@@ -51,102 +55,225 @@ final class _ImageCollageWidgetState extends State<ImageCollageWidget>
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
 
-    // Базовый размер для вычислений (стандартная ширина мобильного устройства)
-    const baseWidth = 375.0;
+    // Adjust base layout based on device type
+    double baseWidth;
+    double heightPercentage;
+
+    if (widget.isDesktop) {
+      baseWidth = 1200.0;
+      heightPercentage = 0.4;
+    } else if (widget.isTablet) {
+      baseWidth = 800.0;
+      heightPercentage = 0.5;
+    } else {
+      baseWidth = 375.0;
+      heightPercentage = 0.6;
+    }
 
     // Коэффициент масштабирования на основе ширины экрана
-    final scaleFactor = (screenWidth / baseWidth).clamp(0.8, 1.2);
+    final scaleFactor = (screenWidth / baseWidth).clamp(0.8, 1.5);
 
-    // Адаптивная высота виджета (60% от высоты экрана)
-    final desiredHeight = screenHeight * 0.6;
+    // Адаптивная высота виджета
+    final desiredHeight = screenHeight * heightPercentage;
 
-    // Адаптивные размеры изображений
-    final imageSize1 = 110.0 * scaleFactor;
-    final imageSize2 = 98.0 * scaleFactor;
-    final imageSize3 = 128.0 * scaleFactor;
+    // Адаптивные размеры изображений (different layout for tablets/desktop)
+    final imageSize1 = widget.isDesktop
+        ? 150.0 * scaleFactor
+        : widget.isTablet
+            ? 130.0 * scaleFactor
+            : 110.0 * scaleFactor;
+    final imageSize2 = widget.isDesktop
+        ? 130.0 * scaleFactor
+        : widget.isTablet
+            ? 110.0 * scaleFactor
+            : 98.0 * scaleFactor;
+    final imageSize3 = widget.isDesktop
+        ? 160.0 * scaleFactor
+        : widget.isTablet
+            ? 140.0 * scaleFactor
+            : 128.0 * scaleFactor;
 
     // Адаптивные отступы
-    final horizontalPadding = 16.0 * scaleFactor;
-    final leftOffset1 = 62.0 * scaleFactor;
-    final leftOffset2 = 74.0 * scaleFactor;
-    final leftOffset3 = 44.0 * scaleFactor;
-    final topOffset1 = 42.0 * scaleFactor;
-    final topOffset2 = 289.0 * scaleFactor;
-    final topOffset3 = 423.0 * scaleFactor;
-    final textTop = 184.0 * scaleFactor;
-    final fontSize = 32.0 * scaleFactor;
+    final horizontalPadding = widget.isDesktop
+        ? 32.0 * scaleFactor
+        : widget.isTablet
+            ? 24.0 * scaleFactor
+            : 16.0 * scaleFactor;
 
-    return SizedBox(
-      height: desiredHeight,
-      child: Stack(
-        children: [
-          _buildAnimatedImage(
-            imageUrl: _getUrl(0),
-            width: imageSize1,
-            height: imageSize1,
-            left: leftOffset1,
-            top: topOffset1,
-            animationDelay: 0,
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(1),
-            width: imageSize1,
-            height: imageSize1,
-            right: leftOffset1,
-            top: topOffset1,
-            animationDelay: 0.1,
-          ),
-          Positioned(
-            top: textTop,
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-              child: Text(
-                'Больше, чем обычный\nтехнический институт',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: fontSize,
-                  fontWeight: FontWeight.w700,
-                  fontFamily: "SF Pro Display",
-                  color: const Color(0xFF4069D3),
+    // Different layout for tablets/desktop vs mobile
+    if (widget.isTablet || widget.isDesktop) {
+      // Tablet/Desktop layout - more spread out
+      final leftOffset1 =
+          widget.isDesktop ? 100.0 * scaleFactor : 80.0 * scaleFactor;
+      final leftOffset2 =
+          widget.isDesktop ? 120.0 * scaleFactor : 100.0 * scaleFactor;
+      final leftOffset3 =
+          widget.isDesktop ? 80.0 * scaleFactor : 60.0 * scaleFactor;
+      final topOffset1 =
+          widget.isDesktop ? 60.0 * scaleFactor : 50.0 * scaleFactor;
+      final topOffset2 =
+          widget.isDesktop ? 320.0 * scaleFactor : 280.0 * scaleFactor;
+      final topOffset3 =
+          widget.isDesktop ? 450.0 * scaleFactor : 400.0 * scaleFactor;
+      final textTop =
+          widget.isDesktop ? 200.0 * scaleFactor : 180.0 * scaleFactor;
+      final fontSize =
+          widget.isDesktop ? 40.0 * scaleFactor : 36.0 * scaleFactor;
+
+      return SizedBox(
+        height: desiredHeight,
+        child: Stack(
+          children: [
+            _buildAnimatedImage(
+              imageUrl: _getUrl(0),
+              width: imageSize1,
+              height: imageSize1,
+              left: leftOffset1,
+              top: topOffset1,
+              animationDelay: 0,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(1),
+              width: imageSize1,
+              height: imageSize1,
+              right: leftOffset1,
+              top: topOffset1,
+              animationDelay: 0.1,
+            ),
+            Positioned(
+              top: textTop,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                child: Text(
+                  'Больше, чем обычный\nтехнический институт',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: "SF Pro Display",
+                    color: const Color(0xFF4069D3),
+                  ),
                 ),
               ),
             ),
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(2),
-            width: imageSize2,
-            height: imageSize2,
-            left: leftOffset2,
-            top: topOffset2,
-            animationDelay: 0.2,
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(3),
-            width: imageSize2,
-            height: imageSize2,
-            right: leftOffset2,
-            top: topOffset2,
-            animationDelay: 0.3,
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(4),
-            width: imageSize3,
-            height: imageSize3,
-            left: leftOffset3,
-            top: topOffset3,
-            animationDelay: 0.4,
-          ),
-          _buildAnimatedImage(
-            imageUrl: _getUrl(5),
-            width: imageSize3,
-            height: imageSize3,
-            right: leftOffset3,
-            top: topOffset3,
-            animationDelay: 0.5,
-          ),
-        ],
-      ),
-    );
+            _buildAnimatedImage(
+              imageUrl: _getUrl(2),
+              width: imageSize2,
+              height: imageSize2,
+              left: leftOffset2,
+              top: topOffset2,
+              animationDelay: 0.2,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(3),
+              width: imageSize2,
+              height: imageSize2,
+              right: leftOffset2,
+              top: topOffset2,
+              animationDelay: 0.3,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(4),
+              width: imageSize3,
+              height: imageSize3,
+              left: leftOffset3,
+              top: topOffset3,
+              animationDelay: 0.4,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(5),
+              width: imageSize3,
+              height: imageSize3,
+              right: leftOffset3,
+              top: topOffset3,
+              animationDelay: 0.5,
+            ),
+          ],
+        ),
+      );
+    } else {
+      // Mobile layout
+      final leftOffset1 = 62.0 * scaleFactor;
+      final leftOffset2 = 74.0 * scaleFactor;
+      final leftOffset3 = 44.0 * scaleFactor;
+      final topOffset1 = 42.0 * scaleFactor;
+      final topOffset2 = 289.0 * scaleFactor;
+      final topOffset3 = 423.0 * scaleFactor;
+      final textTop = 184.0 * scaleFactor;
+      final fontSize = 32.0 * scaleFactor;
+
+      return SizedBox(
+        height: desiredHeight,
+        child: Stack(
+          children: [
+            _buildAnimatedImage(
+              imageUrl: _getUrl(0),
+              width: imageSize1,
+              height: imageSize1,
+              left: leftOffset1,
+              top: topOffset1,
+              animationDelay: 0,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(1),
+              width: imageSize1,
+              height: imageSize1,
+              right: leftOffset1,
+              top: topOffset1,
+              animationDelay: 0.1,
+            ),
+            Positioned(
+              top: textTop,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                child: Text(
+                  'Больше, чем обычный\nтехнический институт',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: fontSize,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: "SF Pro Display",
+                    color: const Color(0xFF4069D3),
+                  ),
+                ),
+              ),
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(2),
+              width: imageSize2,
+              height: imageSize2,
+              left: leftOffset2,
+              top: topOffset2,
+              animationDelay: 0.2,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(3),
+              width: imageSize2,
+              height: imageSize2,
+              right: leftOffset2,
+              top: topOffset2,
+              animationDelay: 0.3,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(4),
+              width: imageSize3,
+              height: imageSize3,
+              left: leftOffset3,
+              top: topOffset3,
+              animationDelay: 0.4,
+            ),
+            _buildAnimatedImage(
+              imageUrl: _getUrl(5),
+              width: imageSize3,
+              height: imageSize3,
+              right: leftOffset3,
+              top: topOffset3,
+              animationDelay: 0.5,
+            ),
+          ],
+        ),
+      );
+    }
   }
 
   Widget _buildAnimatedImage({

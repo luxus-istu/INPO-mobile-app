@@ -3,6 +3,8 @@ import 'package:inpo_mobile_app/features/specialties/presentation/index/bloc/spe
 import 'package:inpo_mobile_app/features/specialties/presentation/index/widgets/specialty_grid_item.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
+import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
@@ -15,9 +17,18 @@ final class SpecialtiesPage extends StatefulWidget {
 }
 
 final class _SpecialtiesPageState extends State<SpecialtiesPage> {
-  static const double _expandedHeight = 160;
-  static const double _collapseThreshold = _expandedHeight - kToolbarHeight;
+  static const double _mobileExpandedHeight = 160;
+  static const double _tabletExpandedHeight = 200;
+  static const double _desktopExpandedHeight = 240;
   bool _isAppBarCollapsed = false;
+
+  double get _expandedHeight {
+    if (context.isDesktop) return _desktopExpandedHeight;
+    if (context.isTablet) return _tabletExpandedHeight;
+    return _mobileExpandedHeight;
+  }
+
+  double get _collapseThreshold => _expandedHeight - kToolbarHeight;
 
   @override
   void initState() {
@@ -29,6 +40,42 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Get responsive values
+    final isTablet = context.isTablet;
+    final isDesktop = context.isDesktop;
+
+    // Responsive grid columns
+    final crossAxisCount = ResponsiveHelper.responsiveGridColumns(
+      context: context,
+      mobile: 2,
+      tablet: 3,
+      desktop: 4,
+    );
+
+    // Responsive spacing
+    final spacing = ResponsiveHelper.responsiveSpacing(
+      context: context,
+      mobile: 8.0,
+      tablet: 12.0,
+      desktop: 16.0,
+    );
+
+    // Responsive aspect ratio
+    final aspectRatio = ResponsiveHelper.responsiveAspectRatio(
+      context: context,
+      mobile: 0.7,
+      tablet: 0.8,
+      desktop: 0.9,
+    );
+
+    // Responsive font size for title
+    final titleFontSize = ResponsiveHelper.responsiveFontSize(
+      context: context,
+      mobile: 16.0,
+      tablet: 18.0,
+      desktop: 20.0,
+    );
+
     return BlocBuilder<SpecialtyBloc, SpecialtyState>(
         bloc: getIt<SpecialtyBloc>(),
         builder: (context, state) {
@@ -65,13 +112,13 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
                       title: AnimatedOpacity(
                         duration: const Duration(milliseconds: 100),
                         opacity: _isAppBarCollapsed ? 1.0 : 0.0,
-                        child: const Text(
+                        child: Text(
                           "ПРОФЕССИИ",
                           style: TextStyle(
                             fontFamily: "Onder",
                             decoration: TextDecoration.none,
                             fontWeight: FontWeight.w400,
-                            fontSize: 16,
+                            fontSize: titleFontSize,
                             color: const Color(0xFF4069D3),
                           ),
                         ),
@@ -82,19 +129,31 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
                       ),
                     ),
                     SliverPadding(
-                      padding:
-                          const EdgeInsets.only(bottom: 64, left: 8, right: 8),
+                      padding: EdgeInsets.only(
+                        bottom: ResponsiveHelper.responsiveValue<double>(
+                          context: context,
+                          mobile: 64.0,
+                          tablet: 80.0,
+                          desktop: 96.0,
+                        ),
+                        left: spacing,
+                        right: spacing,
+                      ),
                       sliver: SliverGrid.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                          crossAxisSpacing: 8,
-                          mainAxisSpacing: 8,
-                          childAspectRatio: 0.7,
+                          crossAxisCount: crossAxisCount,
+                          crossAxisSpacing: spacing,
+                          mainAxisSpacing: spacing,
+                          childAspectRatio: aspectRatio,
                         ),
                         itemCount: state.specialties.length,
                         itemBuilder: (context, index) {
                           final specialty = state.specialties[index];
-                          return SpecialtyGridItem(specialty: specialty);
+                          return SpecialtyGridItem(
+                            specialty: specialty,
+                            isTablet: isTablet,
+                            isDesktop: isDesktop,
+                          );
                         },
                       ),
                     )

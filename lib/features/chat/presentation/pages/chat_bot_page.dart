@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:inpo_mobile_app/features/chat/domain/entities/message_entity.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/bloc/chat_bot_bloc.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/widgets/typing_indicator.dart';
@@ -49,6 +50,37 @@ final class _ChatBotPageState extends State<ChatBotPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Responsive values
+    final isTablet = context.isTablet;
+    final isDesktop = context.isDesktop;
+
+    // Responsive sizing
+    final appBarHeight = isDesktop
+        ? 250.0
+        : isTablet
+            ? 230.0
+            : 211.0;
+    final errorMargin = isDesktop
+        ? 24.0
+        : isTablet
+            ? 20.0
+            : 16.0;
+    final errorPadding = isDesktop
+        ? 16.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+    final errorFontSize = isDesktop
+        ? 16.0
+        : isTablet
+            ? 15.0
+            : 14.0;
+    final errorBorderRadius = isDesktop
+        ? 16.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -58,7 +90,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
         animateColor: false,
         surfaceTintColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 211,
+        toolbarHeight: appBarHeight,
         title: const SizedBox.shrink(),
         flexibleSpace:
             HeaderWidget(labelName: "ЧАТ-БОТ", onTap: () => context.go('/')),
@@ -83,30 +115,33 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               // Баннер ошибки
               if (state is ChatBotError)
                 Container(
-                  padding: const EdgeInsets.all(12),
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: EdgeInsets.all(errorPadding),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: errorMargin,
+                    vertical: errorMargin * 0.5,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(errorBorderRadius),
                     border: Border.all(color: Colors.red.shade200),
                   ),
                   child: Row(
                     children: [
                       Icon(Icons.error_outline, color: Colors.red.shade700),
-                      const SizedBox(width: 12),
+                      SizedBox(width: errorMargin * 0.75),
                       Expanded(
                         child: Text(
                           _getErrorMessage(state.error),
                           style: TextStyle(
                             color: Colors.red.shade700,
-                            fontSize: 14,
+                            fontSize: errorFontSize,
                           ),
                         ),
                       ),
                       IconButton(
                         icon: Icon(Icons.close,
-                            color: Colors.red.shade700, size: 20),
+                            color: Colors.red.shade700,
+                            size: errorFontSize + 6),
                         onPressed: () {
                           getIt<ChatBotBloc>().add(const ChatBotLoadEvent());
                         },
@@ -117,15 +152,15 @@ final class _ChatBotPageState extends State<ChatBotPage> {
 
               // Основной контент
               Expanded(
-                child: _buildMessageList(state),
+                child: _buildMessageList(state, isTablet, isDesktop),
               ),
 
               // Индикатор стриминга
               if (_isStreaming && state is ChatBotProcessing)
-                _buildStreamingIndicator(state),
+                _buildStreamingIndicator(state, isTablet, isDesktop),
 
               // Поле ввода
-              _buildMessageInput(context, state),
+              _buildMessageInput(context, state, isTablet, isDesktop),
             ],
           );
         },
@@ -133,19 +168,46 @@ final class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildMessageList(ChatBotState state) {
+  Widget _buildMessageList(ChatBotState state, bool isTablet, bool isDesktop) {
+    // Responsive sizing
+    final loadingFontSize = isDesktop
+        ? 18.0
+        : isTablet
+            ? 17.0
+            : 16.0;
+    final emptyIconSize = isDesktop
+        ? 80.0
+        : isTablet
+            ? 72.0
+            : 64.0;
+    final emptyTitleFontSize = isDesktop
+        ? 20.0
+        : isTablet
+            ? 19.0
+            : 18.0;
+    final emptySubtitleFontSize = isDesktop
+        ? 16.0
+        : isTablet
+            ? 15.0
+            : 14.0;
+    final listPadding = isDesktop
+        ? 24.0
+        : isTablet
+            ? 20.0
+            : 16.0;
+
     if (state is ChatBotInitial || state is ChatBotLoading) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircularProgressIndicator(color: Theme.of(context).primaryColor),
-            const SizedBox(height: 16),
+            SizedBox(height: listPadding * 0.75),
             Text(
               'Загружаю историю...',
               style: TextStyle(
                 color: Colors.grey.shade600,
-                fontSize: 16,
+                fontSize: loadingFontSize,
               ),
             ),
           ],
@@ -165,23 +227,23 @@ final class _ChatBotPageState extends State<ChatBotPage> {
             children: [
               Icon(
                 Icons.chat_bubble_outline,
-                size: 64,
+                size: emptyIconSize,
                 color: Colors.grey.shade300,
               ),
-              const SizedBox(height: 16),
+              SizedBox(height: listPadding),
               Text(
                 'Задайте вопрос чат-боту',
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: emptyTitleFontSize,
                   color: Colors.grey.shade600,
                   fontWeight: FontWeight.w500,
                 ),
               ),
-              const SizedBox(height: 8),
+              SizedBox(height: listPadding * 0.5),
               Text(
                 'Я помогу вам с любыми вопросами',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: emptySubtitleFontSize,
                   color: Colors.grey.shade500,
                 ),
               ),
@@ -192,7 +254,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
 
       return ListView.builder(
         controller: _scrollController,
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(listPadding),
         itemCount: messages.length,
         itemBuilder: (context, index) {
           final message = messages[index];
@@ -201,7 +263,8 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               index == messages.length - 1 &&
               !isUser;
 
-          return _buildMessageItem(message, isUser, isStreaming);
+          return _buildMessageItem(
+              message, isUser, isStreaming, isTablet, isDesktop);
         },
       );
     }
@@ -209,10 +272,62 @@ final class _ChatBotPageState extends State<ChatBotPage> {
     return const SizedBox.shrink();
   }
 
-  Widget _buildMessageItem(
-      MessageEntity message, bool isUser, bool isStreaming) {
+  Widget _buildMessageItem(MessageEntity message, bool isUser, bool isStreaming,
+      bool isTablet, bool isDesktop) {
+    // Responsive sizing
+    final avatarSize = isDesktop
+        ? 40.0
+        : isTablet
+            ? 36.0
+            : 32.0;
+    final avatarIconSize = isDesktop
+        ? 22.0
+        : isTablet
+            ? 20.0
+            : 18.0;
+    final senderFontSize = isDesktop
+        ? 14.0
+        : isTablet
+            ? 13.0
+            : 12.0;
+    final messageFontSize = isDesktop
+        ? 18.0
+        : isTablet
+            ? 17.0
+            : 16.0;
+    final timeFontSize = isDesktop
+        ? 13.0
+        : isTablet
+            ? 12.0
+            : 11.0;
+    final messageMargin = isDesktop
+        ? 20.0
+        : isTablet
+            ? 18.0
+            : 16.0;
+    final messagePadding = isDesktop
+        ? 20.0
+        : isTablet
+            ? 18.0
+            : 16.0;
+    final borderRadius = isDesktop
+        ? 20.0
+        : isTablet
+            ? 18.0
+            : 16.0;
+    final maxMessageWidth = isDesktop
+        ? 0.6
+        : isTablet
+            ? 0.65
+            : 0.75;
+    final avatarMargin = isDesktop
+        ? 16.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+
     return Container(
-      margin: const EdgeInsets.only(bottom: 16),
+      margin: EdgeInsets.only(bottom: messageMargin),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment:
@@ -220,17 +335,17 @@ final class _ChatBotPageState extends State<ChatBotPage> {
         children: [
           if (!isUser)
             Container(
-              width: 32,
-              height: 32,
-              margin: const EdgeInsets.only(right: 12),
+              width: avatarSize,
+              height: avatarSize,
+              margin: EdgeInsets.only(right: avatarMargin),
               decoration: BoxDecoration(
                 color: const Color(0xff4069D3),
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(borderRadius),
               ),
-              child: const Icon(
+              child: Icon(
                 Icons.smart_toy,
                 color: Colors.white,
-                size: 18,
+                size: avatarIconSize,
               ),
             ),
           Flexible(
@@ -242,32 +357,33 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                 Text(
                   isUser ? 'Вы' : 'ИИ-ассистент',
                   style: TextStyle(
-                    fontSize: 12,
+                    fontSize: senderFontSize,
                     color: Colors.grey.shade600,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: messagePadding * 0.25),
 
                 // Сообщение
                 Container(
                   constraints: BoxConstraints(
-                    maxWidth: MediaQuery.of(context).size.width * 0.75,
+                    maxWidth:
+                        MediaQuery.of(context).size.width * maxMessageWidth,
                   ),
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(messagePadding),
                   decoration: BoxDecoration(
                     color: isUser
                         ? const Color(0xff4069D3)
                         : const Color(0xffF5F7FA),
                     borderRadius: BorderRadius.only(
-                      topLeft: const Radius.circular(16),
-                      topRight: const Radius.circular(16),
+                      topLeft: Radius.circular(borderRadius),
+                      topRight: Radius.circular(borderRadius),
                       bottomLeft: isUser
-                          ? const Radius.circular(16)
-                          : const Radius.circular(4),
+                          ? Radius.circular(borderRadius)
+                          : Radius.circular(borderRadius * 0.25),
                       bottomRight: isUser
-                          ? const Radius.circular(4)
-                          : const Radius.circular(16),
+                          ? Radius.circular(borderRadius * 0.25)
+                          : Radius.circular(borderRadius),
                     ),
                   ),
                   child: Column(
@@ -276,7 +392,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                       Text(
                         message.text,
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: messageFontSize,
                           color: isUser ? Colors.white : Colors.black,
                           height: 1.5,
                         ),
@@ -287,11 +403,11 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                 ),
 
                 // Время
-                const SizedBox(height: 4),
+                SizedBox(height: messagePadding * 0.25),
                 Text(
                   _formatTime(message.timestamp),
                   style: TextStyle(
-                    fontSize: 11,
+                    fontSize: timeFontSize,
                     color: Colors.grey.shade500,
                   ),
                 ),
@@ -300,17 +416,17 @@ final class _ChatBotPageState extends State<ChatBotPage> {
           ),
           if (isUser)
             Container(
-              width: 32,
-              height: 32,
-              margin: const EdgeInsets.only(left: 12),
+              width: avatarSize,
+              height: avatarSize,
+              margin: EdgeInsets.only(left: avatarMargin),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(borderRadius),
               ),
               child: Icon(
                 Icons.person,
                 color: Colors.grey.shade600,
-                size: 18,
+                size: avatarIconSize,
               ),
             ),
         ],
@@ -356,19 +472,70 @@ final class _ChatBotPageState extends State<ChatBotPage> {
   //   );
   // }
 
-  Widget _buildStreamingIndicator(ChatBotProcessing state) {
+  Widget _buildStreamingIndicator(
+      ChatBotProcessing state, bool isTablet, bool isDesktop) {
+    // Responsive sizing
+    final paddingHorizontal = isDesktop
+        ? 24.0
+        : isTablet
+            ? 20.0
+            : 16.0;
+    final paddingVertical = isDesktop
+        ? 16.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+    final dotSize = isDesktop
+        ? 10.0
+        : isTablet
+            ? 9.0
+            : 8.0;
+    final dotMargin = isDesktop
+        ? 10.0
+        : isTablet
+            ? 9.0
+            : 8.0;
+    final fontSize = isDesktop
+        ? 16.0
+        : isTablet
+            ? 15.0
+            : 14.0;
+    final buttonPaddingHorizontal = isDesktop
+        ? 20.0
+        : isTablet
+            ? 18.0
+            : 16.0;
+    final buttonPaddingVertical = isDesktop
+        ? 10.0
+        : isTablet
+            ? 9.0
+            : 8.0;
+    final buttonFontSize = isDesktop
+        ? 16.0
+        : isTablet
+            ? 15.0
+            : 14.0;
+    final borderRadius = isDesktop
+        ? 10.0
+        : isTablet
+            ? 9.0
+            : 8.0;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding: EdgeInsets.symmetric(
+        horizontal: paddingHorizontal,
+        vertical: paddingVertical,
+      ),
       color: Colors.blue.shade50,
       child: Row(
         children: [
           Container(
-            width: 8,
-            height: 8,
-            margin: const EdgeInsets.only(right: 8),
+            width: dotSize,
+            height: dotSize,
+            margin: EdgeInsets.only(right: dotMargin),
             decoration: BoxDecoration(
               color: Colors.blue,
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(dotSize / 2),
             ),
           ),
           Expanded(
@@ -376,12 +543,12 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               'ИИ-ассистент печатает...',
               style: TextStyle(
                 color: Colors.blue.shade800,
-                fontSize: 14,
+                fontSize: fontSize,
               ),
             ),
           ),
           Container(
-            margin: const EdgeInsets.only(left: 8),
+            margin: EdgeInsets.only(left: dotMargin),
             child: ElevatedButton(
               onPressed: () {
                 getIt<ChatBotBloc>().add(const ChatBotCancelStreamEvent());
@@ -389,17 +556,19 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade100,
                 foregroundColor: Colors.red.shade800,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: EdgeInsets.symmetric(
+                  horizontal: buttonPaddingHorizontal,
+                  vertical: buttonPaddingVertical,
+                ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(borderRadius),
                 ),
                 elevation: 0,
               ),
-              child: const Text(
+              child: Text(
                 'ОСТАНОВИТЬ',
                 style: TextStyle(
-                  fontSize: 14,
+                  fontSize: buttonFontSize,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -410,12 +579,60 @@ final class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildMessageInput(BuildContext context, ChatBotState state) {
+  Widget _buildMessageInput(
+      BuildContext context, ChatBotState state, bool isTablet, bool isDesktop) {
     final isProcessing = state is ChatBotProcessing;
     final isButtonDisabled = _textController.text.isEmpty || isProcessing;
 
+    // Responsive sizing
+    final padding = isDesktop
+        ? 24.0
+        : isTablet
+            ? 20.0
+            : 16.0;
+    final inputBorderRadius = isDesktop
+        ? 16.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+    final hintFontSize = isDesktop
+        ? 18.0
+        : isTablet
+            ? 17.0
+            : 16.0;
+    final inputPadding = isDesktop
+        ? 20.0
+        : isTablet
+            ? 18.0
+            : 16.0;
+    final buttonSize = isDesktop
+        ? 56.0
+        : isTablet
+            ? 52.0
+            : 48.0;
+    final buttonBorderRadius = isDesktop
+        ? 14.0
+        : isTablet
+            ? 13.0
+            : 12.0;
+    final buttonIconSize = isDesktop
+        ? 28.0
+        : isTablet
+            ? 26.0
+            : 24.0;
+    final progressSize = isDesktop
+        ? 24.0
+        : isTablet
+            ? 22.0
+            : 20.0;
+    final spacing = isDesktop
+        ? 16.0
+        : isTablet
+            ? 14.0
+            : 12.0;
+
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
@@ -429,11 +646,15 @@ final class _ChatBotPageState extends State<ChatBotPage> {
           Expanded(
             child: Container(
               constraints: BoxConstraints(
-                maxHeight: 120,
+                maxHeight: isDesktop
+                    ? 140
+                    : isTablet
+                        ? 130
+                        : 120,
               ),
               decoration: BoxDecoration(
                 color: const Color(0xffF5F7FA),
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(inputBorderRadius),
                 border: Border.all(color: Colors.grey.shade200),
               ),
               child: TextField(
@@ -445,10 +666,10 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                   hintText: 'Напишите сообщение...',
                   hintStyle: TextStyle(
                     color: Colors.grey.shade500,
-                    fontSize: 16,
+                    fontSize: hintFontSize,
                   ),
                   border: InputBorder.none,
-                  contentPadding: const EdgeInsets.all(16),
+                  contentPadding: EdgeInsets.all(inputPadding),
                   suffixIcon: _textController.text.isNotEmpty
                       ? IconButton(
                           icon: Icon(Icons.clear, color: Colors.grey.shade500),
@@ -469,29 +690,29 @@ final class _ChatBotPageState extends State<ChatBotPage> {
             ),
           ),
 
-          const SizedBox(width: 12),
+          SizedBox(width: spacing),
 
           // Кнопка отправки
           Container(
-            width: 48,
-            height: 48,
+            width: buttonSize,
+            height: buttonSize,
             decoration: BoxDecoration(
               color: isButtonDisabled
                   ? Colors.grey.shade300
                   : const Color(0xff4069D3),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(buttonBorderRadius),
             ),
             child: Material(
               color: Colors.transparent,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(buttonBorderRadius),
               child: InkWell(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(buttonBorderRadius),
                 onTap: isButtonDisabled ? null : _sendMessage,
                 child: Center(
                   child: isProcessing
                       ? SizedBox(
-                          width: 20,
-                          height: 20,
+                          width: progressSize,
+                          height: progressSize,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             color: Colors.white,
@@ -500,7 +721,7 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                       : Icon(
                           Icons.send,
                           color: Colors.white,
-                          size: 24,
+                          size: buttonIconSize,
                         ),
                 ),
               ),

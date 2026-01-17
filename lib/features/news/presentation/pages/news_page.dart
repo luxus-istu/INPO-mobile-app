@@ -3,6 +3,7 @@ import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/features/news/presentation/widgets/news_card.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
@@ -15,9 +16,18 @@ final class NewsPage extends StatefulWidget {
 }
 
 final class _NewsPageState extends State<NewsPage> {
-  static const double _expandedHeight = 160;
-  static const double _collapseThreshold = _expandedHeight - kToolbarHeight;
+  static const double _mobileExpandedHeight = 160;
+  static const double _tabletExpandedHeight = 200;
+  static const double _desktopExpandedHeight = 240;
   bool _isAppBarCollapsed = false;
+
+  double get _expandedHeight {
+    if (context.isDesktop) return _desktopExpandedHeight;
+    if (context.isTablet) return _tabletExpandedHeight;
+    return _mobileExpandedHeight;
+  }
+
+  double get _collapseThreshold => _expandedHeight - kToolbarHeight;
 
   @override
   void initState() {
@@ -29,6 +39,21 @@ final class _NewsPageState extends State<NewsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Responsive values
+    final isTablet = context.isTablet;
+    final isDesktop = context.isDesktop;
+
+    // Responsive font size for title
+    final titleFontSize = isDesktop
+        ? 20.0
+        : isTablet
+            ? 18.0
+            : 16.0;
+
+    // Determine layout type
+    final useGridLayout = isTablet || isDesktop;
+    final crossAxisCount = isDesktop ? 2 : 1;
+
     return BlocBuilder<NewsBloc, NewsState>(
       bloc: getIt<NewsBloc>(),
       builder: (context, state) {
@@ -63,13 +88,13 @@ final class _NewsPageState extends State<NewsPage> {
                   title: AnimatedOpacity(
                     duration: const Duration(milliseconds: 100),
                     opacity: _isAppBarCollapsed ? 1.0 : 0.0,
-                    child: const Text(
+                    child: Text(
                       "НОВОСТИ",
                       style: TextStyle(
                         fontFamily: "Onder",
                         decoration: TextDecoration.none,
                         fontWeight: FontWeight.w400,
-                        fontSize: 16,
+                        fontSize: titleFontSize,
                         color: const Color(0xFF4069D3),
                       ),
                     ),
@@ -81,10 +106,40 @@ final class _NewsPageState extends State<NewsPage> {
                     ),
                   ),
                 ),
-                SliverList(
+                if (useGridLayout)
+                  SliverPadding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: context.responsiveHorizontalPadding,
+                      vertical: 16,
+                    ),
+                    sliver: SliverGrid.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 0.8,
+                      ),
+                      itemCount: state.news.length,
+                      itemBuilder: (context, index) {
+                        final item = state.news[index];
+                        return NewsCard(
+                          newsItem: item,
+                          isTablet: isTablet,
+                          isDesktop: isDesktop,
+                        );
+                      },
+                    ),
+                  )
+                else
+                  SliverList(
                     delegate: SliverChildListDelegate([
-                  ...state.news.map((item) => NewsCard(newsItem: item))
-                ])),
+                      ...state.news.map((item) => NewsCard(
+                            newsItem: item,
+                            isTablet: isTablet,
+                            isDesktop: isDesktop,
+                          ))
+                    ]),
+                  ),
               ]),
             ),
             floatingActionButton: const AnimatedFabMenu(),
