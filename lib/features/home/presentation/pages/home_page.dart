@@ -9,6 +9,7 @@ import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,19 +19,10 @@ final class HomePage extends StatefulWidget {
 }
 
 final class _HomePageState extends State<HomePage> {
-  static const List<_HomeCardData> _cardsData = [
-    _HomeCardData(
-      imagePath: "assets/images/home_image_0.webp",
-      title: "Постоянное участие в\nмеждународных конкурсах и\nолимпиадах",
-    ),
-    _HomeCardData(
-      imagePath: "assets/images/home_image_1.webp",
-      title: "Креативная студенческая\nжизнь",
-    ),
-    _HomeCardData(
-      imagePath: "assets/images/home_image_2.webp",
-      title: "Большое разнообразие\nспециальностей",
-    ),
+  static const List<String> _imagePaths = [
+    "assets/images/home_image_0.webp",
+    "assets/images/home_image_1.webp",
+    "assets/images/home_image_2.webp",
   ];
 
   @override
@@ -44,6 +36,13 @@ final class _HomePageState extends State<HomePage> {
     // Get responsive values based on screen size
     final isTablet = context.isTablet;
     final isMobile = context.isMobile;
+
+    // Get localized card titles
+    final cardTitles = [
+      AppLocalizations.of(context)!.card1Title,
+      AppLocalizations.of(context)!.card2Title,
+      AppLocalizations.of(context)!.card3Title,
+    ];
 
     // Responsive dimensions
     final imageHeight = ResponsiveHelper.responsiveValue<double>(
@@ -97,7 +96,8 @@ final class _HomePageState extends State<HomePage> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const HeaderWidget(labelName: "ГЛАВНАЯ\nСТРАНИЦА"),
+                  HeaderWidget(
+                      labelName: AppLocalizations.of(context)!.homeHeader),
                   SizedBox(
                     height: imageHeight,
                     child: ImageCollageWidget(
@@ -113,7 +113,7 @@ final class _HomePageState extends State<HomePage> {
                     child: Column(
                       children: [
                         Text(
-                          "Почему мы?",
+                          AppLocalizations.of(context)!.whyUsTitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: "SF Pro Display",
@@ -125,17 +125,16 @@ final class _HomePageState extends State<HomePage> {
                         SizedBox(height: spacing),
                         // Use grid layout for tablets/desktop, list for mobile
                         if (isMobile)
-                          ...List.generate(_cardsData.length, (index) {
-                            final card = _cardsData[index];
+                          ...List.generate(cardTitles.length, (index) {
                             return Padding(
                               padding: EdgeInsets.only(
-                                bottom: index == _cardsData.length - 1
+                                bottom: index == cardTitles.length - 1
                                     ? 0
                                     : spacing,
                               ),
                               child: _buildCardWidget(
-                                imagePath: card.imagePath,
-                                title: card.title,
+                                imagePath: _imagePaths[index],
+                                title: cardTitles[index],
                                 cardHeight: cardHeight,
                                 fontSize: cardFontSize,
                               ),
@@ -148,11 +147,10 @@ final class _HomePageState extends State<HomePage> {
                             physics: const NeverScrollableScrollPhysics(),
                             mainAxisSpacing: spacing,
                             crossAxisSpacing: spacing,
-                            children: List.generate(_cardsData.length, (index) {
-                              final card = _cardsData[index];
+                            children: List.generate(cardTitles.length, (index) {
                               return _buildCardWidget(
-                                imagePath: card.imagePath,
-                                title: card.title,
+                                imagePath: _imagePaths[index],
+                                title: cardTitles[index],
                                 cardHeight: cardHeight,
                                 fontSize: cardFontSize,
                               );
@@ -228,10 +226,4 @@ final class _HomePageState extends State<HomePage> {
       ],
     );
   }
-}
-
-class _HomeCardData {
-  final String imagePath;
-  final String title;
-  const _HomeCardData({required this.imagePath, required this.title});
 }

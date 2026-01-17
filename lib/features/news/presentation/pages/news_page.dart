@@ -4,6 +4,7 @@ import 'package:inpo_mobile_app/features/news/presentation/widgets/news_card.dar
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
@@ -82,7 +83,7 @@ final class _NewsPageState extends State<NewsPage> {
                     duration: const Duration(milliseconds: 100),
                     opacity: _isAppBarCollapsed ? 1.0 : 0.0,
                     child: Text(
-                      "НОВОСТИ",
+                      AppLocalizations.of(context)!.newsHeader,
                       style: TextStyle(
                         fontFamily: "Onder",
                         decoration: TextDecoration.none,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -12,10 +13,10 @@ final class SplashScreen extends StatelessWidget {
         minimum: const EdgeInsets.only(top: 106),
         child: Stack(
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('ИНПО',
+                Text(AppLocalizations.of(context)!.brandName,
                     style: TextStyle(
                         fontFamily: "Onder",
                         decoration: TextDecoration.none,
@@ -25,7 +26,7 @@ final class SplashScreen extends StatelessWidget {
                 SizedBox(height: 10),
                 Align(
                   alignment: Alignment.centerRight,
-                  child: Text('ИЖГТУ',
+                  child: Text(AppLocalizations.of(context)!.universityName,
                       style: TextStyle(
                           fontFamily: "Onder",
                           decoration: TextDecoration.none,

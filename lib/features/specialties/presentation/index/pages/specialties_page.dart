@@ -8,6 +8,7 @@ import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.d
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class SpecialtiesPage extends StatefulWidget {
   const SpecialtiesPage({super.key});
@@ -106,7 +107,7 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
                         duration: const Duration(milliseconds: 100),
                         opacity: _isAppBarCollapsed ? 1.0 : 0.0,
                         child: Text(
-                          "ПРОФЕССИИ",
+                          AppLocalizations.of(context)!.specialtiesHeader,
                           style: TextStyle(
                             fontFamily: "Onder",
                             decoration: TextDecoration.none,
@@ -117,8 +118,10 @@ final class _SpecialtiesPageState extends State<SpecialtiesPage> {
                         ),
                       ),
                       centerTitle: true,
-                      flexibleSpace: const FlexibleSpaceBar(
-                        background: HeaderWidget(labelName: "ПРОФЕССИИ"),
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: HeaderWidget(
+                            labelName: AppLocalizations.of(context)!
+                                .specialtiesHeader),
                       ),
                     ),
                     SliverPadding(

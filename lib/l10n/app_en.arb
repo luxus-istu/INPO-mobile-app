@@ -1,0 +1,139 @@
+{
+  "@@locale": "en",
+  "appTitle": "INPO Mobile App",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home page title"
+  },
+  "specialties": "Specialties",
+  "@specialties": {
+    "description": "Specialties page title"
+  },
+  "news": "News",
+  "@news": {
+    "description": "News page title"
+  },
+  "contacts": "Contacts",
+  "@contacts": {
+    "description": "Contacts page title"
+  },
+  "chat": "Chat",
+  "@chat": {
+    "description": "Chat page title"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error message title"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "homeHeader": "MAIN\nPAGE",
+  "@homeHeader": {
+    "description": "Home page header text"
+  },
+  "specialtiesHeader": "PROFESSIONS",
+  "@specialtiesHeader": {
+    "description": "Specialties page header text"
+  },
+  "chatHeader": "CHAT-BOT",
+  "@chatHeader": {
+    "description": "Chat bot page header text"
+  },
+  "contactsHeader": "CONTACTS",
+  "@contactsHeader": {
+    "description": "Contacts page header text"
+  },
+  "newsHeader": "NEWS",
+  "@newsHeader": {
+    "description": "News page header text"
+  },
+  "errorHeader": "ERROR",
+  "@errorHeader": {
+    "description": "Error page header text"
+  },
+  "brandName": "INPO",
+  "@brandName": {
+    "description": "Brand name/logo"
+  },
+  "universityName": "ISTU",
+  "@universityName": {
+    "description": "University name abbreviation"
+  },
+  "whyUsTitle": "Why us?",
+  "@whyUsTitle": {
+    "description": "Why choose us section title"
+  },
+  "card1Title": "Constant participation in\ninternational competitions and\nolympiads",
+  "@card1Title": {
+    "description": "First feature card title"
+  },
+  "card2Title": "Creative student\nlife",
+  "@card2Title": {
+    "description": "Second feature card title"
+  },
+  "card3Title": "Large variety of\nspecialties",
+  "@card3Title": {
+    "description": "Third feature card title"
+  },
+  "thinking": "Thinking...",
+  "@thinking": {
+    "description": "Typing indicator text"
+  },
+  "somethingWentWrong": "Something went\nwrong...",
+  "@somethingWentWrong": {
+    "description": "Generic error message"
+  },
+  "serverMessage": "The server is lying down and relaxing,\nbut everything will be fine soon ;)",
+  "@serverMessage": {
+    "description": "Server error message"
+  },
+  "goBack": "Go back",
+  "@goBack": {
+    "description": "Go back button text"
+  },
+  "urlNotFound": "Error: URL not found",
+  "@urlNotFound": {
+    "description": "URL not found error message"
+  },
+  "menuContacts": "Contacts",
+  "@menuContacts": {
+    "description": "Contacts menu item"
+  },
+  "menuNews": "News",
+  "@menuNews": {
+    "description": "News menu item"
+  },
+  "menuChat": "AI Assistant",
+  "@menuChat": {
+    "description": "Chat/AI assistant menu item"
+  },
+  "menuSpecialties": "Professions",
+  "@menuSpecialties": {
+    "description": "Specialties menu item"
+  },
+  "menuHome": "Home",
+  "@menuHome": {
+    "description": "Home menu item"
+  },
+  "joinUs": "JOIN\nUS!",
+  "@joinUs": {
+    "description": "Join us call to action"
+  }
+}

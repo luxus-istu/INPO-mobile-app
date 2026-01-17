@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class HeaderWidget extends StatelessWidget {
   final String labelName;
@@ -62,7 +63,7 @@ final class HeaderWidget extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Text(
-                  'ИНПО',
+                  AppLocalizations.of(context)!.brandName,
                   style: TextStyle(
                     fontFamily: "Onder",
                     decoration: TextDecoration.none,

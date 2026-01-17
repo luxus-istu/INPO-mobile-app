@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:inpo_mobile_app/core/domain/entities/menu_item.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class Constants {
   static const String AI_FRIENDLY_ERROR_MESSAGE =
@@ -13,11 +14,15 @@ final class Constants {
   static const String SPECIALTIES_ISTU_URL =
       "$ISTU_BASE_URL/department/institut-nepreryvnogo-professionalnogo-obrazovaniya";
 
-  static const List<MenuItem> MENU_ITEMS = [
-    MenuItem(Icons.person_outline, 'Контакты', '/contacts'),
-    MenuItem(Icons.newspaper_outlined, 'Новости', '/news'),
-    MenuItem(Icons.chat_bubble, 'ИИ-помошник', '/chat'),
-    MenuItem(Icons.engineering_outlined, 'Профессии', '/specialties'),
-    MenuItem(Icons.home_outlined, 'Главная', '/'),
-  ];
+  static List<MenuItem> getMenuItems(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return [
+      MenuItem(Icons.person_outline, l10n.menuContacts, '/contacts'),
+      MenuItem(Icons.newspaper_outlined, l10n.menuNews, '/news'),
+      MenuItem(Icons.chat_bubble, l10n.menuChat, '/chat'),
+      MenuItem(
+          Icons.engineering_outlined, l10n.menuSpecialties, '/specialties'),
+      MenuItem(Icons.home_outlined, l10n.menuHome, '/'),
+    ];
+  }
 }

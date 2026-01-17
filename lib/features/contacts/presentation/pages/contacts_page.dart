@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class ContactsPage extends StatelessWidget {
@@ -26,7 +27,7 @@ class ContactsPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          const HeaderWidget(labelName: "КОНТАКТЫ"),
+          HeaderWidget(labelName: AppLocalizations.of(context)!.contactsHeader),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
@@ -68,14 +69,16 @@ class ContactsPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(height: spacing * 5),
-        Text(
-          "ПРИСОЕДИНЯЙСЯ\nК НАМ!",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontFamily: "Onder",
-            fontSize: titleFontSize,
-            fontWeight: FontWeight.w400,
-            color: Color(0xFF000080),
+        Builder(
+          builder: (context) => Text(
+            AppLocalizations.of(context)!.joinUs,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: "Onder",
+              fontSize: titleFontSize,
+              fontWeight: FontWeight.w400,
+              color: Color(0xFF000080),
+            ),
           ),
         ),
         SizedBox(height: spacing * 1.8),
@@ -176,14 +179,16 @@ class ContactsPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text(
-                "ПРИСОЕДИНЯЙСЯ\nК НАМ!",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: "Onder",
-                  fontSize: titleFontSize,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFF000080),
+              Builder(
+                builder: (context) => Text(
+                  AppLocalizations.of(context)!.joinUs,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: "Onder",
+                    fontSize: titleFontSize,
+                    fontWeight: FontWeight.w400,
+                    color: Color(0xFF000080),
+                  ),
                 ),
               ),
               SizedBox(height: spacing * 1.8),

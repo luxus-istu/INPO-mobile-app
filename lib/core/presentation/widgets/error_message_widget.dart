@@ -1,8 +1,7 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class ErrorMessageWidget extends StatelessWidget {
   final SpecialtyDetailError error;
@@ -10,16 +9,14 @@ final class ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorCode =
-        (error.error as DioException).response?.statusCode.toString() ?? "500";
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
         children: [
-          const HeaderWidget(labelName: "ОШИБКА"),
-          const SizedBox(height: 160),
+          const Icon(Icons.arrow_back, size: 24, color: Color(0xff000080)),
+          const SizedBox(width: 16),
           Text(
-            errorCode,
+            AppLocalizations.of(context)!.goBack,
             style: TextStyle(
                 fontFamily: "Onder",
                 decoration: TextDecoration.none,
@@ -28,8 +25,8 @@ final class ErrorMessageWidget extends StatelessWidget {
                 color: Color(0xFF4069D3)),
           ),
           const SizedBox(height: 24),
-          const Text(
-            "Что то пошло\nне так...",
+          Text(
+            AppLocalizations.of(context)!.somethingWentWrong,
             textAlign: TextAlign.center,
             style: TextStyle(
                 fontFamily: "Onder",
@@ -39,8 +36,8 @@ final class ErrorMessageWidget extends StatelessWidget {
                 color: Color(0xFF000080)),
           ),
           const SizedBox(height: 24),
-          const Text(
-            "Сервер лежит и прохлаждается,но\nскоро все уладится ;)",
+          Text(
+            AppLocalizations.of(context)!.serverMessage,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,
@@ -64,15 +61,16 @@ final class ErrorMessageWidget extends StatelessWidget {
                       offset: Offset(0, 2),
                     )
                   ]),
-              child: const Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.arrow_back, size: 24, color: Color(0xff000080)),
+                  const Icon(Icons.arrow_back,
+                      size: 24, color: Color(0xff000080)),
                   SizedBox(width: 16),
                   Text(
-                    "Вернуться",
+                    AppLocalizations.of(context)!.goBack,
                     style: TextStyle(
                         fontSize: 18,
                         fontFamily: "SF Pro Display",

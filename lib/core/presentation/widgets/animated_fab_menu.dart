@@ -83,7 +83,7 @@ final class _AnimatedFabMenuState extends State<AnimatedFabMenu>
   }
 
   List<Widget> _buildMenuItems() {
-    return Constants.MENU_ITEMS.asMap().entries.map((entry) {
+    return Constants.getMenuItems(context).asMap().entries.map((entry) {
       final index = entry.key;
       final item = entry.value;
 

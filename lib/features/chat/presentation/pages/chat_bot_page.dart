@@ -7,6 +7,7 @@ import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.d
 import 'package:inpo_mobile_app/features/chat/domain/entities/message_entity.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/bloc/chat_bot_bloc.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/widgets/typing_indicator.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
 final class ChatBotPage extends StatefulWidget {
@@ -71,8 +72,9 @@ final class _ChatBotPageState extends State<ChatBotPage> {
         elevation: 0,
         toolbarHeight: appBarHeight,
         title: const SizedBox.shrink(),
-        flexibleSpace:
-            HeaderWidget(labelName: "ЧАТ-БОТ", onTap: () => context.go('/')),
+        flexibleSpace: HeaderWidget(
+            labelName: AppLocalizations.of(context)!.chatHeader,
+            onTap: () => context.go('/')),
       ),
       body: BlocConsumer<ChatBotBloc, ChatBotState>(
         bloc: getIt<ChatBotBloc>(),

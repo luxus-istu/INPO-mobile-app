@@ -1,0 +1,139 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Мобильное приложение ИНПО",
+  "@appTitle": {
+    "description": "Название приложения"
+  },
+  "home": "Главная",
+  "@home": {
+    "description": "Заголовок главной страницы"
+  },
+  "specialties": "Специальности",
+  "@specialties": {
+    "description": "Заголовок страницы специальностей"
+  },
+  "news": "Новости",
+  "@news": {
+    "description": "Заголовок страницы новостей"
+  },
+  "contacts": "Контакты",
+  "@contacts": {
+    "description": "Заголовок страницы контактов"
+  },
+  "chat": "Чат",
+  "@chat": {
+    "description": "Заголовок страницы чата"
+  },
+  "error": "Ошибка",
+  "@error": {
+    "description": "Заголовок сообщения об ошибке"
+  },
+  "loading": "Загрузка...",
+  "@loading": {
+    "description": "Текст индикатора загрузки"
+  },
+  "retry": "Повторить",
+  "@retry": {
+    "description": "Текст кнопки повтора"
+  },
+  "back": "Назад",
+  "@back": {
+    "description": "Текст кнопки назад"
+  },
+  "close": "Закрыть",
+  "@close": {
+    "description": "Текст кнопки закрытия"
+  },
+  "homeHeader": "ГЛАВНАЯ\nСТРАНИЦА",
+  "@homeHeader": {
+    "description": "Заголовок главной страницы"
+  },
+  "specialtiesHeader": "ПРОФЕССИИ",
+  "@specialtiesHeader": {
+    "description": "Заголовок страницы специальностей"
+  },
+  "chatHeader": "ЧАТ-БОТ",
+  "@chatHeader": {
+    "description": "Заголовок страницы чат-бота"
+  },
+  "contactsHeader": "КОНТАКТЫ",
+  "@contactsHeader": {
+    "description": "Заголовок страницы контактов"
+  },
+  "newsHeader": "НОВОСТИ",
+  "@newsHeader": {
+    "description": "Заголовок страницы новостей"
+  },
+  "errorHeader": "ОШИБКА",
+  "@errorHeader": {
+    "description": "Заголовок страницы ошибки"
+  },
+  "brandName": "ИНПО",
+  "@brandName": {
+    "description": "Название бренда/логотип"
+  },
+  "universityName": "ИЖГТУ",
+  "@universityName": {
+    "description": "Сокращение названия университета"
+  },
+  "whyUsTitle": "Почему мы?",
+  "@whyUsTitle": {
+    "description": "Заголовок раздела 'Почему выбрать нас'"
+  },
+  "card1Title": "Постоянное участие в\nмеждународных конкурсах и\nолимпиадах",
+  "@card1Title": {
+    "description": "Заголовок первой карточки с преимуществами"
+  },
+  "card2Title": "Креативная студенческая\nжизнь",
+  "@card2Title": {
+    "description": "Заголовок второй карточки с преимуществами"
+  },
+  "card3Title": "Большое разнообразие\nспециальностей",
+  "@card3Title": {
+    "description": "Заголовок третьей карточки с преимуществами"
+  },
+  "thinking": "Думаю...",
+  "@thinking": {
+    "description": "Текст индикатора печати"
+  },
+  "somethingWentWrong": "Что то пошло\nне так...",
+  "@somethingWentWrong": {
+    "description": "Общее сообщение об ошибке"
+  },
+  "serverMessage": "Сервер лежит и прохлаждается,но\nскоро все уладится ;)",
+  "@serverMessage": {
+    "description": "Сообщение об ошибке сервера"
+  },
+  "goBack": "Вернуться",
+  "@goBack": {
+    "description": "Текст кнопки возврата"
+  },
+  "urlNotFound": "Ошибка: URL не найден",
+  "@urlNotFound": {
+    "description": "Сообщение об ошибке 'URL не найден'"
+  },
+  "menuContacts": "Контакты",
+  "@menuContacts": {
+    "description": "Пункт меню контактов"
+  },
+  "menuNews": "Новости",
+  "@menuNews": {
+    "description": "Пункт меню новостей"
+  },
+  "menuChat": "ИИ-помошник",
+  "@menuChat": {
+    "description": "Пункт меню чат/ИИ помощника"
+  },
+  "menuSpecialties": "Профессии",
+  "@menuSpecialties": {
+    "description": "Пункт меню специальностей"
+  },
+  "menuHome": "Главная",
+  "@menuHome": {
+    "description": "Пункт меню главной"
+  },
+  "joinUs": "ПРИСОЕДИНЯЙСЯ\nК НАМ!",
+  "@joinUs": {
+    "description": "Призыв к действию 'Присоединяйся к нам'"
+  }
+}
