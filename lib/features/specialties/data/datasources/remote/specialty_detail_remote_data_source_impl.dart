@@ -1,11 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 import 'package:inpo_mobile_app/core/resources/data_state.dart';
+import 'package:inpo_mobile_app/features/specialties/data/datasources/remote/specialty_detail_remote_data_source.dart';
 import 'package:inpo_mobile_app/features/specialties/data/models/specialty_detail_model.dart';
-
-abstract class SpecialtyDetailRemoteDataSource {
-  Future<DataState<SpecialtyDetailModel>> getSpecialtyDetailFromUrl(String url);
-}
 
 @LazySingleton(as: SpecialtyDetailRemoteDataSource)
 class SpecialtyDetailRemoteDataSourceImpl
