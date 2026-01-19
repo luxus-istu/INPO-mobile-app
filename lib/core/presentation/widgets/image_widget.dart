@@ -1,18 +1,23 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-class ImageService {
-  static void configureImageCache() {
-    // Configure image caching settings if needed
-  }
+final class ImageWidget extends StatelessWidget {
+  final String? imageUrl;
+  final double? width;
+  final double? height;
+  final BoxFit fit;
+  final double borderRadius;
+  const ImageWidget({
+    required this.imageUrl,
+    required this.width,
+    required this.height,
+    required this.fit,
+    required this.borderRadius,
+    super.key,
+  });
 
-  static Widget buildCachedImage({
-    required String? imageUrl,
-    required double? width,
-    required double? height,
-    required BoxFit fit,
-    required double borderRadius,
-  }) {
+  @override
+  Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: CachedNetworkImage(

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
-import 'package:inpo_mobile_app/core/presentation/widgets/error_message_widget.dart';
+import 'package:inpo_mobile_app/features/specialties/presentation/detail/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
@@ -23,6 +23,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
   bool _isAppBarCollapsed = false;
   bool _showAllDisciplines = false;
   bool _showAllCompetencies = false;
+
+  AppLocalizations get localization => AppLocalizations.of(context)!;
 
   double get _expandedHeight {
     if (context.isLargeScreen) return _desktopExpandedHeight;
@@ -166,7 +168,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             ),
                           ),
                           Text(
-                            '${state.detail.seats!} ${AppLocalizations.of(context)!.seats}',
+                            '${state.detail.seats!} ${localization.seats}',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -181,7 +183,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                 ),
                 const SizedBox(height: 60),
                 Text(
-                  AppLocalizations.of(context)!.description,
+                  localization.description,
                   style: const TextStyle(
                     fontSize: 15,
                     fontFamily: "Onder",
@@ -207,7 +209,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppLocalizations.of(context)!.competenciesIntro,
+                        localization.competenciesIntro,
                         style: TextStyle(
                           fontSize: 15,
                           fontFamily: "SF Pro Display",
@@ -244,8 +246,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             children: [
                               Text(
                                 _showAllCompetencies
-                                    ? AppLocalizations.of(context)!.hide
-                                    : AppLocalizations.of(context)!.showMore,
+                                    ? localization.hide
+                                    : localization.showMore,
                                 style: const TextStyle(
                                   color: const Color(0xFF000080),
                                   fontFamily: "SF Pro Display",
@@ -267,7 +269,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                 ),
                 const SizedBox(height: 48),
                 Text(
-                  AppLocalizations.of(context)!.disciplinesGuide,
+                  localization.disciplinesGuide,
                   style: TextStyle(
                     fontSize: 15,
                     fontFamily: "Onder",
@@ -309,8 +311,8 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             children: [
                               Text(
                                 _showAllDisciplines
-                                    ? AppLocalizations.of(context)!.hide
-                                    : AppLocalizations.of(context)!.showMore,
+                                    ? localization.hide
+                                    : localization.showMore,
                                 style: const TextStyle(
                                   color: Color(0xFF000080),
                                   fontFamily: "SF Pro Display",
@@ -331,7 +333,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                   ),
                 ),
                 Text(
-                  AppLocalizations.of(context)!.employmentOpportunities,
+                  localization.employmentOpportunities,
                   style: TextStyle(
                     fontSize: 15,
                     fontFamily: "Onder",
@@ -369,7 +371,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       ),
                     ),
                     child: Text(
-                      AppLocalizations.of(context)!.enroll,
+                      localization.enroll,
                       style: TextStyle(
                         fontSize: 20,
                         fontFamily: "SF Pro Display",
@@ -480,7 +482,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                           ),
                         ),
                         Text(
-                          '${state.detail.seats!} ${AppLocalizations.of(context)!.seats}',
+                          '${state.detail.seats!} ${localization.seats}',
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontWeight: FontWeight.bold,
@@ -516,7 +518,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                         SizedBox(height: spacing),
                         Container(
                           padding: EdgeInsets.all(spacing),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.all(Radius.circular(16)),
                             boxShadow: const [
@@ -531,7 +533,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                AppLocalizations.of(context)!.competenciesIntro,
+                                localization.competenciesIntro,
                                 style: TextStyle(
                                   fontSize: subtitleFontSize,
                                   fontFamily: "SF Pro Display",
@@ -573,8 +575,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                       Text(
                                         _showAllCompetencies
                                             ? 'Скрыть'
-                                            : AppLocalizations.of(context)!
-                                                .showMore,
+                                            : localization.showMore,
                                         style: TextStyle(
                                           color: const Color(0xFF000080),
                                           fontFamily: "SF Pro Display",
@@ -606,7 +607,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          AppLocalizations.of(context)!.disciplinesGuide,
+                          localization.disciplinesGuide,
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontFamily: "Onder",
@@ -653,8 +654,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                                       Text(
                                         _showAllDisciplines
                                             ? 'Скрыть'
-                                            : AppLocalizations.of(context)!
-                                                .showMore,
+                                            : localization.showMore,
                                         style: TextStyle(
                                           color: Color(0xFF000080),
                                           fontFamily: "SF Pro Display",
@@ -677,7 +677,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                         ),
                         SizedBox(height: spacing),
                         Text(
-                          AppLocalizations.of(context)!.employmentOpportunities,
+                          localization.employmentOpportunities,
                           style: TextStyle(
                             fontSize: subtitleFontSize,
                             fontFamily: "Onder",
@@ -724,7 +724,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                     ),
                   ),
                   child: Text(
-                    AppLocalizations.of(context)!.enroll,
+                    localization.enroll,
                     style: TextStyle(
                       fontSize: buttonFontSize,
                       fontFamily: "SF Pro Display",

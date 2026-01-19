@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:inpo_mobile_app/core/presentation/widgets/cached_image_widget.dart';
+import 'package:inpo_mobile_app/core/presentation/widgets/image_widget.dart';
 
 /// A widget that provides lazy loading for images in scrollable content
 /// Only loads images when they come into viewport
-class LazyImageWidget extends StatefulWidget {
+final class LazyImageWidget extends StatefulWidget {
   final String imageUrl;
   final double width;
   final double height;
@@ -76,7 +76,7 @@ class _LazyImageWidgetState extends State<LazyImageWidget> {
       width: widget.width,
       height: widget.height,
       child: _isInView
-          ? CachedImageWidget(
+          ? ImageWidget(
               imageUrl: widget.imageUrl,
               width: widget.width,
               height: widget.height,

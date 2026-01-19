@@ -137,7 +137,9 @@ final class _ChatBotPageState extends State<ChatBotPage> {
               ),
 
               // Индикатор стриминга
-              if (_isStreaming && state is ChatBotProcessing)
+              if (_isStreaming &&
+                  state is ChatBotProcessing &&
+                  state.accumulatedResponse.isNotEmpty)
                 _buildStreamingIndicator(state, isTablet),
 
               // Поле ввода
@@ -319,7 +321,8 @@ final class _ChatBotPageState extends State<ChatBotPage> {
                           height: 1.5,
                         ),
                       ),
-                      if (isStreaming) const TypingIndicator(),
+                      if (isStreaming && message.text.isNotEmpty)
+                        const TypingIndicator(),
                     ],
                   ),
                 ),

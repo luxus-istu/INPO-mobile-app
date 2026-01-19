@@ -8,7 +8,7 @@ import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/splash_loading_page.dart';
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class HomePage extends StatefulWidget {
@@ -85,6 +85,12 @@ final class _HomePageState extends State<HomePage> {
     return BlocBuilder<NewsBloc, NewsState>(
       bloc: getIt<NewsBloc>(),
       builder: (context, state) {
+        if (state is NewsError) {
+          WidgetsBinding.instance.addPostFrameCallback(
+              (_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message.toString()),
+                  )));
+        }
         if (state is NewsLoaded) {
           final imageUrls = state.news
               .map((newsItem) => newsItem.imageUrl ?? "")
@@ -167,7 +173,7 @@ final class _HomePageState extends State<HomePage> {
           );
         }
 
-        return const SplashScreen();
+        return const SplashLoadingPage();
       },
     );
   }

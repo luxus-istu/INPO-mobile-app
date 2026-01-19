@@ -7,7 +7,7 @@ import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.d
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:inpo_mobile_app/core/presentation/pages/splash_screen.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/splash_loading_page.dart';
 
 final class NewsPage extends StatefulWidget {
   const NewsPage({super.key});
@@ -138,7 +138,7 @@ final class _NewsPageState extends State<NewsPage> {
           );
         }
 
-        return const SplashScreen();
+        return const SplashLoadingPage();
       },
     );
   }

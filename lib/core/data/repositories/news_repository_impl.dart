@@ -13,6 +13,7 @@ final class NewsRepositoryImpl implements NewsRepository {
   Future<DataState<List<NewsItem>>> getNews() async {
     try {
       final newsModels = await remoteDataSource.getNewsFromHtml();
+      if (newsModels is DataFailed) return DataFailed(newsModels.error!);
       return DataSuccess(
           newsModels.data!.map((model) => model.toDomainEntity()).toList());
     } on Exception catch (e) {

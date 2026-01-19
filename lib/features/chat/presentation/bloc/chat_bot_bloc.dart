@@ -20,12 +20,16 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
   final SaveMessageUseCase _saveMessage;
   StreamSubscription<DataState<String>>? _responseSubscription;
 
-  // Для накопления потокового ответа
+  // Accumulate stream response
+  // This is a temporary workaround to handle stream response issues
+  // TODO: Implement a more robust stream response solution
   String _accumulatedResponse = '';
   late MessageEntity _currentAiMessage;
   late MessageEntity _userMessage;
 
-  // Для отслеживания ограничения скорости
+  // Track rate limiting
+  // This is a temporary workaround to handle rate limiting issues
+  // TODO: Implement a more robust rate limiting solution
   DateTime? _lastRateLimitError;
 
   ChatBotBloc(this._getMessages, this._sendMessage, this._saveMessage)
@@ -64,6 +68,8 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
     await _cancelCurrentStream();
 
     // Check for recent rate limit errors to prevent immediate retries
+    // This is a temporary workaround to handle rate limiting issues
+    // TODO: Implement a more robust rate limiting solution
     if (_lastRateLimitError != null) {
       final timeSinceLastError =
           DateTime.now().difference(_lastRateLimitError!);
@@ -80,14 +86,18 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       _ => <MessageEntity>[],
     };
 
-    // Создаем сообщение пользователя
+    // Create user message
+    // This is a temporary workaround to handle message creation issues
+    // TODO: Implement a more robust message creation solution
     _userMessage = MessageEntity(
       text: event.request,
       sender: 'user',
       timestamp: DateTime.now(),
     );
 
-    // Создаем пустое сообщение для AI (будем обновлять по мере получения чанков)
+    // Create empty AI message (will be updated as chunks are received)
+    // This is a temporary workaround to handle message creation issues
+    // TODO: Implement a more robust message creation solution
     _currentAiMessage = MessageEntity(
       text: '',
       sender: 'ai',
@@ -100,17 +110,23 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
       _currentAiMessage
     ];
 
-    // Начинаем потоковую обработку
+    // Start stream processing
+    // This is a temporary workaround to handle stream processing issues
+    // TODO: Implement a more robust stream processing solution
     emit(ChatBotProcessing(messagesWithStreaming));
 
-    // Сначала сохраняем сообщение пользователя
+    // First save the user message
+    // This is a temporary workaround to handle message saving issues
+    // TODO: Implement a more robust message saving solution
     final saveUserResult = await _saveMessage(params: _userMessage);
     if (saveUserResult is DataFailed) {
       emit(ChatBotError(saveUserResult.error!));
       return;
     }
 
-    // Запускаем потоковый запрос
+    // Start streaming request
+    // This is a temporary workaround to handle streaming request issues
+    // TODO: Implement a more robust streaming request solution
     _responseSubscription = _sendMessage().listen(
       (dataState) {
         _handleStreamResponse(dataState);
@@ -129,46 +145,41 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
   void _onCancelStream(
       ChatBotCancelStreamEvent event, Emitter<ChatBotState> emit) async {
     await _cancelCurrentStream();
-    // После отмены загружаем актуальные сообщения
+    // After cancellation, load current messages
+    // This is a temporary workaround to handle message loading issues
+    // TODO: Implement a more robust message loading solution
     add(const ChatBotLoadEvent());
   }
 
   void _handleStreamResponse(DataState<String> dataState) {
     dataState.when(
       success: (chunk) {
-        if (_accumulatedResponse.isEmpty) {
-          _accumulatedResponse = chunk;
-        } else if (chunk.startsWith(_accumulatedResponse)) {
-          // Likely full text, update to new full
-          _accumulatedResponse = chunk;
-        } else {
-          // Incremental
-          _accumulatedResponse += chunk;
-        }
+        // Simple concatenation approach - treat all chunks as incremental
+        _accumulatedResponse += chunk;
 
-        // Обновляем текущее сообщение AI
+        // Update current AI message
         _currentAiMessage = _currentAiMessage.copyWith(
           text: _accumulatedResponse,
         );
 
-        // Обновляем состояние с новым чанком
+        // Update state with new chunk
         final currentState = state;
         if (currentState is ChatBotProcessing) {
           final updatedMessages =
               List<MessageEntity>.from(currentState.messages);
 
-          // Заменяем последнее сообщение (которое от AI) обновленной версией
+          // Replace the last message (which is from AI) with updated version
           if (updatedMessages.isNotEmpty &&
               updatedMessages.last.sender == 'ai') {
             updatedMessages[updatedMessages.length - 1] = _currentAiMessage;
           }
 
-          // Добавляем внутреннее событие для обновления состояния
+          // Add internal event to update state
           add(_ChatBotStreamUpdated(updatedMessages, _accumulatedResponse));
         }
       },
       failure: (error) {
-        // Передаем ошибку через событие
+        // Pass error through event
         AppLogger.error('Stream failure: $error');
         add(_ChatBotStreamError(error));
       },
@@ -196,6 +207,8 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
     await _cancelCurrentStream();
 
     // Track rate limit errors
+    // This is a temporary workaround to handle rate limiting issues
+    // TODO: Implement a more robust rate limiting solution
     if (event.error.toString().contains('429') ||
         event.error.toString().contains('Too Many Requests') ||
         event.error.toString().contains('Rate limit exceeded')) {
@@ -208,14 +221,14 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
   Future<void> _onStreamCompleted(
       _ChatBotStreamCompleted event, Emitter<ChatBotState> emit) async {
     try {
-      // Проверяем, что накопился какой-то ответ
+      // Check that some response has been accumulated
       if (_accumulatedResponse.isEmpty) {
         emit(ChatBotError(Exception(
             'Пустой ответ от ИИ. Попробуйте отправить сообщение снова.')));
         return;
       }
 
-      // Сохраняем финальное сообщение AI
+      // Save final AI message
       final finalAiMessage = _currentAiMessage.copyWith(
         text: _accumulatedResponse,
       );
@@ -227,12 +240,15 @@ final class ChatBotBloc extends Bloc<ChatBotEvent, ChatBotState> {
         return;
       }
 
-      // После сохранения загружаем обновленные сообщения
+      // After saving, load updated messages
       add(const ChatBotLoadEvent());
     } on Exception catch (e) {
       AppLogger.error('Stream completion error: ${e.toString()}');
       emit(
           ChatBotError(Exception('Ошибка сохранения ответа: ${e.toString()}')));
+    } finally {
+      // Clean up
+      _accumulatedResponse = '';
     }
   }
 }

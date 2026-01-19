@@ -142,22 +142,4 @@ final class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       return '';
     }
   }
-
-  // @override
-  // Future<DataState<String>> sendMessage(List<MessageEntity> history) async {
-  //   try {
-  //     final response = await client.post(Constants.AI_API_BASE_URL, data: {
-  //       'agent_id': dotenv.get("AI_AGENT_ID"),
-  //       'messages': history
-  //           .map((msg) => {'role': msg.sender, 'content': msg.text})
-  //           .toList(),
-  //     });
-
-  //     return DataSuccess(
-  //         (response.data['choices'][0]['message']['content'] as String)
-  //             .removeMarkdown());
-  //   } catch (_) {
-  //     return DataSuccess(Constants.AI_FRIENDLY_ERROR_MESSAGE);
-  //   }
-  // }
 }
