@@ -415,6 +415,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Type a message...'**
   String get typeMessage;
+
+  /// AI walking message on home page
+  ///
+  /// In en, this message translates to:
+  /// **'Now we\'re walking with AI!'**
+  String get aiWalkingMessage;
+
+  /// Ask question card title
+  ///
+  /// In en, this message translates to:
+  /// **'Ask your question'**
+  String get askYourQuestion;
+
+  /// Chat history card title
+  ///
+  /// In en, this message translates to:
+  /// **'Chat history'**
+  String get chatHistory;
+
+  /// Top specialties text prefix
+  ///
+  /// In en, this message translates to:
+  /// **'TOP SPECIALTIES FROM '**
+  String get topSpecialtiesFrom;
+
+  /// AI abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'AI '**
+  String get ai;
+
+  /// Year text
+  ///
+  /// In en, this message translates to:
+  /// **'IN 2026'**
+  String get in2026;
+
+  /// Director contacts card title
+  ///
+  /// In en, this message translates to:
+  /// **'Director\'s contacts'**
+  String get directorContacts;
+
+  /// Finance department card title
+  ///
+  /// In en, this message translates to:
+  /// **'Finance department'**
+  String get financeDepartment;
+
+  /// Teachers card title
+  ///
+  /// In en, this message translates to:
+  /// **'Teachers'**
+  String get teachers;
+
+  /// Image collage overlay text
+  ///
+  /// In en, this message translates to:
+  /// **'More than an ordinary\ntechnical institute'**
+  String get moreThanOrdinaryInstitute;
 }
 
 class _AppLocalizationsDelegate

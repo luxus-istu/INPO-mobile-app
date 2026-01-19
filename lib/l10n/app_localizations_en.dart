@@ -171,4 +171,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get typeMessage => 'Type a message...';
+
+  @override
+  String get aiWalkingMessage => 'Now we\'re walking with AI!';
+
+  @override
+  String get askYourQuestion => 'Ask your question';
+
+  @override
+  String get chatHistory => 'Chat history';
+
+  @override
+  String get topSpecialtiesFrom => 'TOP SPECIALTIES FROM ';
+
+  @override
+  String get ai => 'AI ';
+
+  @override
+  String get in2026 => 'IN 2026';
+
+  @override
+  String get directorContacts => 'Director\'s contacts';
+
+  @override
+  String get financeDepartment => 'Finance department';
+
+  @override
+  String get teachers => 'Teachers';
+
+  @override
+  String get moreThanOrdinaryInstitute =>
+      'More than an ordinary\ntechnical institute';
 }

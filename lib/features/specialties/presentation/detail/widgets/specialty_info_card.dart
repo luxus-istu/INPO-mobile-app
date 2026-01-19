@@ -80,6 +80,7 @@ class SpecialtyInfoCard extends StatelessWidget {
                   ? AppLocalizations.of(context)!.hide
                   : AppLocalizations.of(context)!.showMore,
               onToggleCompetencies,
+              showAllCompetencies,
             ),
         ],
       ),
@@ -116,6 +117,7 @@ class SpecialtyInfoCard extends StatelessWidget {
                   ? AppLocalizations.of(context)!.hide
                   : AppLocalizations.of(context)!.showMore,
               onToggleDisciplines,
+              showAllDisciplines,
             ),
         ],
       ),
@@ -139,7 +141,8 @@ class SpecialtyInfoCard extends StatelessWidget {
         .toList();
   }
 
-  Widget _buildToggleButton(String text, VoidCallback onPressed) {
+  Widget _buildToggleButton(
+      String text, VoidCallback onPressed, bool isExpanded) {
     return TextButton(
       onPressed: onPressed,
       child: Row(
@@ -155,7 +158,7 @@ class SpecialtyInfoCard extends StatelessWidget {
             ),
           ),
           Icon(
-            text == 'Скрыть' ? Icons.arrow_drop_down : Icons.arrow_drop_up,
+            isExpanded ? Icons.arrow_drop_down : Icons.arrow_drop_up,
             size: 24,
             color: const Color(0xFF000080),
           )

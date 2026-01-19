@@ -8,7 +8,7 @@ import 'package:mockito/mockito.dart';
 // Mock implementation instead of using @GenerateMocks
 class MockNewsRepository extends Mock implements NewsRepository {
   @override
-  Future<DataState<List<NewsItem>>> getNews() {
+  Future<DataState<List<NewsItem>>> getNews(String path) {
     return super.noSuchMethod(
       Invocation.method(#getNews, []),
       returnValue: Future<DataState<List<NewsItem>>>.value(DataSuccess([])),

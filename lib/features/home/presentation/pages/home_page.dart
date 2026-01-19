@@ -1,15 +1,13 @@
+import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_error_page.dart';
-import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
-
-import 'package:inpo_mobile_app/features/home/presentation/widgets/image_collage_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
-import 'package:inpo_mobile_app/core/presentation/utils/responsive_helper.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inpo_mobile_app/core/presentation/pages/splash_loading_page.dart';
+import 'package:inpo_mobile_app/features/home/presentation/widgets/news_card_widget.dart';
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class HomePage extends StatefulWidget {
@@ -20,206 +18,317 @@ final class HomePage extends StatefulWidget {
 }
 
 final class _HomePageState extends State<HomePage> {
-  static const List<String> _imagePaths = [
-    "assets/images/home_image_0.jpg",
-    "assets/images/home_image_1.jpg",
-    "assets/images/home_image_2.jpg",
-  ];
+  static const double _mobileExpandedHeight = 110;
+  static const double _tabletExpandedHeight = 200;
+
+  double get _expandedHeight {
+    if (context.isTablet) return _tabletExpandedHeight;
+    return _mobileExpandedHeight;
+  }
 
   @override
   void initState() {
     super.initState();
-    getIt<NewsBloc>().add(const FetchNews());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => getIt<NewsBloc>().add(const FetchNews()));
   }
 
   @override
   Widget build(BuildContext context) {
-    // Get responsive values based on screen size
-    final isTablet = context.isTablet;
-    final isMobile = context.isMobile;
-
-    // Get localized card titles
-    final cardTitles = [
-      AppLocalizations.of(context)!.card1Title,
-      AppLocalizations.of(context)!.card2Title,
-      AppLocalizations.of(context)!.card3Title,
-    ];
-
-    // Responsive dimensions
-    final imageHeight = ResponsiveHelper.responsiveValue<double>(
-      context: context,
-      mobile: context.screenHeight * 0.7,
-      tablet: context.screenHeight * 0.6,
-    );
-
-    final cardHeight = ResponsiveHelper.responsiveValue<double>(
-      context: context,
-      mobile: context.screenWidth * 0.6,
-      tablet: context.screenWidth * 0.4,
-    );
-
-    final titleFontSize = ResponsiveHelper.responsiveFontSize(
-      context: context,
-      mobile: context.screenWidth < 360 ? 28.0 : 32.0,
-      tablet: 36.0,
-    );
-
-    final cardFontSize = ResponsiveHelper.responsiveFontSize(
-      context: context,
-      mobile: context.screenWidth < 360 ? 18.0 : 20.0,
-      tablet: 22.0,
-    );
-
-    final spacing = ResponsiveHelper.responsiveSpacing(
-      context: context,
-      mobile: context.screenHeight * 0.03,
-      tablet: context.screenHeight * 0.04,
-    );
-
-    // Determine layout based on screen size
-    final crossAxisCount = ResponsiveHelper.responsiveGridColumns(
-      context: context,
-      mobile: 1,
-      tablet: 2,
-    );
+    final sizes = MediaQuery.sizeOf(context);
 
     return BlocBuilder<NewsBloc, NewsState>(
       bloc: getIt<NewsBloc>(),
-      builder: (context, state) {
+      builder: (_, state) {
         if (state is NewsError) {
           return SplashErrorPage(state.message,
               retry: () => getIt<NewsBloc>().add(const FetchNews()));
         }
         if (state is NewsLoaded) {
-          final imageUrls = state.news
-              .map((newsItem) => newsItem.imageUrl ?? "")
-              .take(6)
-              .toList();
-
-          return Scaffold(
-            backgroundColor: Colors.white,
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  HeaderWidget(
-                      labelName: AppLocalizations.of(context)!.homeHeader),
-                  SizedBox(
-                    height: imageHeight,
-                    child: ImageCollageWidget(
-                      imageUrls: imageUrls,
-                      isTablet: isTablet,
-                    ),
+          final news = state.news.take(5).toList();
+          return CustomScrollView(
+            slivers: [
+              SliverAppBar(
+                expandedHeight: _expandedHeight,
+                pinned: true,
+                surfaceTintColor: Colors.white,
+                backgroundColor: Colors.white,
+                shadowColor: Colors.black26,
+                flexibleSpace: FlexibleSpaceBar(
+                  background: HeaderWidget(
+                    labelName: AppLocalizations.of(context)!.universityName,
                   ),
-                  SizedBox(height: spacing),
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: context.responsiveHorizontalPadding,
-                    ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 150, // ← здесь главная фиксация — задаём высоту
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    itemCount: news.length,
+                    itemBuilder: (context, index) {
+                      return SizedBox(
+                        width: 150,
+                        child: NewsCardWidget(news[index]),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: GestureDetector(
+                  onTap: () => context.go("/chat"),
+                  child: Container(
+                    margin: EdgeInsets.all(16),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          AppLocalizations.of(context)!.whyUsTitle,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontFamily: "SF Pro Display",
-                            fontWeight: FontWeight.w700,
-                            fontSize: titleFontSize,
-                            color: const Color(0xFF899ED4),
-                          ),
-                        ),
-                        SizedBox(height: spacing),
-                        // Use grid layout for tablets/desktop, list for mobile
-                        if (isMobile)
-                          ...List.generate(cardTitles.length, (index) {
-                            return Padding(
-                              padding: EdgeInsets.only(
-                                bottom: index == cardTitles.length - 1
-                                    ? 0
-                                    : spacing,
+                        Text(AppLocalizations.of(context)!.aiWalkingMessage,
+                            style: const TextStyle(
+                              fontFamily: "SF Pro Display",
+                              fontSize: 19,
+                              fontWeight: FontWeight.bold,
+                            )),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Card(
+                              elevation: 8,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16)),
                               ),
-                              child: _buildCardWidget(
-                                imagePath: _imagePaths[index],
-                                title: cardTitles[index],
-                                cardHeight: cardHeight,
-                                fontSize: cardFontSize,
+                              child: Container(
+                                width: sizes.width * .43,
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  spacing: 8,
+                                  children: [
+                                    Icon(
+                                      Icons.forum_outlined,
+                                      size: 30,
+                                      color: const Color(0xff4069D3),
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)!
+                                          .askYourQuestion,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontFamily: "SF Pro Display",
+                                          fontSize: 12,
+                                          color: Color(0xff454545),
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ],
+                                ),
                               ),
-                            );
-                          })
-                        else
-                          GridView.count(
-                            crossAxisCount: crossAxisCount,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            mainAxisSpacing: spacing,
-                            crossAxisSpacing: spacing,
-                            children: List.generate(cardTitles.length, (index) {
-                              return _buildCardWidget(
-                                imagePath: _imagePaths[index],
-                                title: cardTitles[index],
-                                cardHeight: cardHeight,
-                                fontSize: cardFontSize,
-                              );
-                            }),
-                          ),
+                            ),
+                            Card(
+                              elevation: 8,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16)),
+                              ),
+                              child: Container(
+                                width: sizes.width * .43,
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  spacing: 8,
+                                  children: [
+                                    Icon(
+                                      Icons.history_outlined,
+                                      size: 30,
+                                      color: const Color(0xff4069D3),
+                                    ),
+                                    Text(
+                                      AppLocalizations.of(context)!.chatHistory,
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(
+                                          fontFamily: "SF Pro Display",
+                                          fontSize: 12,
+                                          color: Color(0xff454545),
+                                          fontWeight: FontWeight.w500),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        )
                       ],
                     ),
                   ),
-                  SizedBox(height: spacing * 2),
-                ],
+                ),
               ),
-            ),
-            floatingActionButton: const AnimatedFabMenu(),
+              SliverToBoxAdapter(
+                child: GestureDetector(
+                  child: Container(
+                    margin: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                      gradient: LinearGradient(colors: [
+                        Color(0xffBABABA),
+                        Color(0xffF5F5F5),
+                      ]),
+                    ),
+                    child: Column(
+                      children: [
+                        RichText(
+                            text: TextSpan(
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontFamily: "Onder",
+                                    height: 1.9,
+                                    color: Color(0xff454545)),
+                                children: [
+                              TextSpan(
+                                  text: AppLocalizations.of(context)!
+                                      .topSpecialtiesFrom),
+                              TextSpan(
+                                  text: AppLocalizations.of(context)!.ai,
+                                  style: const TextStyle(
+                                      color: Color(0xff4069D3))),
+                              TextSpan(
+                                  text: AppLocalizations.of(context)!.in2026)
+                            ])),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward,
+                                size: 25,
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Card(
+                        elevation: 8,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                        child: Container(
+                          padding: const EdgeInsets.all(16),
+                          width: sizes.width * .4,
+                          height: sizes.width * .4,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                AppLocalizations.of(context)!.directorContacts,
+                                style: const TextStyle(
+                                  fontFamily: "SF Pro Display",
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Icon(
+                                Icons.phone_outlined,
+                                size: 50,
+                                color: Color(0xff4069D3),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Column(
+                        children: [
+                          Card(
+                            elevation: 8,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
+                            ),
+                            child: Container(
+                              width: sizes.width * .45,
+                              height: sizes.width * .2,
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .financeDepartment,
+                                    style: const TextStyle(
+                                      fontFamily: "SF Pro Display",
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.currency_ruble,
+                                    size: 30,
+                                    color: Color(0xff4069D3),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                          Card(
+                            elevation: 8,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16)),
+                            ),
+                            child: Container(
+                              width: sizes.width * .45,
+                              height: sizes.width * .2,
+                              padding: const EdgeInsets.all(16),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.teachers,
+                                    style: const TextStyle(
+                                      fontFamily: "SF Pro Display",
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.person_outline,
+                                    size: 30,
+                                    color: Color(0xff4069D3),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           );
         }
 
         return const SplashLoadingPage();
       },
-    );
-  }
-
-  Widget _buildCardWidget({
-    required String imagePath,
-    required String title,
-    required double cardHeight,
-    required double fontSize,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(15),
-          child: Image.asset(
-            imagePath,
-            width: double.infinity,
-            height: cardHeight,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                width: double.infinity,
-                height: cardHeight,
-                color: Colors.grey[100],
-                child: const Icon(
-                  Icons.image,
-                  color: Colors.grey,
-                  size: 32,
-                ),
-              );
-            },
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: fontSize,
-            fontWeight: FontWeight.w400,
-            fontFamily: "SF Pro Display",
-            color: const Color(0xFF4069D3),
-            height: 1.4,
-          ),
-        ),
-      ],
     );
   }
 }

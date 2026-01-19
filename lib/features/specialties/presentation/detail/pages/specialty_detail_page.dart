@@ -66,329 +66,326 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
 
   Widget _buildMobileLayout(SpecialtyDetailLoaded state) {
     final specialtyName = state.detail.title!.split(' ').take(2).join(" ");
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (scrollNotification) {
-          if (scrollNotification is ScrollUpdateNotification) {
-            if (scrollNotification.metrics.pixels >= _collapseThreshold &&
-                !_isAppBarCollapsed) {
-              setState(() {
-                _isAppBarCollapsed = true;
-              });
-            } else if (scrollNotification.metrics.pixels < _collapseThreshold &&
-                _isAppBarCollapsed) {
-              setState(() {
-                _isAppBarCollapsed = false;
-              });
-            }
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollUpdateNotification) {
+          if (scrollNotification.metrics.pixels >= _collapseThreshold &&
+              !_isAppBarCollapsed) {
+            setState(() {
+              _isAppBarCollapsed = true;
+            });
+          } else if (scrollNotification.metrics.pixels < _collapseThreshold &&
+              _isAppBarCollapsed) {
+            setState(() {
+              _isAppBarCollapsed = false;
+            });
           }
-          return false;
-        },
-        child: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              expandedHeight: _expandedHeight,
-              pinned: true,
-              surfaceTintColor: Colors.white,
-              backgroundColor: Colors.white,
-              shadowColor: Colors.black26,
-              title: AnimatedOpacity(
-                duration: const Duration(milliseconds: 100),
-                opacity: _isAppBarCollapsed ? 1.0 : 0.0,
-                child: Text(
-                  specialtyName,
-                  style: TextStyle(
-                    fontFamily: "Onder",
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16,
-                    color: const Color(0xFF4069D3),
-                  ),
-                ),
-              ),
-              centerTitle: false,
-              flexibleSpace: FlexibleSpaceBar(
-                background: HeaderWidget(
-                  labelName: specialtyName,
-                  onTap: () => context.pop(),
+        }
+        return false;
+      },
+      child: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: _expandedHeight,
+            pinned: true,
+            surfaceTintColor: Colors.white,
+            backgroundColor: Colors.white,
+            shadowColor: Colors.black26,
+            title: AnimatedOpacity(
+              duration: const Duration(milliseconds: 100),
+              opacity: _isAppBarCollapsed ? 1.0 : 0.0,
+              child: Text(
+                specialtyName,
+                style: TextStyle(
+                  fontFamily: "Onder",
+                  decoration: TextDecoration.none,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16,
+                  color: const Color(0xFF4069D3),
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              sliver: SliverList(
-                  delegate: SliverChildListDelegate.fixed([
-                Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            state.detail.icon!,
-                            size: 80,
+            centerTitle: false,
+            flexibleSpace: FlexibleSpaceBar(
+              background: HeaderWidget(
+                labelName: specialtyName,
+                onTap: () => context.pop(),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverList(
+                delegate: SliverChildListDelegate.fixed([
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Icon(
+                          state.detail.icon!,
+                          size: 80,
+                          color: const Color(0xFF4069D3),
+                        ),
+                        Text(
+                          state.detail.duration!,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "SF Pro Display",
+                            fontWeight: FontWeight.bold,
+                            color: const Color(0xFF8F8F8F),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          state.detail.code!,
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: "Onder",
+                            fontWeight: FontWeight.w400,
+                            color: const Color(0xFF000080),
+                          ),
+                        ),
+                        Text(
+                          state.detail.title!,
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                            fontFamily: "SF Pro Display",
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
                             color: const Color(0xFF4069D3),
                           ),
-                          Text(
-                            state.detail.duration!,
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "SF Pro Display",
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0xFF8F8F8F),
-                            ),
+                        ),
+                        Text(
+                          '${state.detail.seats!} ${localization.seats}',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: "SF Pro Display",
+                            color: const Color(0xFF8F8F8F),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 60),
+              Text(
+                localization.description,
+                style: const TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Onder",
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF000080),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(16)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black38,
+                      blurRadius: 16,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      localization.competenciesIntro,
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: "SF Pro Display",
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF000080),
                       ),
                     ),
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            state.detail.code!,
+                    const SizedBox(height: 12),
+                    ...state.detail.competencies!
+                        .take(_showAllCompetencies
+                            ? state.detail.competencies!.length
+                            : 3)
+                        .map(
+                          (item) => Text(
+                            '• $item',
                             style: TextStyle(
-                              fontSize: 16,
-                              fontFamily: "Onder",
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF000080),
-                            ),
-                          ),
-                          Text(
-                            state.detail.title!,
-                            maxLines: 3,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.end,
-                            style: TextStyle(
+                              fontSize: 15,
                               fontFamily: "SF Pro Display",
-                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: const Color(0xFF4069D3),
                             ),
                           ),
-                          Text(
-                            '${state.detail.seats!} ${localization.seats}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: "SF Pro Display",
-                              color: const Color(0xFF8F8F8F),
+                        ),
+                    if (state.detail.competencies!.length > 3)
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _showAllCompetencies = !_showAllCompetencies;
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              _showAllCompetencies
+                                  ? localization.hide
+                                  : localization.showMore,
+                              style: const TextStyle(
+                                color: const Color(0xFF000080),
+                                fontFamily: "SF Pro Display",
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
+                            Icon(
+                              _showAllCompetencies
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_up,
+                              size: 24,
+                              color: const Color(0xFF000080),
+                            )
+                          ],
+                        ),
+                      )
                   ],
                 ),
-                const SizedBox(height: 60),
-                Text(
-                  localization.description,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontFamily: "Onder",
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF000080),
-                  ),
+              ),
+              const SizedBox(height: 48),
+              Text(
+                localization.disciplinesGuide,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Onder",
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF000080),
                 ),
-                const SizedBox(height: 12),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black38,
-                        blurRadius: 16,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        localization.competenciesIntro,
-                        style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: "SF Pro Display",
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFF000080),
+              ),
+              SizedBox(height: 18),
+              Container(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ...state.detail.disciplines!
+                        .take(_showAllDisciplines
+                            ? state.detail.disciplines!.length
+                            : 5)
+                        .map(
+                          (item) => Text(
+                            '• $item',
+                            style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: "SF Pro Display",
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 12),
-                      ...state.detail.competencies!
-                          .take(_showAllCompetencies
-                              ? state.detail.competencies!.length
-                              : 3)
-                          .map(
-                            (item) => Text(
-                              '• $item',
-                              style: TextStyle(
-                                fontSize: 15,
+                    if (state.detail.disciplines!.length > 3)
+                      TextButton(
+                        onPressed: () {
+                          setState(() {
+                            _showAllDisciplines = !_showAllDisciplines;
+                          });
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              _showAllDisciplines
+                                  ? localization.hide
+                                  : localization.showMore,
+                              style: const TextStyle(
+                                color: Color(0xFF000080),
                                 fontFamily: "SF Pro Display",
                                 fontWeight: FontWeight.bold,
-                                color: const Color(0xFF4069D3),
                               ),
                             ),
-                          ),
-                      if (state.detail.competencies!.length > 3)
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _showAllCompetencies = !_showAllCompetencies;
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                _showAllCompetencies
-                                    ? localization.hide
-                                    : localization.showMore,
-                                style: const TextStyle(
-                                  color: const Color(0xFF000080),
-                                  fontFamily: "SF Pro Display",
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Icon(
-                                _showAllCompetencies
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 24,
-                                color: const Color(0xFF000080),
-                              )
-                            ],
-                          ),
-                        )
-                    ],
-                  ),
+                            Icon(
+                              _showAllDisciplines
+                                  ? Icons.arrow_drop_down
+                                  : Icons.arrow_drop_up,
+                              size: 24,
+                              color: const Color(0xFF000080),
+                            )
+                          ],
+                        ),
+                      )
+                  ],
                 ),
-                const SizedBox(height: 48),
-                Text(
-                  localization.disciplinesGuide,
+              ),
+              Text(
+                localization.employmentOpportunities,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontFamily: "Onder",
+                  fontWeight: FontWeight.w400,
+                  color: const Color(0xFF000080),
+                ),
+              ),
+              SizedBox(height: 16),
+              ...state.detail.companies!.map(
+                (company) => Text(
+                  company,
                   style: TextStyle(
                     fontSize: 15,
-                    fontFamily: "Onder",
-                    fontWeight: FontWeight.w400,
                     color: const Color(0xFF000080),
+                    fontFamily: "SF Pro Display",
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 18),
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      ...state.detail.disciplines!
-                          .take(_showAllDisciplines
-                              ? state.detail.disciplines!.length
-                              : 5)
-                          .map(
-                            (item) => Text(
-                              '• $item',
-                              style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: "SF Pro Display",
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                      if (state.detail.disciplines!.length > 3)
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _showAllDisciplines = !_showAllDisciplines;
-                            });
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Text(
-                                _showAllDisciplines
-                                    ? localization.hide
-                                    : localization.showMore,
-                                style: const TextStyle(
-                                  color: Color(0xFF000080),
-                                  fontFamily: "SF Pro Display",
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Icon(
-                                _showAllDisciplines
-                                    ? Icons.arrow_drop_down
-                                    : Icons.arrow_drop_up,
-                                size: 24,
-                                color: const Color(0xFF000080),
-                              )
-                            ],
-                          ),
-                        )
-                    ],
+              ),
+              SizedBox(height: 60),
+              Center(
+                child: ElevatedButton(
+                  onPressed: () async =>
+                      await launchUrlString(state.detail.link!),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF9FBAFF),
+                    foregroundColor: const Color(0xFF3A6BD9),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 30,
+                      vertical: 16,
+                    ),
+                    elevation: 8,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16)),
+                    ),
                   ),
-                ),
-                Text(
-                  localization.employmentOpportunities,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontFamily: "Onder",
-                    fontWeight: FontWeight.w400,
-                    color: const Color(0xFF000080),
-                  ),
-                ),
-                SizedBox(height: 16),
-                ...state.detail.companies!.map(
-                  (company) => Text(
-                    company,
+                  child: Text(
+                    localization.enroll,
                     style: TextStyle(
-                      fontSize: 15,
-                      color: const Color(0xFF000080),
+                      fontSize: 20,
                       fontFamily: "SF Pro Display",
                       fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
                   ),
                 ),
-                SizedBox(height: 60),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: () async =>
-                        await launchUrlString(state.detail.link!),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF9FBAFF),
-                      foregroundColor: const Color(0xFF3A6BD9),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 30,
-                        vertical: 16,
-                      ),
-                      elevation: 8,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                      ),
-                    ),
-                    child: Text(
-                      localization.enroll,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontFamily: "SF Pro Display",
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 60),
-              ])),
-            ),
-          ],
-        ),
+              ),
+              const SizedBox(height: 60),
+            ])),
+          ),
+        ],
       ),
     );
   }

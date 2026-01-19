@@ -12,8 +12,6 @@ final class SplashLoadingPage extends StatelessWidget {
         color: const Color(0xFF4069D3),
         child: SafeArea(
           bottom: false,
-          minimum: const EdgeInsets.only(
-              top: 106), // Фиксированный отступ для мобильных
           child: Stack(
             children: [
               Column(

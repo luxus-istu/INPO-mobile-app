@@ -208,8 +208,48 @@
   "@stop": {
     "description": "Stop button text"
   },
-  "typeMessage": "Type a message...",
-  "@typeMessage": {
-    "description": "Message input hint"
-  }
-}
+   "typeMessage": "Type a message...",
+   "@typeMessage": {
+     "description": "Message input hint"
+   },
+   "aiWalkingMessage": "Now we're walking with AI!",
+   "@aiWalkingMessage": {
+     "description": "AI walking message on home page"
+   },
+   "askYourQuestion": "Ask your question",
+   "@askYourQuestion": {
+     "description": "Ask question card title"
+   },
+   "chatHistory": "Chat history",
+   "@chatHistory": {
+     "description": "Chat history card title"
+   },
+   "topSpecialtiesFrom": "TOP SPECIALTIES FROM ",
+   "@topSpecialtiesFrom": {
+     "description": "Top specialties text prefix"
+   },
+   "ai": "AI ",
+   "@ai": {
+     "description": "AI abbreviation"
+   },
+   "in2026": "IN 2026",
+   "@in2026": {
+     "description": "Year text"
+   },
+   "directorContacts": "Director's contacts",
+   "@directorContacts": {
+     "description": "Director contacts card title"
+   },
+   "financeDepartment": "Finance department",
+   "@financeDepartment": {
+     "description": "Finance department card title"
+   },
+   "teachers": "Teachers",
+   "@teachers": {
+     "description": "Teachers card title"
+   },
+   "moreThanOrdinaryInstitute": "More than an ordinary\ntechnical institute",
+   "@moreThanOrdinaryInstitute": {
+     "description": "Image collage overlay text"
+   }
+ }

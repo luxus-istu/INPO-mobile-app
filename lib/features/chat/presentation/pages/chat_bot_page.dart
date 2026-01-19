@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
@@ -75,11 +74,10 @@ class _ChatBotPageState extends State<ChatBotPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: isTablet ? 230 : 211,
+        toolbarHeight: isTablet ? 230 : 110,
         title: const SizedBox.shrink(),
         flexibleSpace: HeaderWidget(
           labelName: l10n.chatHeader,
-          onTap: () => context.go('/'),
         ),
       ),
       body: BlocConsumer<ChatBotBloc, ChatBotState>(

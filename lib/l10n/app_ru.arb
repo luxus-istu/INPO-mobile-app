@@ -208,8 +208,48 @@
   "@stop": {
     "description": "Текст кнопки остановки"
   },
-  "typeMessage": "Напишите сообщение...",
-  "@typeMessage": {
-    "description": "Подсказка ввода сообщения"
-  }
-}
+   "typeMessage": "Напишите сообщение...",
+   "@typeMessage": {
+     "description": "Подсказка ввода сообщения"
+   },
+   "aiWalkingMessage": "Теперь шагаем с ИИ!",
+   "@aiWalkingMessage": {
+     "description": "Сообщение о прогулке с ИИ на главной странице"
+   },
+   "askYourQuestion": "Задай свой вопрос",
+   "@askYourQuestion": {
+     "description": "Заголовок карточки задать вопрос"
+   },
+   "chatHistory": "История чатов",
+   "@chatHistory": {
+     "description": "Заголовок карточки истории чатов"
+   },
+   "topSpecialtiesFrom": "ТОП СПЕЦИАЛЬНОСТЕЙ ОТ ",
+   "@topSpecialtiesFrom": {
+     "description": "Префикс текста топ специальностей"
+   },
+   "ai": " ИИ ",
+   "@ai": {
+     "description": "Сокращение ИИ"
+   },
+   "in2026": "В 2К26",
+   "@in2026": {
+     "description": "Текст года"
+   },
+   "directorContacts": "Контакты директора",
+   "@directorContacts": {
+     "description": "Заголовок карточки контактов директора"
+   },
+   "financeDepartment": "Фин. отдел",
+   "@financeDepartment": {
+     "description": "Заголовок карточки финансового отдела"
+   },
+   "teachers": "Преподаватели",
+   "@teachers": {
+     "description": "Заголовок карточки преподавателей"
+   },
+   "moreThanOrdinaryInstitute": "Больше, чем обычный\nтехнический институт",
+   "@moreThanOrdinaryInstitute": {
+     "description": "Текст наложения на коллаж изображений"
+   }
+ }

@@ -19,7 +19,7 @@ final class NewsBloc extends Bloc<NewsEvent, NewsState> {
   Future<void> _onFetchNews(FetchNews event, Emitter<NewsState> emit) async {
     emit(const NewsLoading());
     try {
-      final news = await this._getNewsUseCase();
+      final news = await this._getNewsUseCase(params: event.newsType);
       if (news is DataFailed) {
         emit(NewsError(news.error!));
         return;

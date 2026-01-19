@@ -13,22 +13,7 @@ final class HeaderWidget extends StatelessWidget {
     // Get responsive values based on screen size
     final isTablet = context.isTablet;
 
-    // Responsive font sizes - matching home screen sizes
-    final logoFontSize = 48.0;
-
-    final labelFontSize = ResponsiveHelper.responsiveValue<double>(
-      context: context,
-      mobile: context.screenWidth < 360 ? 14.0 : 16.0,
-      tablet: 18.0,
-    );
-
     // Responsive padding
-    final topPadding = ResponsiveHelper.responsiveValue<double>(
-      context: context,
-      mobile: context.screenHeight < 700 ? 60.0 : 78.0,
-      tablet: context.screenHeight < 900 ? 70.0 : 90.0,
-    );
-
     final backButtonSize = ResponsiveHelper.responsiveValue<double>(
       context: context,
       mobile: context.screenWidth < 360 ? 18.0 : 20.0,
@@ -47,86 +32,78 @@ final class HeaderWidget extends StatelessWidget {
       tablet: context.screenHeight < 900 ? 28.0 : 36.0,
     );
 
-    return Container(
-      padding: EdgeInsets.only(top: topPadding),
-      color: Colors.white,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          minHeight: context.screenHeight * 0.2,
-          maxHeight: context.screenHeight * 0.3,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                child: Text(
-                  AppLocalizations.of(context)!.brandName,
-                  style: TextStyle(
-                    fontFamily: "Onder",
-                    decoration: TextDecoration.none,
-                    fontWeight: FontWeight.w400,
-                    fontSize: logoFontSize,
-                    color: const Color(0xFF4069D3),
-                  ),
-                ),
-              ),
+    return SafeArea(
+      child: Container(
+          color: Colors.white,
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              minHeight: context.screenHeight * 0.2,
+              maxHeight: context.screenHeight * 0.3,
             ),
-            SizedBox(height: spacing),
-            Flexible(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: onTap != null
-                    ? MainAxisAlignment.spaceBetween
-                    : MainAxisAlignment.end,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  if (onTap != null)
-                    ElevatedButton(
-                      onPressed: onTap,
-                      style: ElevatedButton.styleFrom(
-                        elevation: 0,
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.white,
-                        padding: EdgeInsets.zero,
-                        minimumSize:
-                            Size(backButtonSize * 2, backButtonSize * 2),
-                      ),
-                      child: Icon(
-                        Icons.arrow_back_ios,
-                        color: Colors.black,
-                        size: backButtonSize,
-                      ),
+                  Text(
+                    AppLocalizations.of(context)!.brandName,
+                    style: TextStyle(
+                      fontFamily: "Onder",
+                      decoration: TextDecoration.none,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 40,
+                      color: const Color(0xFF4069D3),
                     ),
-                  if (onTap != null)
-                    SizedBox(width: context.responsiveHorizontalPadding),
-                  Expanded(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        labelName,
-                        textAlign: TextAlign.end,
-                        maxLines: isTablet ? 1 : 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          fontFamily: "Onder",
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w400,
-                          fontSize: labelFontSize,
-                          color: const Color(0xFF4069D3),
+                  ),
+                  SizedBox(height: spacing),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: onTap != null
+                        ? MainAxisAlignment.spaceBetween
+                        : MainAxisAlignment.end,
+                    children: [
+                      if (onTap != null)
+                        ElevatedButton(
+                          onPressed: onTap,
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.zero,
+                            minimumSize:
+                                Size(backButtonSize * 2, backButtonSize * 2),
+                          ),
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: Colors.black,
+                            size: backButtonSize,
+                          ),
+                        ),
+                      if (onTap != null)
+                        SizedBox(width: context.responsiveHorizontalPadding),
+                      Expanded(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerRight,
+                          child: Text(
+                            labelName,
+                            textAlign: TextAlign.end,
+                            maxLines: isTablet ? 1 : 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontFamily: "Onder",
+                              decoration: TextDecoration.none,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 28,
+                              color: const Color(0xFF4069D3),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(height: bottomPadding),
+                    ],
                   ),
-                ],
-              ),
-            ),
-            SizedBox(height: bottomPadding),
-          ],
-        ),
-      ),
+                ]),
+          )),
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 
 final class ImageCollageWidget extends StatefulWidget {
   final List<String> imageUrls;
@@ -120,7 +121,7 @@ final class _ImageCollageWidgetState extends State<ImageCollageWidget>
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: Text(
-                  'Больше, чем обычный\nтехнический институт',
+                  AppLocalizations.of(context)!.moreThanOrdinaryInstitute,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: fontSize,
@@ -202,7 +203,7 @@ final class _ImageCollageWidgetState extends State<ImageCollageWidget>
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
                 child: Text(
-                  'Больше, чем обычный\nтехнический институт',
+                  AppLocalizations.of(context)!.moreThanOrdinaryInstitute,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: fontSize,

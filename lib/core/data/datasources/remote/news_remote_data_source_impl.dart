@@ -13,9 +13,9 @@ final class NewsRemoteDataSourceImpl implements NewsRemoteDataSource {
   const NewsRemoteDataSourceImpl(this.dio);
 
   @override
-  Future<DataState<List<NewsItemModel>>> getNewsFromHtml() async {
+  Future<DataState<List<NewsItemModel>>> getNewsFromHtml(String path) async {
     try {
-      final response = await dio.get(Constants.NEWS_ISTU_URL);
+      final response = await dio.get(Constants.ISTU_BASE_NEWS_URL + path);
       final document = parser.parse(response.data);
 
       final newsElements = document.querySelectorAll('div.mediaTileList-item');

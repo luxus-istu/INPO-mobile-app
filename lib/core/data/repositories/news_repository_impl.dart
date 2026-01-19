@@ -10,9 +10,9 @@ final class NewsRepositoryImpl implements NewsRepository {
   const NewsRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<DataState<List<NewsItem>>> getNews() async {
+  Future<DataState<List<NewsItem>>> getNews(String path) async {
     try {
-      final newsModels = await remoteDataSource.getNewsFromHtml();
+      final newsModels = await remoteDataSource.getNewsFromHtml(path);
       if (newsModels is DataFailed) return DataFailed(newsModels.error!);
       return DataSuccess(
           newsModels.data!.map((model) => model.toDomainEntity()).toList());

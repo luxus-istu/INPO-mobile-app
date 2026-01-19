@@ -169,4 +169,35 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get typeMessage => 'Напишите сообщение...';
+
+  @override
+  String get aiWalkingMessage => 'Теперь шагаем с ИИ!';
+
+  @override
+  String get askYourQuestion => 'Задай свой вопрос';
+
+  @override
+  String get chatHistory => 'История чатов';
+
+  @override
+  String get topSpecialtiesFrom => 'ТОП СПЕЦИАЛЬНОСТЕЙ ОТ ';
+
+  @override
+  String get ai => ' ИИ ';
+
+  @override
+  String get in2026 => 'В 2К26';
+
+  @override
+  String get directorContacts => 'Контакты директора';
+
+  @override
+  String get financeDepartment => 'Фин. отдел';
+
+  @override
+  String get teachers => 'Преподаватели';
+
+  @override
+  String get moreThanOrdinaryInstitute =>
+      'Больше, чем обычный\nтехнический институт';
 }

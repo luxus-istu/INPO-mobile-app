@@ -8,5 +8,9 @@ sealed class NewsEvent extends Equatable {
 }
 
 class FetchNews extends NewsEvent {
-  const FetchNews();
+  final String newsType;
+  const FetchNews({this.newsType = ""});
+
+  @override
+  List<Object> get props => [this.newsType];
 }

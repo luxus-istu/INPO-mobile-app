@@ -1,6 +1,7 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/bottom_navigation_bar_base_page.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/splash_error_page.dart';
 import 'package:inpo_mobile_app/features/chat/presentation/pages/chat_bot_page.dart';
-import 'package:inpo_mobile_app/features/contacts/presentation/pages/contacts_page.dart';
 import 'package:inpo_mobile_app/features/home/presentation/pages/home_page.dart';
 import 'package:inpo_mobile_app/features/news/presentation/pages/news_page.dart';
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
@@ -11,34 +12,55 @@ import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/sp
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/pages/specialty_detail_page.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/index/pages/specialties_page.dart';
 
-final GoRouter router = GoRouter(initialLocation: '/', routes: [
-  GoRoute(path: '/', builder: (_, __) => const HomePage()),
-  GoRoute(
-      path: "/specialties",
-      builder: (_, __) => const SpecialtiesPage(),
-      routes: [
-        GoRoute(
-          path: 'details',
-          builder: (context, state) {
-            final url = state.extra as String?;
-
-            if (url == null) {
-              return Scaffold(
-                  body: Center(
-                      child: Builder(
-                builder: (context) =>
-                    Text(AppLocalizations.of(context)!.urlNotFound),
-              )));
-            }
-            return BlocProvider.value(
-              value: getIt<SpecialtyDetailBloc>()
-                ..add(FetchSpecialtyDetail(url)),
-              child: const SpecialtyDetailPage(),
-            );
-          },
+final GoRouter router = GoRouter(
+    errorBuilder: (context, state) => SplashErrorPage(
+          state.error!,
+          retry: () => context.go('/'),
+          buttonMessage: "Go home",
         ),
-      ]),
-  GoRoute(path: "/news", builder: (_, __) => const NewsPage()),
-  GoRoute(path: "/contacts", builder: (_, __) => const ContactsPage()),
-  GoRoute(path: '/chat', builder: (context, state) => const ChatBotPage()),
-]);
+    initialLocation: '/',
+    routes: [
+      StatefulShellRoute.indexedStack(
+          builder: (_, __, navigationShell) =>
+              BottomNavigationBarBasePage(navigationShell),
+          branches: [
+            StatefulShellBranch(routes: [
+              GoRoute(path: '/', builder: (_, __) => const HomePage()),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                  path: "/specialties",
+                  builder: (_, __) => const SpecialtiesPage(),
+                  routes: [
+                    GoRoute(
+                      path: 'details',
+                      builder: (context, state) {
+                        final url = state.extra as String?;
+
+                        if (url == null) {
+                          return Scaffold(
+                              body: Center(
+                                  child: Builder(
+                            builder: (context) =>
+                                Text(AppLocalizations.of(context)!.urlNotFound),
+                          )));
+                        }
+                        return BlocProvider.value(
+                          value: getIt<SpecialtyDetailBloc>()
+                            ..add(FetchSpecialtyDetail(url)),
+                          child: const SpecialtyDetailPage(),
+                        );
+                      },
+                    ),
+                  ])
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(
+                  path: '/chat',
+                  builder: (context, state) => const ChatBotPage()),
+            ]),
+            StatefulShellBranch(routes: [
+              GoRoute(path: "/news", builder: (_, __) => const NewsPage()),
+            ]),
+          ]),
+    ]);
