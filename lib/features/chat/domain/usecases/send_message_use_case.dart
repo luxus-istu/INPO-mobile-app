@@ -13,7 +13,6 @@ final class SendMessageUseCase {
       final aiResponseStream = repository.getAiResponse();
 
       await for (final dataState in aiResponseStream) {
-        AppLogger.debug('AI Response data state: $dataState');
         yield dataState;
       }
     } catch (e) {

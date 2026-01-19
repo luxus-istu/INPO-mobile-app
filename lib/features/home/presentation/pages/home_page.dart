@@ -1,5 +1,6 @@
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/bloc/news_bloc.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/splash_error_page.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/animated_fab_menu.dart';
 
 import 'package:inpo_mobile_app/features/home/presentation/widgets/image_collage_widget.dart';
@@ -86,10 +87,8 @@ final class _HomePageState extends State<HomePage> {
       bloc: getIt<NewsBloc>(),
       builder: (context, state) {
         if (state is NewsError) {
-          WidgetsBinding.instance.addPostFrameCallback(
-              (_) => ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message.toString()),
-                  )));
+          return SplashErrorPage(state.message,
+              retry: () => getIt<NewsBloc>().add(const FetchNews()));
         }
         if (state is NewsLoaded) {
           final imageUrls = state.news

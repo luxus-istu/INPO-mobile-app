@@ -4,54 +4,44 @@ sealed class ChatBotState extends Equatable {
   const ChatBotState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-final class ChatBotInitial extends ChatBotState {
+class ChatBotInitial extends ChatBotState {
   const ChatBotInitial();
 }
 
-final class ChatBotLoading extends ChatBotState {
+class ChatBotLoading extends ChatBotState {
   const ChatBotLoading();
 }
 
-final class ChatBotLoaded extends ChatBotState {
+class ChatBotLoaded extends ChatBotState {
   final List<MessageEntity> messages;
 
   const ChatBotLoaded(this.messages);
 
   @override
-  List<Object> get props => [messages];
+  List<Object?> get props => [messages];
 }
 
-final class ChatBotProcessing extends ChatBotState {
+class ChatBotProcessing extends ChatBotState {
   final List<MessageEntity> messages;
-  final String accumulatedResponse;
+  final bool isStreaming; // ← новый флаг
 
   const ChatBotProcessing(
     this.messages, {
-    this.accumulatedResponse = '',
+    this.isStreaming = true,
   });
 
-  ChatBotProcessing copyWith({
-    List<MessageEntity>? messages,
-    String? accumulatedResponse,
-  }) {
-    return ChatBotProcessing(
-      messages ?? this.messages,
-      accumulatedResponse: accumulatedResponse ?? this.accumulatedResponse,
-    );
-  }
-
   @override
-  List<Object> get props => [messages, accumulatedResponse];
+  List<Object?> get props => [messages, isStreaming];
 }
 
-final class ChatBotError extends ChatBotState {
+class ChatBotError extends ChatBotState {
   final Exception error;
 
   const ChatBotError(this.error);
 
   @override
-  List<Object> get props => [error];
+  List<Object?> get props => [error];
 }

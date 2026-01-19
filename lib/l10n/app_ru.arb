@@ -4,6 +4,14 @@
   "@appTitle": {
     "description": "Название приложения"
   },
+  "errorOccurred": "Произашла ошибка",
+  "@errorOccurred": {
+    "description": "Сообщение об ошибке"
+  },
+  "tryAgain": "Попробовать снова",
+  "@tryAgain": {
+    "description": "Текст кнопки повтора"
+  },
   "home": "Главная",
   "@home": {
     "description": "Заголовок главной страницы"

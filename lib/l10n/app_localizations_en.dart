@@ -12,6 +12,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'INPO Mobile App';
 
   @override
+  String get errorOccurred => 'An error occurred';
+
+  @override
+  String get tryAgain => 'Try again';
+
+  @override
   String get home => 'Home';
 
   @override

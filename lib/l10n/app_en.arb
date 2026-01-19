@@ -4,6 +4,14 @@
   "@appTitle": {
     "description": "The title of the application"
   },
+  "errorOccurred": "An error occurred",
+  "@errorOccurred": {
+    "description": "Message abount the error"
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "Retry button text"
+  },
   "home": "Home",
   "@home": {
     "description": "Home page title"

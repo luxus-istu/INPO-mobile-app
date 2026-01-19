@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:gpt_markdown/gpt_markdown.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
@@ -10,23 +11,30 @@ import 'package:inpo_mobile_app/features/chat/presentation/widgets/typing_indica
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-final class ChatBotPage extends StatefulWidget {
+class ChatBotPage extends StatefulWidget {
   const ChatBotPage({super.key});
 
   @override
   State<ChatBotPage> createState() => _ChatBotPageState();
 }
 
-final class _ChatBotPageState extends State<ChatBotPage> {
-  final TextEditingController _textController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  bool _isStreaming = false;
+class _ChatBotPageState extends State<ChatBotPage> {
+  final _textController = TextEditingController();
+  final _scrollController = ScrollController();
+  bool _isComposing = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getIt<ChatBotBloc>().add(const ChatBotLoadEvent());
+    });
+
+    _textController.addListener(() {
+      final composing = _textController.text.trim().isNotEmpty;
+      if (_isComposing != composing && mounted) {
+        setState(() => _isComposing = composing);
+      }
     });
   }
 
@@ -49,32 +57,30 @@ final class _ChatBotPageState extends State<ChatBotPage> {
     });
   }
 
+  void _sendMessage() {
+    final text = _textController.text.trim();
+    if (text.isEmpty) return;
+    getIt<ChatBotBloc>().add(ChatBotSendMessageEvent(text));
+    _textController.clear();
+    _scrollToBottom();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // Responsive values
     final isTablet = context.isTablet;
-
-    // Responsive sizing
-    final appBarHeight = isTablet ? 230.0 : 211.0;
-    final errorMargin = isTablet ? 20.0 : 16.0;
-    final errorPadding = isTablet ? 14.0 : 12.0;
-    final errorFontSize = isTablet ? 15.0 : 14.0;
-    final errorBorderRadius = isTablet ? 14.0 : 12.0;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        foregroundColor: Colors.white,
-        shadowColor: Colors.white,
-        animateColor: false,
-        surfaceTintColor: Colors.white,
         elevation: 0,
-        toolbarHeight: appBarHeight,
+        toolbarHeight: isTablet ? 230 : 211,
         title: const SizedBox.shrink(),
         flexibleSpace: HeaderWidget(
-            labelName: AppLocalizations.of(context)!.chatHeader,
-            onTap: () => context.go('/')),
+          labelName: l10n.chatHeader,
+          onTap: () => context.go('/'),
+        ),
       ),
       body: BlocConsumer<ChatBotBloc, ChatBotState>(
         bloc: getIt<ChatBotBloc>(),
@@ -82,568 +88,424 @@ final class _ChatBotPageState extends State<ChatBotPage> {
           if (state is ChatBotLoaded || state is ChatBotProcessing) {
             _scrollToBottom();
           }
-
-          // Обновляем флаг стриминга
-          if (state is ChatBotProcessing) {
-            _isStreaming = true;
-          } else {
-            _isStreaming = false;
-          }
         },
         builder: (context, state) {
+          final isProcessing = state is ChatBotProcessing;
+
           return Column(
             children: [
-              // Баннер ошибки
               if (state is ChatBotError)
-                Container(
-                  padding: EdgeInsets.all(errorPadding),
-                  margin: EdgeInsets.symmetric(
-                    horizontal: errorMargin,
-                    vertical: errorMargin * 0.5,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.red.shade50,
-                    borderRadius: BorderRadius.circular(errorBorderRadius),
-                    border: Border.all(color: Colors.red.shade200),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(Icons.error_outline, color: Colors.red.shade700),
-                      SizedBox(width: errorMargin * 0.75),
-                      Expanded(
-                        child: Text(
-                          _getErrorMessage(state.error),
-                          style: TextStyle(
-                            color: Colors.red.shade700,
-                            fontSize: errorFontSize,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.close,
-                            color: Colors.red.shade700,
-                            size: errorFontSize + 6),
-                        onPressed: () {
-                          getIt<ChatBotBloc>().add(const ChatBotLoadEvent());
-                        },
-                      ),
-                    ],
-                  ),
+                _ErrorBanner(
+                  error: state.error,
+                  isTablet: isTablet,
+                  onClose: () =>
+                      getIt<ChatBotBloc>().add(const ChatBotLoadEvent()),
                 ),
-
-              // Основной контент
               Expanded(
-                child: _buildMessageList(state, isTablet),
+                child: _MessageList(
+                  state: state,
+                  scrollController: _scrollController,
+                  isTablet: isTablet,
+                  l10n: l10n,
+                ),
               ),
-
-              // Индикатор стриминга
-              if (_isStreaming &&
-                  state is ChatBotProcessing &&
-                  state.accumulatedResponse.isNotEmpty)
-                _buildStreamingIndicator(state, isTablet),
-
-              // Поле ввода
-              _buildMessageInput(context, state, isTablet),
+              // Убрали _TypingBar полностью — теперь индикация только внутри bubble
+              _MessageInput(
+                controller: _textController,
+                isProcessing: isProcessing,
+                isComposing: _isComposing,
+                isTablet: isTablet,
+                l10n: l10n,
+                onSend: _sendMessage,
+              ),
             ],
           );
         },
       ),
     );
   }
+}
 
-  Widget _buildMessageList(ChatBotState state, bool isTablet) {
-    // Responsive sizing
-    final loadingFontSize = isTablet ? 17.0 : 16.0;
-    final emptyIconSize = isTablet ? 72.0 : 64.0;
-    final emptyTitleFontSize = isTablet ? 19.0 : 18.0;
-    final emptySubtitleFontSize = isTablet ? 15.0 : 14.0;
-    final listPadding = isTablet ? 20.0 : 16.0;
+// ────────────────────────────────────────────────
+// Helper Widgets
+// ────────────────────────────────────────────────
 
+class _ErrorBanner extends StatelessWidget {
+  final Exception error;
+  final bool isTablet;
+  final VoidCallback onClose;
+
+  const _ErrorBanner({
+    required this.error,
+    required this.isTablet,
+    required this.onClose,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final msg =
+        _getUserFriendlyError(error.toString(), AppLocalizations.of(context)!);
+    return Container(
+      margin:
+          EdgeInsets.symmetric(horizontal: isTablet ? 24 : 16, vertical: 10),
+      padding: EdgeInsets.all(isTablet ? 16 : 12),
+      decoration: BoxDecoration(
+        color: Colors.red.shade50,
+        border: Border.all(color: Colors.red.shade200),
+        borderRadius: BorderRadius.circular(isTablet ? 16 : 12),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.error_outline_rounded, color: Colors.red.shade700),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              msg,
+              style: TextStyle(
+                  color: Colors.red.shade800, fontSize: isTablet ? 15 : 14),
+            ),
+          ),
+          IconButton(
+            icon: const Icon(Icons.close, color: Colors.redAccent),
+            onPressed: onClose,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _MessageList extends StatelessWidget {
+  final ChatBotState state;
+  final ScrollController scrollController;
+  final bool isTablet;
+  final AppLocalizations l10n;
+
+  const _MessageList({
+    required this.state,
+    required this.scrollController,
+    required this.isTablet,
+    required this.l10n,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     if (state is ChatBotInitial || state is ChatBotLoading) {
       return Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
-            CircularProgressIndicator(color: Theme.of(context).primaryColor),
-            SizedBox(height: listPadding * 0.75),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 16),
+            Text(l10n.loadingHistory,
+                style: TextStyle(color: Colors.grey[700])),
+          ],
+        ),
+      );
+    }
+
+    final messages = switch (state) {
+      ChatBotLoaded(messages: final m) => m,
+      ChatBotProcessing(messages: final m) => m,
+      _ => <MessageEntity>[],
+    };
+
+    if (messages.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.chat_bubble_outline_rounded,
+                size: 80, color: Colors.grey[300]),
+            const SizedBox(height: 16),
+            Text(l10n.askQuestion,
+                style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: 8),
             Text(
-              AppLocalizations.of(context)!.loadingHistory,
-              style: TextStyle(
-                color: Colors.grey.shade600,
-                fontSize: loadingFontSize,
-              ),
+              l10n.helpWithQuestions,
+              style: TextStyle(color: Colors.grey[600]),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       );
     }
 
-    if (state is ChatBotLoaded || state is ChatBotProcessing) {
-      final messages = state is ChatBotLoaded
-          ? state.messages
-          : (state as ChatBotProcessing).messages;
+    return ListView.builder(
+      controller: scrollController,
+      padding: EdgeInsets.all(isTablet ? 24 : 16),
+      itemCount: messages.length,
+      itemBuilder: (context, index) {
+        final msg = messages[index];
+        final isUser = msg.sender == 'user';
 
-      if (messages.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.chat_bubble_outline,
-                size: emptyIconSize,
-                color: Colors.grey.shade300,
-              ),
-              SizedBox(height: listPadding),
-              Text(
-                AppLocalizations.of(context)!.askQuestion,
-                style: TextStyle(
-                  fontSize: emptyTitleFontSize,
-                  color: Colors.grey.shade600,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: listPadding * 0.5),
-              Text(
-                AppLocalizations.of(context)!.helpWithQuestions,
-                style: TextStyle(
-                  fontSize: emptySubtitleFontSize,
-                  color: Colors.grey.shade500,
-                ),
-              ),
-            ],
-          ),
+        return _MessageBubble(
+          message: msg,
+          isUser: isUser,
+          isTablet: isTablet,
+          state: state,
+          index: index,
+          messages: messages,
         );
-      }
-
-      return ListView.builder(
-        controller: _scrollController,
-        padding: EdgeInsets.all(listPadding),
-        itemCount: messages.length,
-        itemBuilder: (context, index) {
-          final message = messages[index];
-          final isUser = message.sender == 'user';
-          final isStreaming = state is ChatBotProcessing &&
-              index == messages.length - 1 &&
-              !isUser;
-
-          return _buildMessageItem(message, isUser, isStreaming, isTablet);
-        },
-      );
-    }
-
-    return const SizedBox.shrink();
+      },
+    );
   }
+}
 
-  Widget _buildMessageItem(
-      MessageEntity message, bool isUser, bool isStreaming, bool isTablet) {
-    // Responsive sizing
-    final avatarSize = isTablet ? 36.0 : 32.0;
-    final avatarIconSize = isTablet ? 20.0 : 18.0;
-    final senderFontSize = isTablet ? 13.0 : 12.0;
-    final messageFontSize = isTablet ? 17.0 : 16.0;
-    final timeFontSize = isTablet ? 12.0 : 11.0;
-    final messageMargin = isTablet ? 18.0 : 16.0;
-    final messagePadding = isTablet ? 18.0 : 16.0;
-    final borderRadius = isTablet ? 18.0 : 16.0;
-    final maxMessageWidth = isTablet ? 0.65 : 0.75;
-    final avatarMargin = isTablet ? 14.0 : 12.0;
+class _MessageBubble extends StatelessWidget {
+  final MessageEntity message;
+  final bool isUser;
+  final bool isTablet;
+  final ChatBotState state;
+  final int index;
+  final List<MessageEntity> messages;
 
-    return Container(
-      margin: EdgeInsets.only(bottom: messageMargin),
+  const _MessageBubble({
+    required this.message,
+    required this.isUser,
+    required this.isTablet,
+    required this.state,
+    required this.index,
+    required this.messages,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isLastAiMessage = !isUser && index == messages.length - 1;
+    final isStreaming =
+        state is ChatBotProcessing && (state as ChatBotProcessing).isStreaming;
+
+    // Показываем "думаю..." только пока текст пустой и идёт генерация
+    final showThinking =
+        isLastAiMessage && isStreaming && message.text.trim().isEmpty;
+
+    final borderRadius = isTablet ? 20.0 : 18.0;
+    final maxWidthFactor = isTablet ? 0.68 : 0.78;
+
+    return Padding(
+      padding: EdgeInsets.only(bottom: isTablet ? 20 : 16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment:
             isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
-          if (!isUser)
-            Container(
-              width: avatarSize,
-              height: avatarSize,
-              margin: EdgeInsets.only(right: avatarMargin),
-              decoration: BoxDecoration(
-                color: const Color(0xff4069D3),
-                borderRadius: BorderRadius.circular(borderRadius),
-              ),
-              child: Icon(
-                Icons.smart_toy,
-                color: Colors.white,
-                size: avatarIconSize,
-              ),
-            ),
+          if (!isUser) ...[
+            _Avatar(isUser: false, size: isTablet ? 44 : 40),
+            const SizedBox(width: 12),
+          ],
           Flexible(
             child: Column(
-              crossAxisAlignment:
-                  isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Имя отправителя
                 Text(
-                  isUser
-                      ? AppLocalizations.of(context)!.you
-                      : AppLocalizations.of(context)!.aiAssistant,
+                  isUser ? 'You' : 'AI',
                   style: TextStyle(
-                    fontSize: senderFontSize,
-                    color: Colors.grey.shade600,
-                    fontWeight: FontWeight.w500,
-                  ),
+                      fontSize: isTablet ? 13 : 12, color: Colors.grey[600]),
                 ),
-                SizedBox(height: messagePadding * 0.25),
-
-                // Сообщение
+                const SizedBox(height: 4),
                 Container(
                   constraints: BoxConstraints(
-                    maxWidth:
-                        MediaQuery.of(context).size.width * maxMessageWidth,
+                    maxWidth: MediaQuery.sizeOf(context).width * maxWidthFactor,
                   ),
-                  padding: EdgeInsets.all(messagePadding),
+                  padding: EdgeInsets.all(isTablet ? 16 : 14),
                   decoration: BoxDecoration(
                     color: isUser
-                        ? const Color(0xff4069D3)
-                        : const Color(0xffF5F7FA),
+                        ? const Color(0xFF4069D3)
+                        : const Color(0xFFF5F7FA),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(borderRadius),
                       topRight: Radius.circular(borderRadius),
-                      bottomLeft: isUser
-                          ? Radius.circular(borderRadius)
-                          : Radius.circular(borderRadius * 0.25),
-                      bottomRight: isUser
-                          ? Radius.circular(borderRadius * 0.25)
-                          : Radius.circular(borderRadius),
+                      bottomLeft:
+                          isUser ? Radius.circular(borderRadius) : Radius.zero,
+                      bottomRight:
+                          isUser ? Radius.zero : Radius.circular(borderRadius),
                     ),
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        message.text,
-                        style: TextStyle(
-                          fontSize: messageFontSize,
-                          color: isUser ? Colors.white : Colors.black,
-                          height: 1.5,
-                        ),
-                      ),
-                      if (isStreaming && message.text.isNotEmpty)
-                        const TypingIndicator(),
+                      // Текст сообщения
+                      if (message.text.isNotEmpty)
+                        GptMarkdown(message.text,
+                            style: TextStyle(
+                              color: isUser ? Colors.white : Colors.black87,
+                              height: 1.45,
+                              fontSize: isTablet ? 16.5 : 15.5,
+                            )),
+                      // Text(
+                      //   message.text,
+                      //   style: TextStyle(
+                      //     color: isUser ? Colors.white : Colors.black87,
+                      //     height: 1.45,
+                      //     fontSize: isTablet ? 16.5 : 15.5,
+                      //   ),
+                      // ),
+
+                      // Индикатор "думаю..." — только внутри bubble, на русском
+                      if (showThinking) const TypingIndicator()
                     ],
                   ),
                 ),
-
-                // Время
-                SizedBox(height: messagePadding * 0.25),
+                const SizedBox(height: 4),
                 Text(
                   _formatTime(message.timestamp),
                   style: TextStyle(
-                    fontSize: timeFontSize,
-                    color: Colors.grey.shade500,
-                  ),
+                      fontSize: isTablet ? 12 : 11, color: Colors.grey[500]),
                 ),
               ],
             ),
           ),
-          if (isUser)
-            Container(
-              width: avatarSize,
-              height: avatarSize,
-              margin: EdgeInsets.only(left: avatarMargin),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade200,
-                borderRadius: BorderRadius.circular(borderRadius),
-              ),
-              child: Icon(
-                Icons.person,
-                color: Colors.grey.shade600,
-                size: avatarIconSize,
-              ),
-            ),
+          if (isUser) ...[
+            const SizedBox(width: 12),
+            _Avatar(isUser: true, size: isTablet ? 44 : 40),
+          ],
         ],
       ),
     );
   }
+}
 
-  // Widget _buildTypingIndicator() {
-  //   return Container(
-  //     margin: const EdgeInsets.only(top: 8),
-  //     child: Row(
-  //       mainAxisSize: MainAxisSize.min,
-  //       children: [
-  //         _buildTypingDot(const Duration(milliseconds: 0)),
-  //         _buildTypingDot(const Duration(milliseconds: 200)),
-  //         _buildTypingDot(const Duration(milliseconds: 400)),
-  //       ],
-  //     ),
-  //   );
-  // }
+// Остальные классы без изменений: _Avatar, _MessageInput, _getUserFriendlyError, _formatTime
 
-  // Widget _buildTypingDot(Duration delay) {
-  //   return Container(
-  //     margin: const EdgeInsets.symmetric(horizontal: 2),
-  //     child: TweenAnimationBuilder(
-  //       tween: Tween<double>(begin: 0, end: 1),
-  //       duration: const Duration(milliseconds: 1200),
-  //       // delay: delay,
-  //       builder: (context, value, child) {
-  //         return Opacity(
-  //           opacity: value < 0.5 ? value * 2 : 2 - (value * 2),
-  //           child: Container(
-  //             width: 6,
-  //             height: 6,
-  //             decoration: BoxDecoration(
-  //               color: Colors.grey.shade400,
-  //               borderRadius: BorderRadius.circular(3),
-  //             ),
-  //           ),
-  //         );
-  //       },
-  //     ),
-  //   );
-  // }
+class _Avatar extends StatelessWidget {
+  final bool isUser;
+  final double size;
 
-  Widget _buildStreamingIndicator(ChatBotProcessing state, bool isTablet) {
-    // Responsive sizing
-    final paddingHorizontal = isTablet ? 20.0 : 16.0;
-    final paddingVertical = isTablet ? 14.0 : 12.0;
-    final dotSize = isTablet ? 9.0 : 8.0;
-    final dotMargin = isTablet ? 9.0 : 8.0;
-    final fontSize = isTablet ? 15.0 : 14.0;
-    final buttonPaddingHorizontal = isTablet ? 18.0 : 16.0;
-    final buttonPaddingVertical = isTablet ? 9.0 : 8.0;
-    final buttonFontSize = isTablet ? 15.0 : 14.0;
-    final borderRadius = isTablet ? 9.0 : 8.0;
+  const _Avatar({required this.isUser, required this.size});
 
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: paddingHorizontal,
-        vertical: paddingVertical,
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        color: isUser ? Colors.grey[300] : const Color(0xFF4069D3),
+        borderRadius: BorderRadius.circular(size * 0.4),
       ),
-      color: Colors.blue.shade50,
-      child: Row(
-        children: [
-          Container(
-            width: dotSize,
-            height: dotSize,
-            margin: EdgeInsets.only(right: dotMargin),
-            decoration: BoxDecoration(
-              color: Colors.blue,
-              borderRadius: BorderRadius.circular(dotSize / 2),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              AppLocalizations.of(context)!.aiTyping,
-              style: TextStyle(
-                color: Colors.blue.shade800,
-                fontSize: fontSize,
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(left: dotMargin),
-            child: ElevatedButton(
-              onPressed: () {
-                getIt<ChatBotBloc>().add(const ChatBotCancelStreamEvent());
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red.shade100,
-                foregroundColor: Colors.red.shade800,
-                padding: EdgeInsets.symmetric(
-                  horizontal: buttonPaddingHorizontal,
-                  vertical: buttonPaddingVertical,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(borderRadius),
-                ),
-                elevation: 0,
-              ),
-              child: Text(
-                AppLocalizations.of(context)!.stop,
-                style: TextStyle(
-                  fontSize: buttonFontSize,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
+      child: Icon(
+        isUser ? Icons.person : Icons.smart_toy,
+        color: isUser ? Colors.grey[700] : Colors.white,
+        size: size * 0.55,
       ),
     );
   }
+}
 
-  Widget _buildMessageInput(
-      BuildContext context, ChatBotState state, bool isTablet) {
-    final isProcessing = state is ChatBotProcessing;
-    final isButtonDisabled = _textController.text.isEmpty || isProcessing;
+class _MessageInput extends StatelessWidget {
+  final TextEditingController controller;
+  final bool isProcessing;
+  final bool isComposing;
+  final bool isTablet;
+  final AppLocalizations l10n;
+  final VoidCallback onSend;
 
-    // Responsive sizing
-    final padding = isTablet ? 20.0 : 16.0;
-    final inputBorderRadius = isTablet ? 14.0 : 12.0;
-    final hintFontSize = isTablet ? 17.0 : 16.0;
-    final inputPadding = isTablet ? 18.0 : 16.0;
-    final buttonSize = isTablet ? 52.0 : 48.0;
-    final buttonBorderRadius = isTablet ? 13.0 : 12.0;
-    final buttonIconSize = isTablet ? 26.0 : 24.0;
-    final progressSize = isTablet ? 22.0 : 20.0;
-    final spacing = isTablet ? 14.0 : 12.0;
+  const _MessageInput({
+    required this.controller,
+    required this.isProcessing,
+    required this.isComposing,
+    required this.isTablet,
+    required this.l10n,
+    required this.onSend,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final canSend = isComposing && !isProcessing;
 
     return Container(
-      padding: EdgeInsets.all(padding),
+      padding: EdgeInsets.all(isTablet ? 20 : 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        border: Border(
-          top: BorderSide(color: Colors.grey.shade200),
-        ),
+        border: Border(top: BorderSide(color: Colors.grey.shade200)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          // Поле ввода
           Expanded(
             child: Container(
-              constraints: BoxConstraints(
-                maxHeight: isTablet ? 130 : 120,
-              ),
+              constraints: BoxConstraints(maxHeight: isTablet ? 140 : 120),
               decoration: BoxDecoration(
-                color: const Color(0xffF5F7FA),
-                borderRadius: BorderRadius.circular(inputBorderRadius),
+                color: const Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.circular(isTablet ? 16 : 14),
                 border: Border.all(color: Colors.grey.shade200),
               ),
               child: TextField(
-                controller: _textController,
+                controller: controller,
                 enabled: !isProcessing,
                 maxLines: null,
+                textCapitalization: TextCapitalization.sentences,
                 keyboardType: TextInputType.multiline,
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.typeMessage,
+                  hintText: l10n.typeMessage,
                   hintStyle: TextStyle(
-                    color: Colors.grey.shade500,
-                    fontSize: hintFontSize,
-                  ),
+                      color: Colors.grey[500],
+                      fontSize: isTablet ? 16.5 : 15.5),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.all(inputPadding),
-                  suffixIcon: _textController.text.isNotEmpty
+                  contentPadding: EdgeInsets.all(isTablet ? 18 : 16),
+                  suffixIcon: controller.text.isNotEmpty
                       ? IconButton(
-                          icon: Icon(Icons.clear, color: Colors.grey.shade500),
-                          onPressed: () {
-                            _textController.clear();
-                            setState(() {});
-                          },
+                          icon: const Icon(Icons.clear_rounded,
+                              color: Colors.grey),
+                          onPressed: controller.clear,
                         )
                       : null,
                 ),
-                onChanged: (value) {
-                  setState(() {});
-                },
-                onSubmitted: (text) {
-                  _sendMessage();
-                },
+                onSubmitted: (_) => canSend ? onSend() : null,
               ),
             ),
           ),
-
-          SizedBox(width: spacing),
-
-          // Кнопка отправки
-          Container(
-            width: buttonSize,
-            height: buttonSize,
-            decoration: BoxDecoration(
-              color: isButtonDisabled
-                  ? Colors.grey.shade300
-                  : const Color(0xff4069D3),
-              borderRadius: BorderRadius.circular(buttonBorderRadius),
-            ),
-            child: Material(
-              color: Colors.transparent,
-              borderRadius: BorderRadius.circular(buttonBorderRadius),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(buttonBorderRadius),
-                onTap: isButtonDisabled ? null : _sendMessage,
-                child: Center(
-                  child: isProcessing
-                      ? SizedBox(
-                          width: progressSize,
-                          height: progressSize,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : Icon(
-                          Icons.send,
-                          color: Colors.white,
-                          size: buttonIconSize,
-                        ),
-                ),
-              ),
+          const SizedBox(width: 12),
+          SizedBox(
+            width: isTablet ? 56 : 52,
+            height: isTablet ? 56 : 52,
+            child: FloatingActionButton(
+              onPressed: canSend ? onSend : null,
+              backgroundColor:
+                  canSend ? const Color(0xFF4069D3) : Colors.grey[300],
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+              child: isProcessing
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                          strokeWidth: 2.5, color: Colors.white),
+                    )
+                  : const Icon(Icons.send_rounded, color: Colors.white),
             ),
           ),
         ],
       ),
     );
   }
+}
 
-  void _sendMessage() {
-    final text = _textController.text.trim();
-    if (text.isNotEmpty) {
-      getIt<ChatBotBloc>().add(ChatBotRequestEvent(text));
-      _textController.clear();
-      setState(() {});
-    }
+String _getUserFriendlyError(String errorStr, AppLocalizations l10n) {
+  final lower = errorStr.toLowerCase();
+  if (lower.contains('429') || lower.contains('too many requests')) {
+    return 'Слишком много запросов. Подождите минуту и попробуйте снова.';
   }
-
-  String _getErrorMessage(Exception error) {
-    final errorString = error.toString();
-
-    // Handle rate limiting (429 status code)
-    if (errorString.contains('429') ||
-        errorString.contains('Too Many Requests')) {
-      return 'Слишком много запросов. Пожалуйста, подождите несколько минут перед повторной попыткой.';
-    }
-
-    // Handle unprocessable entity (422 status code)
-    if (errorString.contains('422') ||
-        errorString.contains('Unprocessable Entity')) {
-      return 'Некорректный запрос. Пожалуйста, проверьте ваше сообщение и попробуйте снова.';
-    }
-
-    // Handle common streaming errors
-    if (errorString.contains('Connection failed') ||
-        errorString.contains('SocketException') ||
-        errorString.contains('Failed host lookup')) {
-      return 'Ошибка соединения. Проверьте интернет-соединение.';
-    }
-
-    if (errorString.contains('timeout') || errorString.contains('Timeout')) {
-      return 'Тайм-аут соединения. Сервер не отвечает.';
-    }
-
-    if (errorString.contains('Failed to get AI response')) {
-      return 'Не удалось получить ответ от ИИ. Попробуйте позже.';
-    }
-
-    if (errorString.contains('Stream error')) {
-      return 'Ошибка потоковой передачи. Попробуйте отправить сообщение снова.';
-    }
-
-    if (errorString.contains('DioException') ||
-        errorString.contains('bad response')) {
-      return 'Ошибка сервера. Попробуйте отправить сообщение позже.';
-    }
-
-    // Default error message
-    return 'Произошла ошибка: ${error.toString().split(':').length > 1 ? error.toString().split(':')[1].trim() : 'неизвестная ошибка'}';
+  if (lower.contains('422') || lower.contains('unprocessable')) {
+    return 'Некорректный формат сообщения.';
   }
-
-  String _formatTime(DateTime timestamp) {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-    final messageDate =
-        DateTime(timestamp.year, timestamp.month, timestamp.day);
-
-    if (messageDate.isAtSameMomentAs(today)) {
-      return DateFormat('HH:mm').format(timestamp);
-    } else if (messageDate.isAfter(today.subtract(const Duration(days: 1)))) {
-      return 'Вчера ${DateFormat('HH:mm').format(timestamp)}';
-    } else {
-      return DateFormat('dd.MM.yyyy HH:mm').format(timestamp);
-    }
+  if (lower.contains('timeout')) {
+    return 'Время ожидания истекло. Попробуйте позже.';
   }
+  if (lower.contains('connection') || lower.contains('socketexception')) {
+    return 'Проблема с соединением. Проверьте интернет.';
+  }
+  return 'Ошибка: ${errorStr.split('\n').first.trim()}';
+}
+
+String _formatTime(DateTime ts) {
+  final now = DateTime.now();
+  final today = DateTime(now.year, now.month, now.day);
+  final msgDay = DateTime(ts.year, ts.month, ts.day);
+
+  if (msgDay == today) return DateFormat('HH:mm').format(ts);
+  if (msgDay == today.subtract(const Duration(days: 1))) {
+    return 'Вчера ${DateFormat('HH:mm').format(ts)}';
+  }
+  return DateFormat('dd.MM.yyyy HH:mm').format(ts);
 }

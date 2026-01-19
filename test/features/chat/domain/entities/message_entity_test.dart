@@ -55,12 +55,12 @@ void main() {
       // Act
       final copiedMessage = originalMessage.copyWith(
         text: 'New text',
-        sender: 'ai',
+        sender: 'assistant',
       );
 
       // Assert
       expect(copiedMessage.text, 'New text');
-      expect(copiedMessage.sender, 'ai');
+      expect(copiedMessage.sender, 'assistant');
       expect(copiedMessage.timestamp, originalMessage.timestamp);
       expect(copiedMessage, isNot(same(originalMessage)));
     });
@@ -80,7 +80,7 @@ void main() {
       );
       final message3 = MessageEntity(
         text: 'Hello',
-        sender: 'ai',
+        sender: 'assistant',
         timestamp: timestamp,
       );
 

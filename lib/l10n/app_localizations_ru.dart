@@ -12,6 +12,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get appTitle => 'Мобильное приложение ИНПО';
 
   @override
+  String get errorOccurred => 'Произашла ошибка';
+
+  @override
+  String get tryAgain => 'Попробовать снова';
+
+  @override
   String get home => 'Главная';
 
   @override

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:inpo_mobile_app/core/di/injection.dart';
+import 'package:inpo_mobile_app/core/presentation/pages/splash_error_page.dart';
 import 'package:inpo_mobile_app/features/specialties/presentation/detail/bloc/specialty_detail_bloc.dart';
-import 'package:inpo_mobile_app/features/specialties/presentation/detail/widgets/error_message_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/widgets/header_widget.dart';
 import 'package:inpo_mobile_app/core/presentation/utils/screen_size_extensions.dart';
 import 'package:inpo_mobile_app/l10n/app_localizations.dart';
@@ -40,7 +40,9 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
         bloc: getIt<SpecialtyDetailBloc>(),
         builder: (context, state) {
           if (state is SpecialtyDetailError) {
-            return ErrorMessageWidget(error: state);
+            return SplashErrorPage(state.error,
+                buttonMessage: AppLocalizations.of(context)!.goBack,
+                retry: () => context.pop());
           }
           if (state is SpecialtyDetailLoaded) {
             // Determine if we should use tablet/desktop layout
@@ -63,6 +65,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
   }
 
   Widget _buildMobileLayout(SpecialtyDetailLoaded state) {
+    final specialtyName = state.detail.title!.split(' ').take(2).join(" ");
     return Scaffold(
       backgroundColor: Colors.white,
       body: NotificationListener<ScrollNotification>(
@@ -94,7 +97,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
                 duration: const Duration(milliseconds: 100),
                 opacity: _isAppBarCollapsed ? 1.0 : 0.0,
                 child: Text(
-                  state.detail.title!,
+                  specialtyName,
                   style: TextStyle(
                     fontFamily: "Onder",
                     decoration: TextDecoration.none,
@@ -107,7 +110,7 @@ class _SpecialtyDetailPageState extends State<SpecialtyDetailPage> {
               centerTitle: false,
               flexibleSpace: FlexibleSpaceBar(
                 background: HeaderWidget(
-                  labelName: state.detail.title!,
+                  labelName: specialtyName,
                   onTap: () => context.pop(),
                 ),
               ),

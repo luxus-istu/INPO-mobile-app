@@ -104,6 +104,18 @@ abstract class AppLocalizations {
   /// **'INPO Mobile App'**
   String get appTitle;
 
+  /// Message abount the error
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred'**
+  String get errorOccurred;
+
+  /// Retry button text
+  ///
+  /// In en, this message translates to:
+  /// **'Try again'**
+  String get tryAgain;
+
   /// Home page title
   ///
   /// In en, this message translates to:

@@ -4,22 +4,31 @@ sealed class ChatBotEvent extends Equatable {
   const ChatBotEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
-final class ChatBotLoadEvent extends ChatBotEvent {
+class ChatBotLoadEvent extends ChatBotEvent {
   const ChatBotLoadEvent();
 }
 
-final class ChatBotRequestEvent extends ChatBotEvent {
-  final String request;
+class ChatBotSendMessageEvent extends ChatBotEvent {
+  final String message;
 
-  const ChatBotRequestEvent(this.request);
+  const ChatBotSendMessageEvent(this.message);
 
   @override
-  List<Object> get props => [request];
+  List<Object?> get props => [message];
 }
 
-final class ChatBotCancelStreamEvent extends ChatBotEvent {
+class ChatBotCancelStreamEvent extends ChatBotEvent {
   const ChatBotCancelStreamEvent();
+}
+
+class ChatBotStreamError extends ChatBotEvent {
+  final Exception error;
+
+  const ChatBotStreamError(this.error);
+
+  @override
+  List<Object?> get props => [error];
 }
