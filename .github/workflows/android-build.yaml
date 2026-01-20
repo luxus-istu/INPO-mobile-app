@@ -3,17 +3,15 @@ name: Flutter Build Android
 on:
   push:
     branches:
-      - main
-      - development
+      - master
   pull_request:
     branches:
-      - main
-      - development
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: ${{ github.ref_name == 'main' && 'production' || github.ref_name == 'development' && 'development' }}
+    environment: ${{ github.ref_name == 'master' && 'production' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v5

@@ -1,0 +1,255 @@
+{
+  "@@locale": "en",
+  "appTitle": "INPO Mobile App",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "errorOccurred": "An error occurred",
+  "@errorOccurred": {
+    "description": "Message abount the error"
+  },
+  "tryAgain": "Try again",
+  "@tryAgain": {
+    "description": "Retry button text"
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Home page title"
+  },
+  "specialties": "Specialties",
+  "@specialties": {
+    "description": "Specialties page title"
+  },
+  "news": "News",
+  "@news": {
+    "description": "News page title"
+  },
+  "contacts": "Contacts",
+  "@contacts": {
+    "description": "Contacts page title"
+  },
+  "chat": "Chat",
+  "@chat": {
+    "description": "Chat page title"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Error message title"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Back button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
+  },
+  "homeHeader": "MAIN\nPAGE",
+  "@homeHeader": {
+    "description": "Home page header text"
+  },
+  "specialtiesHeader": "PROFESSIONS",
+  "@specialtiesHeader": {
+    "description": "Specialties page header text"
+  },
+  "chatHeader": "CHAT-BOT",
+  "@chatHeader": {
+    "description": "Chat bot page header text"
+  },
+  "contactsHeader": "CONTACTS",
+  "@contactsHeader": {
+    "description": "Contacts page header text"
+  },
+  "newsHeader": "NEWS",
+  "@newsHeader": {
+    "description": "News page header text"
+  },
+  "errorHeader": "ERROR",
+  "@errorHeader": {
+    "description": "Error page header text"
+  },
+  "brandName": "INPO",
+  "@brandName": {
+    "description": "Brand name/logo"
+  },
+  "universityName": "ISTU",
+  "@universityName": {
+    "description": "University name abbreviation"
+  },
+  "whyUsTitle": "Why us?",
+  "@whyUsTitle": {
+    "description": "Why choose us section title"
+  },
+  "card1Title": "Constant participation in\ninternational competitions and\nolympiads",
+  "@card1Title": {
+    "description": "First feature card title"
+  },
+  "card2Title": "Creative student\nlife",
+  "@card2Title": {
+    "description": "Second feature card title"
+  },
+  "card3Title": "Large variety of\nspecialties",
+  "@card3Title": {
+    "description": "Third feature card title"
+  },
+  "thinking": "Thinking...",
+  "@thinking": {
+    "description": "Typing indicator text"
+  },
+  "somethingWentWrong": "Something went\nwrong...",
+  "@somethingWentWrong": {
+    "description": "Generic error message"
+  },
+  "serverMessage": "The server is lying down and relaxing,\nbut everything will be fine soon ;)",
+  "@serverMessage": {
+    "description": "Server error message"
+  },
+  "goBack": "Go back",
+  "@goBack": {
+    "description": "Go back button text"
+  },
+  "urlNotFound": "Error: URL not found",
+  "@urlNotFound": {
+    "description": "URL not found error message"
+  },
+  "menuContacts": "Contacts",
+  "@menuContacts": {
+    "description": "Contacts menu item"
+  },
+  "menuNews": "News",
+  "@menuNews": {
+    "description": "News menu item"
+  },
+  "menuChat": "AI Assistant",
+  "@menuChat": {
+    "description": "Chat/AI assistant menu item"
+  },
+  "menuSpecialties": "Professions",
+  "@menuSpecialties": {
+    "description": "Specialties menu item"
+  },
+  "menuHome": "Home",
+  "@menuHome": {
+    "description": "Home menu item"
+  },
+  "joinUs": "JOIN\nUS!",
+  "@joinUs": {
+    "description": "Join us call to action"
+  },
+  "moreThanInstitute": "More than just an\nordinary technical institute",
+  "@moreThanInstitute": {
+    "description": "Image collage overlay text"
+  },
+  "description": "DESCRIPTION",
+  "@description": {
+    "description": "Description section header"
+  },
+  "disciplinesGuide": "DISCIPLINES GUIDE",
+  "@disciplinesGuide": {
+    "description": "Disciplines guide section header"
+  },
+  "employmentOpportunities": "WHERE WILL THEY HIRE FOR WORK AND INTERNSHIP?",
+  "@employmentOpportunities": {
+    "description": "Employment opportunities section header"
+  },
+  "enroll": "Enroll",
+  "@enroll": {
+    "description": "Enroll button text"
+  },
+  "seats": "seats",
+  "@seats": {
+    "description": "Number of available seats suffix"
+  },
+  "showMore": "More details",
+  "@showMore": {
+    "description": "Show more button text"
+  },
+  "hide": "Hide",
+  "@hide": {
+    "description": "Hide button text"
+  },
+  "competenciesIntro": "As a result of mastering the training program, the graduate will be professionally prepared for the following types of activities:",
+  "@competenciesIntro": {
+    "description": "Introduction text for competencies section"
+  },
+  "loadingHistory": "Loading history...",
+  "@loadingHistory": {
+    "description": "Loading chat history message"
+  },
+  "askQuestion": "Ask the chatbot a question",
+  "@askQuestion": {
+    "description": "Chat input placeholder"
+  },
+  "helpWithQuestions": "I will help you with any questions",
+  "@helpWithQuestions": {
+    "description": "Chatbot subtitle"
+  },
+  "you": "You",
+  "@you": {
+    "description": "User label in chat"
+  },
+  "aiAssistant": "AI Assistant",
+  "@aiAssistant": {
+    "description": "AI assistant label in chat"
+  },
+  "aiTyping": "AI Assistant is typing...",
+  "@aiTyping": {
+    "description": "AI typing indicator"
+  },
+  "stop": "STOP",
+  "@stop": {
+    "description": "Stop button text"
+  },
+   "typeMessage": "Type a message...",
+   "@typeMessage": {
+     "description": "Message input hint"
+   },
+   "aiWalkingMessage": "Now we're walking with AI!",
+   "@aiWalkingMessage": {
+     "description": "AI walking message on home page"
+   },
+   "askYourQuestion": "Ask your question",
+   "@askYourQuestion": {
+     "description": "Ask question card title"
+   },
+   "chatHistory": "Chat history",
+   "@chatHistory": {
+     "description": "Chat history card title"
+   },
+   "topSpecialtiesFrom": "TOP SPECIALTIES FROM ",
+   "@topSpecialtiesFrom": {
+     "description": "Top specialties text prefix"
+   },
+   "ai": "AI ",
+   "@ai": {
+     "description": "AI abbreviation"
+   },
+   "in2026": "IN 2026",
+   "@in2026": {
+     "description": "Year text"
+   },
+   "directorContacts": "Director's contacts",
+   "@directorContacts": {
+     "description": "Director contacts card title"
+   },
+   "financeDepartment": "Finance department",
+   "@financeDepartment": {
+     "description": "Finance department card title"
+   },
+   "teachers": "Teachers",
+   "@teachers": {
+     "description": "Teachers card title"
+   },
+   "moreThanOrdinaryInstitute": "More than an ordinary\ntechnical institute",
+   "@moreThanOrdinaryInstitute": {
+     "description": "Image collage overlay text"
+   }
+ }
